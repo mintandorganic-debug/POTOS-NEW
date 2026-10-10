@@ -37,7 +37,6 @@ public class CardInteraction : MonoBehaviour
             return;
 
         ownerAnimator?.EnableCardLift();
-
         if (card.IsInRoulette ||
             !card.IsAvailable ||
             isZoomed)
@@ -82,8 +81,10 @@ public class CardInteraction : MonoBehaviour
             ownerAnimator?.EnableCardFocus();
             return FocusCard();
         }
-
-        ownerAnimator?.DisableCardFocus();
+        else
+        {
+            ownerAnimator?.DisableCardFocus();
+        }
 
         if (movement != null &&
             movement.IsMoving)
@@ -127,14 +128,13 @@ public class CardInteraction : MonoBehaviour
 
         visual?.SetHover(false);
 
-        card.RequestMoveToZoomSocket();
+        movement?.MoveToZoomSocket(
+            player.cardZoomSocket);
 
         card.EnableLookZoom(
-            card.OwnerNetId,
             lookZoomFov);
 
         card.LockCameraAt(
-            card.OwnerNetId,
             card.transform);
 
         visual?.StartDescriptionSwap();
@@ -147,6 +147,7 @@ public class CardInteraction : MonoBehaviour
         movement?.ResetHover();
         visual?.SetHover(false);
 
+
         if (!isZoomed)
             return;
 
@@ -154,11 +155,8 @@ public class CardInteraction : MonoBehaviour
 
         visual?.ShowCardMesh();
 
-        card.DisableLookZoom(
-            card.OwnerNetId);
-
-        card.UnlockCamera(
-            card.OwnerNetId);
+        card.DisableLookZoom();
+        card.UnlockCamera();
     }
 
     private void CacheOwnerAnimator()

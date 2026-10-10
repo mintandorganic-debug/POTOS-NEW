@@ -76,21 +76,21 @@ public class CardMovement : MonoBehaviour
 
         StopHover();
 
-        movementTargetSocket = null;
-        isMoving = false;
-
         transform.SetParent(
             socket,
             false);
 
-        transform.localPosition =
-            Vector3.zero;
-
         transform.localRotation =
             Quaternion.identity;
 
+        transform.localPosition =
+            Vector3.zero;
+
         targetLocalPosition =
             Vector3.zero;
+
+        isMoving = false;
+        movementTargetSocket = null;
     }
 
     public void MoveToZoomSocket(
@@ -113,6 +113,10 @@ public class CardMovement : MonoBehaviour
         movementTargetSocket = socket;
         movementSpeed = speed;
         isMoving = true;
+
+        transform.SetParent(
+            socket,
+            true);
     }
 
     public void UpdateMovement()
@@ -127,8 +131,7 @@ public class CardMovement : MonoBehaviour
             Vector3.MoveTowards(
                 transform.localPosition,
                 targetLocalPosition,
-                hoverSpeed *
-                Time.deltaTime);
+                hoverSpeed * Time.deltaTime);
     }
 
     private void UpdateSocketMovement()
@@ -143,58 +146,39 @@ public class CardMovement : MonoBehaviour
             Vector3.MoveTowards(
                 transform.position,
                 movementTargetSocket.position,
-                movementSpeed *
-                Time.deltaTime);
+                movementSpeed * Time.deltaTime);
 
         transform.rotation =
             Quaternion.RotateTowards(
                 transform.rotation,
                 movementTargetSocket.rotation,
-                movementSpeed *
-                100f *
+                movementSpeed * 100f *
                 Time.deltaTime);
 
         if (Vector3.SqrMagnitude(
                 transform.position -
-                movementTargetSocket.position) >
+                movementTargetSocket.position) <=
             0.0001f)
         {
-            return;
+            transform.position =
+                movementTargetSocket.position;
+
+            transform.rotation =
+                movementTargetSocket.rotation;
+
+            transform.SetParent(
+                movementTargetSocket,
+                true);
+
+            transform.localPosition =
+                Vector3.zero;
+
+            transform.localRotation =
+                Quaternion.identity;
+
+            isMoving = false;
+            movementTargetSocket = null;
         }
-
-        Transform socket =
-            movementTargetSocket;
-
-        transform.SetParent(
-            socket,
-            false);
-
-        transform.localPosition =
-            Vector3.zero;
-
-        transform.localRotation =
-            Quaternion.identity;
-
-        targetLocalPosition =
-            Vector3.zero;
-
-        movementTargetSocket = null;
-        isMoving = false;
-    }
-
-    public void Detach()
-    {
-        StopHover();
-
-        movementTargetSocket = null;
-        isMoving = false;
-
-        transform.SetParent(
-            null,
-            true);
-
-        targetLocalPosition =
-            Vector3.zero;
     }
 
     public void ResetState()

@@ -348,25 +348,17 @@ public class CameraLook : NetworkBehaviour
     }
 
     private void OnLookZoomEntered(
-        uint playerNetId,
         float fov)
     {
         if (!isLocalPlayer)
             return;
 
-        if (netId != playerNetId)
-            return;
-
         targetFov = fov;
     }
 
-    private void OnLookZoomExited(
-        uint playerNetId)
+    private void OnLookZoomExited()
     {
         if (!isLocalPlayer)
-            return;
-
-        if (netId != playerNetId)
             return;
 
         targetFov =
@@ -374,13 +366,9 @@ public class CameraLook : NetworkBehaviour
     }
 
     private void OnCameraLockEntered(
-        uint playerNetId,
         Transform target)
     {
         if (!isLocalPlayer)
-            return;
-
-        if (netId != playerNetId)
             return;
 
         if (target == null)
@@ -392,13 +380,9 @@ public class CameraLook : NetworkBehaviour
         cameraLocked = true;
     }
 
-    private void OnCameraLockExited(
-        uint playerNetId)
+    private void OnCameraLockExited()
     {
         if (!isLocalPlayer)
-            return;
-
-        if (netId != playerNetId)
             return;
 
         cameraLocked = false;

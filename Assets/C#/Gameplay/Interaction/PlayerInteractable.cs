@@ -31,13 +31,8 @@ public class PlayerInteractable : InteractableObject
 
     public override void Interact()
     {
-        if (GameMaster.Instance == null ||
-            GameMaster.Instance.CurrentPhase !=
-                GameMaster.GamePhase.SelectTarget)
-        {
+        if (GameMaster.Instance.CurrentPhase != GameMaster.GamePhase.SelectTarget)
             return;
-        }
-
         SelectAsTarget();
     }
 
@@ -67,6 +62,11 @@ public class PlayerInteractable : InteractableObject
         {
             return;
         }
+
+        Debug.Log(
+            $"{attacker.name} attacks {name} with {card.name}");
+
+        // Actual attack logic goes here.
     }
 
     // =========================================================
@@ -77,15 +77,12 @@ public class PlayerInteractable : InteractableObject
     {
         if (targetRenderer == null)
             return;
-
         enemyCanvas?.SetActive(true);
 
-        if (GameMaster.Instance == null ||
-            GameMaster.Instance.CurrentPhase !=
-                GameMaster.GamePhase.SelectTarget)
-        {
+
+        if (GameMaster.Instance.CurrentPhase != GameMaster.GamePhase.SelectTarget)
             return;
-        }
+
 
         targetRenderer.GetPropertyBlock(mpb);
 
@@ -100,8 +97,8 @@ public class PlayerInteractable : InteractableObject
     {
         if (targetRenderer == null)
             return;
-
         enemyCanvas?.SetActive(false);
+
 
         targetRenderer.GetPropertyBlock(mpb);
 

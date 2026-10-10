@@ -1,0 +1,1252 @@
+Unity Editor version:    6000.5.2f1 (eb73d3b415a1)
+Branch:                  6000.5/staging
+Build type:              Release
+Batch mode:              NO
+macOS version:           Version 26.6.2 (Build 25G83)
+Darwin version:          25.6.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        16384 MB
+Date:                    2026-10-10T08:15:56Z
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-davidfincher" at "2026-10-10T08:15:56.598486Z"
+
+COMMAND LINE ARGUMENTS:
+/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/MacOS/Unity
+-projectpath
+/Users/davidfincher/Documents/GitHub/Potos
+-acceptSoftwareTermsForThisRunOnly
+-useHub
+-hubIPC
+-cloudEnvironment
+production
+-licensingIpc
+LicenseClient-davidfincher
+-hubSessionId
+d20ebf75-6f24-49ce-acae-56d11e379530
+-accessToken
+aUXFWqNp5q_dSwSNahjaJVG5qYAEZseHwsi-klJBL58007f
+Successfully changed project path to: /Users/davidfincher/Documents/GitHub/Potos
+/Users/davidfincher/Documents/GitHub/Potos
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=0"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [8446091648]  Target information:
+
+Player connection [8446091648]  * "[IP] 10.9.252.40 [Port] 55504 [Flags] 2 [Guid] 225038095 [EditorId] 225038095 [Version] 1048832 [Id] OSXEditor(0,Davids-MacBook-Air.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8446091648] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8446091648] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-61559" after 0.2 seconds.
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              6dd36c3d1a524b468452fa3dc9e76c06
+  Correlation Id:          9e07313ca18a32d6fe47c01fd5b27185
+  External correlation Id: 3238487150423238969
+  Machine Id:              f4p26YZ5wnO3aIEtoswklvaZS+U=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-davidfincher" (connect: 0.00s, validation: 0.00s, handshake: 0.43s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-davidfincher-notifications" at "2026-10-10T08:15:57.031664Z"
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated the access token aUXFWqNp5q...
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 7972487186709-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.44s
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.5.2f1 (eb73d3b415a1)
+[Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/davidfincher/Documents/GitHub/Potos/Assets
+GfxDevice: creating device client; kGfxThreadingModeThreaded
+ preferred device: Apple M3 (high power)
+Metal devices available: 1
+0: Apple M3 (high power)
+Using device Apple M3 (high power)
+Initializing Metal device caps: Apple M3
+Mac GPU Family: 2
+Apple GPU Family: 9
+MSL Version: 3.0
+Has Float MSAA: 1
+Has Float Filtering: 1
+ReadWrite Texture Tier: 2
+Initialize mono
+Mono path[0] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed'
+Mono path[1] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56559
+CodeReloadManager initialized
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
+Registered in 0.001939 seconds.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Package Manager log level set to [2]
+[Licensing::Client] Successfully resolved entitlement details
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.263 seconds
+Domain Reload Profiling: 2577ms
+	BeginReloadAssembly (99ms)
+		CreateAndSetChildDomain (16ms)
+	RebuildCommonClasses (3ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (167ms)
+		LoadAssemblies (85ms)
+		AnalyzeDomain (128ms)
+			TypeCache.Refresh (128ms)
+				TypeCache.ScanAssembly (117ms)
+	FinalizeReload (2264ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (31ms)
+			BeforeProcessingInitializeOnLoad (42ms)
+			ProcessInitializeOnLoadAttributes (55ms)
+			ProcessInitializeOnLoadMethodAttributes (2088ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 65 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.collab-proxy@2.12.4 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.collab-proxy@0b1559bcd34e)
+    com.unity.inputsystem@1.19.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.inputsystem@21a28c3a6c83)
+    com.unity.multiplayer.playmode@2.0.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.multiplayer.playmode@d8888f6ed6aa)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.splines@2.9.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.splines@e6e1d5900acc)
+    com.unity.timeline@1.8.12 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.timeline@8cd8509afae5)
+    com.unity.visualscripting@1.9.11 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.visualscripting@8bed5ad90189)
+    com.unity.settings-manager@2.1.1 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.settings-manager@0b8638c5ce86)
+    com.unity.ide.visualstudio@2.0.26 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ide.visualstudio@a99d56dec63f)
+    com.unity.ide.rider@3.0.38 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ide.rider@1f60b3138684)
+    com.unity.editorcoroutines@1.1.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.editorcoroutines@87a15ed012c2)
+    com.unity.performance.profile-analyzer@1.4.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.performance.profile-analyzer@2bb26871883c)
+    com.unity.testtools.codecoverage@1.3.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.testtools.codecoverage@19a841221620)
+    com.unity.searcher@4.9.4 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.29 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.mono-cecil@1.11.6 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.feature.development@1.0.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.feature.development@767aadbc6eb7)
+    com.unity.multiplayer.center@1.0.1 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.multiplayer.center@b860850997d0)
+    com.unity.render-pipelines.high-definition@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.high-definition@debc963d8185)
+    com.unity.ugui@2.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ugui@3d1ea40b73ef)
+    com.unity.modules.accessibility@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physics2d)
+    com.unity.modules.physicscore2d@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physicscore2d)
+    com.unity.modules.screencapture@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.hierarchycore)
+    com.unity.mathematics@1.4.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.mathematics@981956d94fb6)
+    com.unity.render-pipelines.core@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.core@9fe9377312a8)
+    com.unity.shadergraph@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.shadergraph@2df19e8719bc)
+    com.unity.visualeffectgraph@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12)
+    com.unity.render-pipelines.high-definition-config@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.high-definition-config@77f033cbf9c5)
+    com.unity.test-framework@1.7.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.test-framework@1405238725ab)
+    com.unity.collections@6.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.collections@a43cabe808ca)
+    com.unity.ext.nunit@2.1.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ext.nunit@44f7d31723bd)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.00 seconds
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+A meta data file (.meta) exists but its folder 'Assets/3D-Animations' can't be found, and has been created. Empty directories cannot be stored in version control, so it's assumed that the meta data file is for an empty directory in version control. When moving or deleting folders outside of Unity, please ensure that the corresponding .meta file is moved or deleted along with it.
+A meta data file (.meta) exists but its folder 'Assets/Shaders/Assembly VFX Dissolve/VFX/Model' can't be found, and has been created. Empty directories cannot be stored in version control, so it's assumed that the meta data file is for an empty directory in version control. When moving or deleting folders outside of Unity, please ensure that the corresponding .meta file is moved or deleted along with it.
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://unix:/tmp/ilpp.sock-b9850045288cc3c92f818a704df5b9b7
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/davidfincher/Documents/GitHub/Potos
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 26.8950ms
+Starting: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /Users/davidfincher/Documents/GitHub/Potos
+ExitCode: 4 Duration: 0s145ms
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/200b0aE-inputdata.json
+*** Tundra requires additional run (0.13 seconds), 0 items updated, 0 evaluated
+Starting: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/netcorerun/netcorerun "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/BuildPipeline/ScriptCompilationBuildProgram.exe" "Library/Bee/200b0aE.dag.json" "Library/Bee/200b0aE-inputdata.json" "Library/Bee/buildprogram0.traceevents"
+WorkingDir: /Users/davidfincher/Documents/GitHub/Potos
+ExitCode: 0 Duration: 1s226ms
+Starting: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --dagfilejson="Library/Bee/200b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: /Users/davidfincher/Documents/GitHub/Potos
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.runtime.interopservices.windowsruntime has duplicate hint path. Ignoring "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/UnityReferenceAssemblies/unity-4.8-api/Facades/System.Runtime.InteropServices.WindowsRuntime.dll" in favor of "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll"
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.componentmodel.composition has duplicate hint path. Ignoring "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/UnityReferenceAssemblies/unity-4.8-api/System.ComponentModel.Composition.dll" in favor of "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/NetStandard/compat/2.1.0/shims/netfx/System.ComponentModel.Composition.dll"
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil, Version=0.11.6.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@6bb9aca3ef38/Unity.Burst.CodeGen/Unity.Burst.Cecil.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.Cecil, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.nuget.mono-cecil@ecb9724e46ff/Mono.Cecil.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.CecilX, Version=0.11.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Assets/Mirror/Plugins/Mono.Cecil/Mono.CecilX.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 25.3258ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with Library/Bee/artifacts/200b0aE.dag/Mirror.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/UnityEngine.CoreModule.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Scripting, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/Unity.Scripting.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved UnityEditor.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/UnityEditor.CoreModule.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.CecilX.Rocks, Version=0.11.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Assets/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Rocks.dll
+Find all reader and writers took 40 milliseconds
+Script Module: Assembly-CSharp.dll
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+Find all reader and writers took 17 milliseconds
+Script Module: Assembly-CSharp-Editor.dll
+Weave behaviours and messages took 2 milliseconds
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with Library/Bee/artifacts/200b0aE.dag/Unity.Collections.dll
+Weave behaviours and messages took 77 milliseconds
+  ProcessSitesModule Assembly-CSharp.dll elapsed time:00:00:00.0027580
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.6.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@6bb9aca3ef38/Unity.Burst.CodeGen/Unity.Burst.Cecil.Rocks.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 238.7590ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 397.9690ms
+ExitCode: 0 Duration: 2s714ms
+Finished compiling graph: 1019 nodes, 22482 flattened edges (18478 ToBuild, 176 ToUse), maximum node priority 1179
+[ 521/1016  0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.rsp
+[ 770/1016  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[1008/1016  1s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+Assets/Shaders/Assembly VFX Dissolve/VFX/Scripts/DissolveVFXController.cs(48,37): warning CS0414: The field 'DissolveVFXController.vfxParticleAttractionSpeedProperty' is assigned but its value is never used
+[1009/1016  0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[1010/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1011/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1012/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[1013/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+[1014/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[1015/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+*** Tundra build success (2.70 seconds), 10 items updated, 1016 evaluated
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+Assets/Shaders/Assembly VFX Dissolve/VFX/Scripts/DissolveVFXController.cs(48,37): warning CS0414: The field 'DissolveVFXController.vfxParticleAttractionSpeedProperty' is assigned but its value is never used
+X Dissolve/VFX/Scripts/DissolveVFXController.cs(48,37): warning CS0414: The field 'DissolveVFXController.vfxParticleAttractionSpeedProperty' is assigned but its value is never used
+AssetDatabase: script compilation time: 4.571118s
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Begin MonoManager ReloadAssembly
+Total cache size 264523732
+Total cache size after purge 264523732, took 00:00:00.1600536
+Symbol file LoadedFromMemory is not a mono symbol file
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Importing 'GUID: 49288e629e1ba214d8c264215476fc9c - Path: Assets/3D-Animations' with importer (DefaultImporter)
+Imported 'GUID: 49288e629e1ba214d8c264215476fc9c' -> (Import Result ID: '649a3a7d4c048f08eb53424ce5890694') in 0.011 seconds [static dependencies only]. Details - ImportResultOutputID=e23ab37771cf5f60fc5de48a7193ca68 DependenciesID=1d0970eda1e3c7a6d8d732c2bd6fde85 StaticDependenciesID=bca3011417f220f66d2fde5af24d75a9 
+Importing 'GUID: 40f80f6183bf19046a40902e44e77bf5 - Path: Assets/Shaders/Capillars' with importer (DefaultImporter)
+Imported 'GUID: 40f80f6183bf19046a40902e44e77bf5' -> (Import Result ID: '5436d7f19b071ecb351b3caf254ed1a7') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=90967fc8735d9a0343fbcb1975e3fc60 DependenciesID=2cbaa10df7366f87c0765959fbebb36c StaticDependenciesID=bf2ef0c4e50ca07dfb0e4ae9c6bac426 
+Importing 'GUID: 8482324ee771c5c4a984be3ab7b76619 - Path: Assets/Sounds/flame' with importer (DefaultImporter)
+Imported 'GUID: 8482324ee771c5c4a984be3ab7b76619' -> (Import Result ID: '2327d75aa8d412176b976a4f20079cae') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=456dc16e1f763fca7c5dc710650b583f DependenciesID=057b36f227b0025bed75ec03f3b1e4b6 StaticDependenciesID=df67869128971a887ad5c64acf06e469 
+Importing 'GUID: 0d6a6755f9b88ac49bfe026fc5ab9382 - Path: Assets/Shaders/Blood System' with importer (DefaultImporter)
+Imported 'GUID: 0d6a6755f9b88ac49bfe026fc5ab9382' -> (Import Result ID: 'd437fb17b584c81c20e66b458830577b') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=cdbb8904742151c975ceb27df17d7c84 DependenciesID=7ccf31d50bd19f0fb7440263764d7c96 StaticDependenciesID=ead7ceca252d9548097622ad7280c227 
+Importing 'GUID: ee9d2553644b14842b2afd1c606b3faf - Path: Assets/Shaders/Flame' with importer (DefaultImporter)
+Imported 'GUID: ee9d2553644b14842b2afd1c606b3faf' -> (Import Result ID: '4e812e7e45a102d242094020f7ae39a3') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=30c06f0614c99f748879439fab7f7343 DependenciesID=7b47ffcebb8a036386ed79ddfc83279c StaticDependenciesID=971cc3896781542eefb4a661852cde9e 
+Importing 'GUID: 1f3083baa1d82bc4b8e7923de4585870 - Path: Assets/Sounds/game sounds' with importer (DefaultImporter)
+Imported 'GUID: 1f3083baa1d82bc4b8e7923de4585870' -> (Import Result ID: 'c20cd593d40fd22f71d0b8d16df7ddbf') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=eab8fb1dc889a9bad9948d4b7cf55135 DependenciesID=49525dce7f88fc212aae128ea960ca4b StaticDependenciesID=abc35df9aea5fd9ba2c02508723b5626 
+Importing 'GUID: 712c55237fd90774185ad84d7edc9b81 - Path: Assets/Shaders/Capillars/Additive' with importer (DefaultImporter)
+Imported 'GUID: 712c55237fd90774185ad84d7edc9b81' -> (Import Result ID: 'de3f600d6c285907b90589517ff41fd8') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=c2819fa72dac89d65a4e081bb3cae52d DependenciesID=6dfd764314d132b5447217e4dcec8218 StaticDependenciesID=a63b145ef65d1da6e1515321cf2e5164 
+Importing 'GUID: 49f434b674f61bf47b4db684bef09e12 - Path: Assets/Shaders/Blood System/Shader  Overlay' with importer (DefaultImporter)
+Imported 'GUID: 49f434b674f61bf47b4db684bef09e12' -> (Import Result ID: 'e031d870a40e54700ee40b97d381a779') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=383a67e0877e7456f42c57fdc6430305 DependenciesID=6b644e0b7a1eb99d01cebf5df524e04f StaticDependenciesID=e20f739208ca93446944b3843c4cd134 
+Importing 'GUID: 6c14a9bfb0b3e584c8d5803f2e558041 - Path: Assets/Shaders/Blood System/Shader  Overlay/Subgraph' with importer (DefaultImporter)
+Imported 'GUID: 6c14a9bfb0b3e584c8d5803f2e558041' -> (Import Result ID: '17f07af3db5a74e7c8debe44f4018237') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=4ed7e229fd8732f0634eb9624477457b DependenciesID=fd949850c1be55fe5ad4338c06d26c88 StaticDependenciesID=8959b2b8096d55df8983a0494862e428 
+Refreshing native plugins compatible for Editor in 3.20 ms, found 3 plugins.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Moved ScriptTemplates to Assets folder.
+Mirror | mirror-networking.com | discord.gg/N9QVxbM
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.383 seconds
+Domain Reload Profiling: 2989ms
+	BeginReloadAssembly (124ms)
+		DisableScriptedObjects (9ms)
+		CreateAndSetChildDomain (23ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (439ms)
+		LoadAssemblies (225ms)
+		AnalyzeDomain (217ms)
+			TypeCache.Refresh (171ms)
+				TypeCache.ScanAssembly (155ms)
+			BuildScriptInfoCaches (40ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (2383ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (43ms)
+			ProcessInitializeOnLoadAttributes (1572ms)
+			ProcessInitializeOnLoadMethodAttributes (457ms)
+			AfterProcessingInitializeOnLoad (5ms)
+		AwakeInstancesAfterBackupRestoration (32ms)
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Importing 'GUID: d029a45549f566f418bb7c2a6fc4fabc - Path: Assets/Shaders/Flame/flame.png' with importer (TextureImporter)
+Imported 'GUID: d029a45549f566f418bb7c2a6fc4fabc' -> (Import Result ID: '6df7dfe4eba71108674660b394cd3889') in 0.010 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=b129d8bb529207aaabaa7a9a0ae1d93b DependenciesID=f9f195ad09b4e802786e771cb9b2e7ac StaticDependenciesID=2b3fb941bd382b1c50897f22a4b170af 
+Importing 'GUID: d7a4ea8fac9429f4a86cb19bcfd52146 - Path: Assets/props/cards/ATK_FLAME_CARD 1.png' with importer (TextureImporter)
+Imported 'GUID: d7a4ea8fac9429f4a86cb19bcfd52146' -> (Import Result ID: 'c6ced0fa55d334bc6d1bf057c3aabe04') in 0.050 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a755be8f16467425987e1726089dea99 DependenciesID=ae436ae39012890479a8a0b5a6c9d8b4 StaticDependenciesID=35b6fc538576df86aba3e6477d9b55de 
+Importing 'GUID: b8ff3b13d3ad3fc4d8da3d7375cb64e1 - Path: Assets/Shaders/Capillars/Additive/small capillars_ADDITIVE.png' with importer (TextureImporter)
+Imported 'GUID: b8ff3b13d3ad3fc4d8da3d7375cb64e1' -> (Import Result ID: '2cb95255d78771113874382aa089668a') in 0.009 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=fce7d639cd0879c9155d1510e64ecc3f DependenciesID=4d83dc78915c739aa4ea6b70a8d69499 StaticDependenciesID=a10e0e2ceeb542cc4ac7f1417e64a807 
+Importing 'GUID: 9c400e151a8e9a24fbfc7379d9bd76c7 - Path: Assets/Shaders/Capillars/Additive/medium capillars_ADDITIVE.png' with importer (TextureImporter)
+Imported 'GUID: 9c400e151a8e9a24fbfc7379d9bd76c7' -> (Import Result ID: '13f972a1188570f71da85982d9382522') in 0.006 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=26a28d18e20ed6406c1485fe47a3f7a3 DependenciesID=0ed3de886734df3807863a8fa6943a57 StaticDependenciesID=992478f248347d3c254fc6ac34314907 
+Importing 'GUID: cf777d0d88c4fd84ba01e551ddbbcb1f - Path: Assets/Shaders/Capillars/Additive/big capillars_ADDITIVE.png' with importer (TextureImporter)
+Imported 'GUID: cf777d0d88c4fd84ba01e551ddbbcb1f' -> (Import Result ID: '28ee89c8a6c2df421df4396efb14c93d') in 0.007 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=6099392e1b6cb50c3f1deb8e059a82c2 DependenciesID=5dc5b37c79eb1bc956030ed2f0d15033 StaticDependenciesID=fd2ef087bc22c63ceedc751a944406d4 
+Importing 'GUID: cf485832e4e6324469de63eecc2c1841 - Path: Assets/Shaders/Blood System/Shader  Overlay/CS_Overlay_Shader.mat' with importer (NativeFormatImporter)
+Imported 'GUID: cf485832e4e6324469de63eecc2c1841' -> (Import Result ID: 'bcddf8dd53030364db6972ed4ada9394') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=7567c9ab713d3e60279fe1c13d7bd2a9 DependenciesID=8180eb2f658a6b54388c24807353e16b StaticDependenciesID=0e69db7fb5e28f7553c9ca24adec53b9 
+Importing 'GUID: 0b3bd835e43f4d4489982f59dfaee76f - Path: Assets/Shaders/Blood System/Shader  Overlay/Subgraph/Radial_Mask.shadersubgraph' with importer (ScriptedImporter : Unity.ShaderGraph.Editor:UnityEditor.ShaderGraph:ShaderSubGraphImporter)
+Imported 'GUID: 0b3bd835e43f4d4489982f59dfaee76f' -> (Import Result ID: '74baa1c9c9da2c49762223232fadcc76') in 0.138 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=42149e5ef475f4cbe8ab55686b35c6f4 DependenciesID=437f982acfbdf91c050f9cbb182bd9bb StaticDependenciesID=49b58aaef43b218967e64c8db3013287 
+Importing 'GUID: 641290963a2bcf848b64cdb63cd8a399 - Path: Assets/Shaders/Blood System/Shader  Overlay/CS_Overlay_Shader.shadergraph' with importer (ScriptedImporter : Unity.ShaderGraph.Editor:UnityEditor.ShaderGraph:ShaderGraphImporter)
+NullReferenceException: Object reference not set to an instance of an object
+  at UnityEditor.ShaderGraph.GraphData.CollectShaderKeywords (UnityEditor.ShaderGraph.KeywordCollector collector, UnityEditor.ShaderGraph.GenerationMode generationMode) [0x00051] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Data/Graphs/GraphData.cs:1400 
+  at UnityEditor.ShaderGraph.Generator.BuildShader (System.String additionalShaderID, System.Collections.Generic.List`1[T] outTemporaryBlocks) [0x000a3] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Generation/Processors/Generator.cs:282 
+  at UnityEditor.ShaderGraph.Generator..ctor (UnityEditor.ShaderGraph.GraphData graphData, UnityEditor.ShaderGraph.AbstractMaterialNode outputNode, UnityEditor.ShaderGraph.GenerationMode mode, System.String primaryShaderName, UnityEditor.ShaderGraph.Target[] targets, UnityEditor.ShaderGraph.AssetCollection assetCollection, System.Boolean humanReadable, System.Boolean hidden) [0x001b6] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Generation/Processors/Generator.cs:169 
+  at UnityEditor.ShaderGraph.ShaderGraphImporter.BuildAllShaders (UnityEditor.AssetImporters.AssetImportContext importContext, UnityEditor.ShaderGraph.ShaderGraphImporter+AssetImportErrorLog importErrorLog, UnityEditor.ShaderGraph.AssetCollection allImportAssetDependencies, UnityEditor.ShaderGraph.GraphData graph) [0x0001e] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Importers/ShaderGraphImporter.cs:155 
+UnityEngine.DebugLogHandler:Internal_LogException_Injected(Exception, IntPtr)
+UnityEngine.DebugLogHandler:Internal_LogException(Exception, Object)
+UnityEngine.DebugLogHandler:LogException(Exception, Object)
+UnityEngine.Logger:LogException(Exception, Object)
+UnityEngine.Debug:LogException(Exception)
+UnityEditor.ShaderGraph.ShaderGraphImporter:BuildAllShaders(AssetImportContext, AssetImportErrorLog, AssetCollection, GraphData) (at ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Importers/ShaderGraphImporter.cs:217)
+UnityEditor.ShaderGraph.ShaderGraphImporter:OnImportAsset(AssetImportContext) (at ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Importers/ShaderGraphImporter.cs:255)
+UnityEditor.AssetImporters.ScriptedImporter:GenerateAssetData(AssetImportContext) (at /Users/bokken/build/output/unity/unity/Modules/AssetPipelineEditor/Public/ScriptedImporter.cs:25)
+
+(Filename: ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Data/Graphs/GraphData.cs Line: 1400)
+
+Launching external process: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Helpers/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+NullReferenceException: Object reference not set to an instance of an object
+  at UnityEditor.ShaderGraph.GraphData+<GetPromotedInputs>d__220.MoveNext () [0x0005d] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Data/Graphs/GraphData.cs:1416 
+  at UnityEditor.ShaderGraph.ShaderGraphImporter.OnImportAsset (UnityEditor.AssetImporters.AssetImportContext ctx) [0x00413] in ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Importers/ShaderGraphImporter.cs:358 
+  at UnityEditor.AssetImporters.ScriptedImporter.GenerateAssetData (UnityEditor.AssetImporters.AssetImportContext ctx) [0x00000] in /Users/bokken/build/output/unity/unity/Modules/AssetPipelineEditor/Public/ScriptedImporter.cs:25 
+
+(Filename: ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Data/Graphs/GraphData.cs Line: 1416)
+
+Asset import failed, "Assets/Shaders/Blood System/Shader  Overlay/CS_Overlay_Shader.shadergraph" > NullReferenceException: Object reference not set to an instance of an object
+UnityEditor.ShaderGraph.GraphData+<GetPromotedInputs>d__220.MoveNext () (at ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Data/Graphs/GraphData.cs:1416)
+UnityEditor.ShaderGraph.ShaderGraphImporter.OnImportAsset (UnityEditor.AssetImporters.AssetImportContext ctx) (at ./Library/PackageCache/com.unity.shadergraph@2df19e8719bc/Editor/Importers/ShaderGraphImporter.cs:358)
+UnityEditor.AssetImporters.ScriptedImporter.GenerateAssetData (UnityEditor.AssetImporters.AssetImportContext ctx) (at /Users/bokken/build/output/unity/unity/Modules/AssetPipelineEditor/Public/ScriptedImporter.cs:25)
+Imported 'GUID: 641290963a2bcf848b64cdb63cd8a399' -> (Import Result ID: 'd443fd0f380c9104c1e4d6d8efcd5b20') in 0.135 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=04b76e15dc58929da509783621ff7624 DependenciesID=53c10c2928f79a2bbc47addcd9224771 StaticDependenciesID=b7e000fb82d742cec555ddeca519e0e3 
+Importing 'GUID: 97eb47d0c82bba444aede656d7d7ce14 - Path: Assets/Shaders/Flame/Flame.shadergraph' with importer (ScriptedImporter : Unity.ShaderGraph.Editor:UnityEditor.ShaderGraph:ShaderGraphImporter)
+Imported 'GUID: 97eb47d0c82bba444aede656d7d7ce14' -> (Import Result ID: '2df45955da1c392c9d110ff975466c5d') in 0.043 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=49afa2f3f768bc0e8e45090eee5a0b0d DependenciesID=74d2bb7a9f470d904e399be7abaec286 StaticDependenciesID=16b6c054f890d6f4dfaf98eded4426d6 
+Importing 'GUID: 920815d973dd480478b7107840cdc0e1 - Path: Assets/Data/Attacks/Colt.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 920815d973dd480478b7107840cdc0e1' -> (Import Result ID: 'e6e88cab5d81a2ad8b34a1e1fe10d3ea') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=eeb427700f8d13b93aaa1c943b3a19a7 DependenciesID=1ea28cd0bb832e57f70d29b6c9d35525 StaticDependenciesID=eed461d875ef266986b01b851a5ffc3b 
+Importing 'GUID: a440b960b783fe64e9c3add6ac0b6924 - Path: Assets/Data/CardEffects/CE_Knife.asset' with importer (NativeFormatImporter)
+Imported 'GUID: a440b960b783fe64e9c3add6ac0b6924' -> (Import Result ID: '81f89ef2bdbe0f9a8a579fb4093bf3f5') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=268bd91ef591f8fdb85b452e7f21e4f6 DependenciesID=2c821317a413970b08668992bbb398f6 StaticDependenciesID=9234ce7834c6c7a0adfc0f042e05f220 
+Importing 'GUID: 187eeae44226bab4481a9820d3253aed - Path: Assets/Shaders/Flame/FlameThrower.vfx' with importer (VisualEffectImporter)
+Imported 'GUID: 187eeae44226bab4481a9820d3253aed' -> (Import Result ID: '198dda3f4d70ecc17bd3bf86ee06a24e') in 0.005 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=671aed6712b300c34d423e96e874535c DependenciesID=e3c0e06a5e3b0fdb8d4ab2fe470d878d StaticDependenciesID=fcc84e4552102068b81335f93b93301b 
+Importing 'GUID: a8891243144f7c649b6778fca6ee2cad - Path: Assets/Data/Attacks/Knife.asset' with importer (NativeFormatImporter)
+Imported 'GUID: a8891243144f7c649b6778fca6ee2cad' -> (Import Result ID: '91b1f1f6be39e11e55671c82786a6a2e') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=1af274749f88188d02e0e0b01771b8fa DependenciesID=7fc65f995496b1e89dcc03816d4ff511 StaticDependenciesID=4641d9f47ea32433a69d329a199ed9f6 
+Importing 'GUID: 19b900309b007ff479d5087cc2ac7834 - Path: Assets/Data/Attacks/Web.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 19b900309b007ff479d5087cc2ac7834' -> (Import Result ID: '98af073cb3df9913eeacb429c464bb8b') in 0.005 seconds [static dependencies only]. Details - ImportResultOutputID=857659fafe110e472c6a1aaba432ff83 DependenciesID=46add828a5757d8c59ecfc6d8417107a StaticDependenciesID=2de01160a5f5b197832755d61b1725e6 
+Importing 'GUID: 69f7d078b8d6dd64c983c33898c3c321 - Path: Assets/Data/CardEffects/CE_Glue.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 69f7d078b8d6dd64c983c33898c3c321' -> (Import Result ID: '553495360a5029d330e6dc41bc6cdf18') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=812a9196e76625ef2cf71d216a62612f DependenciesID=71de99afd5a5a0b0388cbb0bec4a0b9e StaticDependenciesID=41758d1c48750bfc45c1ad743144d78a 
+Importing 'GUID: 792e2db102eafbd4ebf6c52d738153ae - Path: Assets/Shaders/Shower.vfx' with importer (VisualEffectImporter)
+Imported 'GUID: 792e2db102eafbd4ebf6c52d738153ae' -> (Import Result ID: '9e9efebbe6f302bf3dd1b7d685b1fe1b') in 0.000 seconds [static dependencies only]. Details - ImportResultOutputID=6f20b738474ca75e8b7e74417b451493 DependenciesID=7f246f9453c0b6eb91d3e3532e9b6188 StaticDependenciesID=ba99d76df0fa6d4c749aea0724a5413b 
+Importing 'GUID: 4c573f14c6132ff458e58cba5a1a76a3 - Path: Assets/Data/Attacks/Glue.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 4c573f14c6132ff458e58cba5a1a76a3' -> (Import Result ID: '772026e386d0dd8d6210f7f82b145f86') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=ae70e59d0d44cca327d42456c6c94a15 DependenciesID=f482d145744b72438827718e4649d8d5 StaticDependenciesID=ab83a5701f7bc125624de26487297023 
+Importing 'GUID: 534aabb6fb847f74dbd2ce44529c354c - Path: Assets/Sounds/game sounds/WIN_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: 534aabb6fb847f74dbd2ce44529c354c' -> (Import Result ID: '96b7079d5a55ea124e2f8755e04ac3a5') in 0.052 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=28727ca69e7ec4b3f40be3734a243a75 DependenciesID=5ed71341838b0f3a996a582f11ce9a74 StaticDependenciesID=3a3286ebbfd16c95b664d0b577db1d1a 
+Importing 'GUID: 1441bcd6d296a4140ad93fbc28cb3c3a - Path: Assets/Sounds/flame/ATK_FLAME_ATK_ACTION_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: 1441bcd6d296a4140ad93fbc28cb3c3a' -> (Import Result ID: '1c01510c9b41a259930eed20691708a6') in 0.038 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=1e1ee58b5510423a1c6ad40ee7b061d7 DependenciesID=5968d985d6fd5d30caef38d451a819da StaticDependenciesID=68374e46ca2c0e81b2bdcdcb8324f964 
+Importing 'GUID: 984921e08d25aee4685307d1c8e7fadc - Path: Assets/Sounds/game sounds/ACCESSORY_DISAPPEAR_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: 984921e08d25aee4685307d1c8e7fadc' -> (Import Result ID: '15610b38c0f3f4aa165e5462d2275bd3') in 0.023 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=c56eb664605acac3e3e1e465f0e60a0c DependenciesID=a235a8c2714ea9647552df7dcf70f7d3 StaticDependenciesID=72b5b22d9a6ea21645e54d15a1c631ee 
+Importing 'GUID: 797de070cebc73843b87d16d050ba05d - Path: Assets/Sounds/game sounds/LOST_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: 797de070cebc73843b87d16d050ba05d' -> (Import Result ID: 'ea722c2e20c18f56e9ab418885e19f5b') in 0.026 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=b6bc3b44c3b1af40f8878ef91f7f0998 DependenciesID=2d64b964053add01c15494616229cf31 StaticDependenciesID=e35213dbae63186fc0b342ef2cb77e17 
+Importing 'GUID: 2a94c8cca27affd47bca72ca25791d4b - Path: Assets/Sounds/flame/ATK_FLAME_ATK_PREP_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: 2a94c8cca27affd47bca72ca25791d4b' -> (Import Result ID: '3a9475f5cb4950fbc9606f93b709d80c') in 0.065 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=813bb3dd268a62f578cf9df4527f4355 DependenciesID=b72865726362f8b077924b8d0d875c1b StaticDependenciesID=c5d10901d5dd9f4f7bcdb09a007d1d1e 
+Importing 'GUID: da3d5b79dff315a4b9b765d902b69128 - Path: Assets/Sounds/game sounds/NEXT_STAGE_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: da3d5b79dff315a4b9b765d902b69128' -> (Import Result ID: '042476b192ae2338e1a6516198044114') in 0.040 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=d3adbdb6a43df255fcbd8b0f7576cb21 DependenciesID=1e6f3d7592ab1a2b899d8a4feac9207a StaticDependenciesID=6068ebb4619e0bc31bc8a65a1abc0c88 
+Importing 'GUID: decb2702aa1b9ac4cb2a101a41f05b49 - Path: Assets/Sounds/game sounds/CARD_BURN_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: decb2702aa1b9ac4cb2a101a41f05b49' -> (Import Result ID: '5ac36ce5baec9b95f86704ca48de94d7') in 0.036 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=f945318be07d2fd9e7d0ce934baf1e5f DependenciesID=2043c1b29ade748320219f3bf2f1507a StaticDependenciesID=fc9104082ebbf4c414d26d6779395f75 
+Importing 'GUID: efb581c83fcdf8e4ab09d13223242d40 - Path: Assets/Sounds/flame/ATK_FLAME_ATK_END_SOUND.wav' with importer (AudioImporter)
+Imported 'GUID: efb581c83fcdf8e4ab09d13223242d40' -> (Import Result ID: '3356e2eae4cb0cef67c7c70c04e2b6b5') in 0.143 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=bfcebfb00cd26c1c22b4dff9949acc57 DependenciesID=ce74ee562dcbf09b16010f9f21443469 StaticDependenciesID=beda10700d658a7d03ab3211cedb604f 
+Importing 'GUID: 50f3ff790e3088b4bb94576a146603ab - Path: Assets/Prefabs/cardHold.prefab' with importer (PrefabImporter)
+Card on card (2) requires a NetworkIdentity. Please add a NetworkIdentity component to card (2) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card requires a NetworkIdentity. Please add a NetworkIdentity component to card or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (3) requires a NetworkIdentity. Please add a NetworkIdentity component to card (3) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (4) requires a NetworkIdentity. Please add a NetworkIdentity component to card (4) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (1) requires a NetworkIdentity. Please add a NetworkIdentity component to card (1) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Imported 'GUID: 50f3ff790e3088b4bb94576a146603ab' -> (Import Result ID: '39fb43de00b0b4ac6f2c49b0d4a7eec5') in 0.135 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=bc07fe473b714e0c86c1f3ec759011a2 DependenciesID=d529ca90aba0fc2973ace5ad564dfa44 StaticDependenciesID=9074a63ee42eaa138f00044e9022852c 
+Importing 'GUID: 542379bfe4acae84f8194f8d1c67d90d - Path: Assets/Prefabs/card.prefab' with importer (PrefabImporter)
+Imported 'GUID: 542379bfe4acae84f8194f8d1c67d90d' -> (Import Result ID: 'ba29075b790cca426c58e903d50014a1') in 0.012 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=7d5a555c4b35e773e17da2d4a41b7b06 DependenciesID=c0217d4c85ddac3913d953536ae24ef3 StaticDependenciesID=f1d93d1ca19411df5933f76e409ffd0e 
+Importing 'GUID: b95a82a09abc63046a22f7917407d53b - Path: Assets/Shaders/Assembly VFX Dissolve/Prefab/Clock Dissolve Appear.prefab' with importer (PrefabImporter)
+Problem detected while importing the Prefab file: 'Assets/Shaders/Assembly VFX Dissolve/Prefab/Clock Dissolve Appear.prefab'.
+The file might be corrupt or have a missing Variant parent or nested Prefabs. See details below.
+Errors:
+	Nested Prefab problem. Missing Nested Prefab Asset: 'Hands_teethGold and White (Missing Prefab with guid: 6c8611523e4e1dd49aea117aae14ab8c)'
+Imported 'GUID: b95a82a09abc63046a22f7917407d53b' -> (Import Result ID: '40fcef36156652c13214708952075392') in 0.073 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=bdacb6db4cb36ae23b0fae9708727af7 DependenciesID=c83b9d7b1948e970093afbf6d7f33f34 StaticDependenciesID=562b19f58f1204797d1f10ecc0929acb 
+Importing 'GUID: 2b2950971998e1c4abd4d430fc9278f0 - Path: Assets/Prefabs/Player.prefab' with importer (PrefabImporter)
+Imported 'GUID: 2b2950971998e1c4abd4d430fc9278f0' -> (Import Result ID: 'd450c1ebc2bf0d7d36ef9b569e0be43f') in 0.382 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=ba58b8dc355949c50565a5aa2866dd36 DependenciesID=e9be8be172f9c78bba001a106f266d78 StaticDependenciesID=0437f1d8a47cd03f76e50b03f2decd3e 
+Starting new worker id: 0 with log in /Users/davidfincher/Documents/GitHub/Potos/Logs/AssetImportWorkerHW0.log
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:SanitizeForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1439)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:53)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:SanitizeForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1439)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:53)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+Importing 'GUID: 187eeae44226bab4481a9820d3253aed - Path: Assets/Shaders/Flame/FlameThrower.vfx' with importer (VisualEffectImporter)
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:CompileForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1597)
+UnityEditor.VFX.VFXGraphPreprocessor:OnCompileResource (UnityEditor.VFX.VisualEffectResource) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:138)
+UnityEditor.VFX.VisualEffectResource:CompileResource () (at /Users/bokken/build/output/unity/unity/Modules/VFXEditor/Public/ScriptBindings/VisualEffectResource.bindings.cs:605)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:98)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:CompileForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1597)
+UnityEditor.VFX.VFXGraphPreprocessor:OnCompileResource (UnityEditor.VFX.VisualEffectResource) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:138)
+UnityEditor.VFX.VisualEffectResource:CompileResource () (at /Users/bokken/build/output/unity/unity/Modules/VFXEditor/Public/ScriptBindings/VisualEffectResource.bindings.cs:605)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:98)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+Imported 'GUID: 187eeae44226bab4481a9820d3253aed' -> (Import Result ID: 'bdc82100fa39e367dc8c82c2db63c167') in 0.149 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=445e89e9be53189aa8c63db2767be098 DependenciesID=cf0102f4df2b87569bf4224d5338a28c StaticDependenciesID=fcc84e4552102068b81335f93b93301b 
+Importing 'GUID: 792e2db102eafbd4ebf6c52d738153ae - Path: Assets/Shaders/Shower.vfx' with importer (VisualEffectImporter)
+Imported 'GUID: 792e2db102eafbd4ebf6c52d738153ae' -> (Import Result ID: 'e56acc8022381376f5c917d33d8885ee') in 0.123 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=901d476ab3e3260601d131bf9ac15074 DependenciesID=1ac55854c81dcce57e4da83a86d23b17 StaticDependenciesID=ba99d76df0fa6d4c749aea0724a5413b 
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:SanitizeForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1439)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:53)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+The VFX Graph 'FlameThrower' cannot be compiled because a Shader Graph with GUID 'dcff2a11524a7184c8850ca793dfce3b' is missing.
+You might find the missing file by searching on your disk this guid in .meta files.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+UnityEditor.VFX.VFXShaderGraphParticleOutput:CheckGraphBeforeImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs:211)
+UnityEditor.VFX.VFXGraph:SanitizeForImport () (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:1439)
+UnityEditor.VFX.VFXGraphPreprocessor:OnPostprocessAllAssets (string[],string[],string[],string[]) (at ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/Models/VFXGraph.cs:53)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.AssetPostprocessingInternal:InvokeMethod (System.Reflection.MethodInfo,object[]) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:1181)
+UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],string[],string[],string[],bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/AssetPostprocessor.cs:407)
+
+(Filename: ./Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12/Editor/ShaderGraph/VFXShaderGraphParticleOutput.cs Line: 211)
+
+
+Asset Pipeline Refresh (id=e0d5bcbbca7134ca1948b10b9eca0e93): Total: 12.342 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=40 (actual=40, local cache=0, cache server=0)
+		Asset DB Process Time: managed=153 ms, native=6198 ms
+		Asset DB Callback time: managed=727 ms, native=26 ms
+		Scripting: domain reloads=1, domain reload time=631 ms, compile time=4572 ms, other=30 ms
+		Project Asset Count: scripts=2007, non-scripts=4390
+		Asset File Changes: new=33, changed=50, moved=1, deleted=19
+		Scan Filter Count: 5
+	InvokePackagesCallback: 6.757ms
+	ApplyChangesToAssetFolders: 0.350ms
+	Scan: 670.978ms
+	Collect global state as custom dependencies: 1.370ms
+	OnSourceAssetsModified: 0.577ms
+	CategorizeScriptCompilationAssets: 59.073ms
+	ProcessAssetsWithTransientArtifactChanges: 65.820ms
+	CategorizeAssets: 144.828ms
+	CompileScripts: 4572.422ms
+	ImportOutOfDateAssets: 5250.622ms (2432.579ms without children)
+		ImportManagerImport: 1946.967ms (103.718ms without children)
+			UpdateCategorizedAssets: 75.108ms
+		ReloadNativeAssets: 0.087ms
+		UnloadImportedAssets: 1.190ms
+		ReloadImportedAssets: 0.984ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.348ms
+		InitializingProgressBar: 1.272ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.186ms
+		ImportSchedulerStart: 866.993ms
+	PostProcessAllAssets: 1230.446ms
+		ShaderAssetModifiedCallback 7.289ms
+		VCAutoAddAssetPostprocess 3.823ms
+		XRBuildSystem.XRAssetImported 2.962ms
+		PostProcessCallbackCreateDeferredMaterials 1.230ms
+		ComputeShaderImportPostprocess 1.002ms
+		VersionControlSettings.HiddenFilePostprocess 0.154ms
+		LocalizationDatabase.AssetDatabasePostprocessCallback 0.114ms
+		RaytracingShaderImportPostprocess 0.055ms
+		MonoPostProcessAllAssets: 1211.923ms
+			AssetPostprocessor.OnPostprocessAllAssets 1.061ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 0.531ms
+			AssetChangedListener.OnPostprocessAllAssets 0.130ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.113ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.054ms
+	PostAssetChangesProfiler: 2.557ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.209ms
+	UnloadStreamsBegin: 3.045ms
+	PersistCurrentRevisions: 1.873ms
+	GenerateScriptTypeHashes: 3.032ms
+	GenerateScriptTypeSerializationHashes: 4.784ms
+	Untracked: 777.103ms
+
+Application.AssetDatabase Initial Refresh End
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Scanning for USB devices : 0.126ms
+Initializing Unity extensions:
+Worker ready: AssetImportWorkerHW0 0
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Potos
+2026-10-10 10:16:13.135 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be7480a0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Unloading 70 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Scenes/MainMenu.unity'
+	Deserialize:            56.005 ms
+	Integration:            303.501 ms
+	Integration of assets:  17.373 ms
+	Thread Wait Time:       0.072 ms
+	Total Operation Time:   376.951 ms
+Unloading 8809 unused Assets / (37.1 MB). Loaded Objects now: 11467.
+Memory consumption went from 451.3 MB to 414.2 MB.
+Total: 15.915083 ms (FindLiveObjects: 0.710750 ms CreateObjectMapping: 2.518000 ms MarkObjects: 9.520667 ms  DeleteObjects: 3.162417 ms)
+
+[LAYOUT] About to load UserSettings/Layouts/default-6000.dwlt, keepMainWindow=False
+[LAYOUT] About to save layout /Users/davidfincher/Documents/GitHub/Potos/UserSettings/Layouts/default-6000.dwlt
+[LAYOUT] About to save layout /Users/davidfincher/Library/Preferences/Unity/Editor-5.x/Layouts/current/default-6000.dwlt
+[MODES] ModeService[default].InitializeCurrentMode
+[MODES] ModeService[default].RaiseModeChanged(default, default)
+2026-10-10 10:16:13.937 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be749360 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+[Project] Loading completed in 17.410 seconds
+	Project init time: 				16.313 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.163 seconds
+		Asset Database init time: 		0.343 seconds
+		Global illumination init time: 	0.000 seconds
+		Assemblies load time: 			2.625 seconds
+		Unity extensions init time: 	0.016 seconds
+		Asset Database refresh time: 	12.342 seconds
+	Scene opening time: 			0.907 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1791620174003,"processId":61559,"projectLoad":17.409939708000004,"projectInit":16.312791583,"templateInit":0.0,"packageManagerInit":0.162510417,"assetDatabaseInit":0.343309791,"globalIlluminationInit":0.000412334,"assembliesLoad":2.624996333,"unityExtensionsInit":0.016143708,"assetDatabaseRefresh":12.341866416,"sceneOpening":0.907206292}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1791620174004,"processId":61559,"editorVersion":"6000.5.2f1 (eb73d3b415a1)","branch":"6000.5/staging","buildType":"Release","platform":"OSX"}
+Subscribe to USB device events
+Scanning for USB devices : 0.083ms
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Asset Pipeline Refresh (id=cc907c716a10c4ea7a5149650eaad56c): Total: 0.118 seconds - Initiated by RefreshV2(ForceSynchronousImport)
+Start Indexing on Editor startup
+[Indexing] Starting Initial Indexing for Assets
+Created GICache directory at /Users/davidfincher/Library/Caches/com.unity3d.UnityEditor/GiCache. Took: 0.003s, timestamps: [17.460 - 17.463]
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "aUXFWqNp"... (expires: 2026-10-10T08:18:57Z)
+[Licensing::Client] Successfully resolved entitlement details
+Starting new worker id: 1 with log in /Users/davidfincher/Documents/GitHub/Potos/Logs/AssetImportWorkerHW1.log
+[Worker0] Imported GUID: d029a45549f566f418bb7c2a6fc4fabc - Path: Assets/Shaders/Flame/flame.png - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'dabcaf5a8f0d3d69fe8ad41db6ac892d') in 0.100173166 seconds
+[Worker0] Imported GUID: 2a94c8cca27affd47bca72ca25791d4b - Path: Assets/Sounds/flame/ATK_FLAME_ATK_PREP_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'c2ecb90a2562b3e0e4adab343529a190') in 0.03152725 seconds
+[Worker0] Imported GUID: 0d6a6755f9b88ac49bfe026fc5ab9382 - Path: Assets/Shaders/Blood System - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '4f4ea8f1588d8b5665cb289af9f1bf60') in 0.025643625 seconds
+[Worker0] Imported GUID: a8891243144f7c649b6778fca6ee2cad - Path: Assets/Data/Attacks/Knife.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '48ad8c5fa5e05d6305799598b97cff68') in 0.039488417 seconds
+[Worker0] Imported GUID: 62360a0955939d244a9e6a5aa9a2eed9 - Path: Assets/C#/Gameplay/Player/CameraLook.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '93e0d72016bd663f42ac58f74ceb1650') in 0.0279525 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Worker0] Imported GUID: ee9d2553644b14842b2afd1c606b3faf - Path: Assets/Shaders/Flame - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'e4c9d8b28884aae7d9fe633ad06c2f93') in 0.024338625 seconds
+[Worker0] Imported GUID: 49288e629e1ba214d8c264215476fc9c - Path: Assets/3D-Animations - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '7b350de0f0c058942a257b928b75f9b7') in 0.0240055 seconds
+[Worker0] Imported GUID: 1f3083baa1d82bc4b8e7923de4585870 - Path: Assets/Sounds/game sounds - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'c695781ec91f1cc8ea11da3e1d8671d6') in 0.024867667 seconds
+[Worker0] Imported GUID: b8ff3b13d3ad3fc4d8da3d7375cb64e1 - Path: Assets/Shaders/Capillars/Additive/small capillars_ADDITIVE.png - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'bd24564c05d3e6ce4c90a56fb892a91e') in 0.0331175 seconds
+[Worker0] Imported GUID: efb581c83fcdf8e4ab09d13223242d40 - Path: Assets/Sounds/flame/ATK_FLAME_ATK_END_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '8d6188e83ceee707ec38c0b409491b64') in 0.031913125 seconds
+[Worker0] Imported GUID: c1a3638f645345c4491fd46f41d7b3b5 - Path: Assets/C#/Gameplay/Interaction/Card/CardInteraction.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'f3b9a54042fc397164aa9eb3963d8b47') in 0.02358275 seconds
+[Worker0] Imported GUID: dd9126eac17fa4e40975d98c2f13b52c - Path: Assets/C#/Gameplay/Interaction/Card/Card.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '00d28d59e9e6df08da1c0c4ebe14bbc8') in 0.025868917 seconds
+[Worker0] Imported GUID: c870bafc051140a4fa0cea76c3858e30 - Path: Assets/C#/Gameplay/Player/PlayerEffects.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'b8240389132e3eb95eb57fde3918eaa4') in 0.025240667 seconds
+[Worker0] Imported GUID: 1441bcd6d296a4140ad93fbc28cb3c3a - Path: Assets/Sounds/flame/ATK_FLAME_ATK_ACTION_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'df0228d9ba70145cfb54b9142702eb6e') in 0.024677583 seconds
+[Worker0] Imported GUID: 49f434b674f61bf47b4db684bef09e12 - Path: Assets/Shaders/Blood System/Shader  Overlay - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '63f582d487c49a04240e01feda31c25b') in 0.0241645 seconds
+[Worker0] Imported GUID: decb2702aa1b9ac4cb2a101a41f05b49 - Path: Assets/Sounds/game sounds/CARD_BURN_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'd8d1eff44ef2122f6e1346c5951539d2') in 0.025612541 seconds
+[Worker0] Imported GUID: 2d44c52dfd83c51429d3f284f9c3d5e3 - Path: Assets/C#/Gameplay/GameMaster.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '28813a241b6d9af4c071ff7a6e7847b7') in 0.026386084 seconds
+[Worker0] Imported GUID: 59d1dcdf050aaf64b9e903ce2afdd640 - Path: Assets/C#/Gameplay/Interaction/Card/CardEffects/CE_Glue.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '6b53b02d143ef80ad1fb1e6ef292b4d6') in 0.023543333 seconds
+[Worker0] Imported GUID: 9c3e70fa46926b149b4f4aeac5b205c5 - Path: Assets/C#/Gameplay/Interaction/Card/CardEffects/CE_Knife.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '3afa70f80f1465fa92e2c4542f942c15') in 0.023375167 seconds
+[Worker0] Imported GUID: cf485832e4e6324469de63eecc2c1841 - Path: Assets/Shaders/Blood System/Shader  Overlay/CS_Overlay_Shader.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '0ad47691562688a42bb47495f27af27e') in 0.031422833 seconds
+[Worker0] Imported GUID: 712c55237fd90774185ad84d7edc9b81 - Path: Assets/Shaders/Capillars/Additive - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'cdfcbc8e9e2694e2289242298abb6c36') in 0.028195083 seconds
+[Worker0] Imported GUID: a440b960b783fe64e9c3add6ac0b6924 - Path: Assets/Data/CardEffects/CE_Knife.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '0655d3d6a3c9b25172ecb50be0b2fb0b') in 0.025457334 seconds
+[Worker0] Imported GUID: 40f80f6183bf19046a40902e44e77bf5 - Path: Assets/Shaders/Capillars - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '8c3546dc915bd7679a613a5bcc6fb48d') in 0.026866 seconds
+[Worker0] Imported GUID: cf777d0d88c4fd84ba01e551ddbbcb1f - Path: Assets/Shaders/Capillars/Additive/big capillars_ADDITIVE.png - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '00380e7a57b543965717c436af4f8028') in 0.028059084 seconds
+[Worker0] Imported GUID: 2b2950971998e1c4abd4d430fc9278f0 - Path: Assets/Prefabs/Player.prefab - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '5a82cae00665f3aeb19b2d667bde578c') in 0.185095542 seconds
+[Worker0] Imported GUID: 187eeae44226bab4481a9820d3253aed - Path: Assets/Shaders/Flame/FlameThrower.vfx - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'dbf6ed930c510cada5e34e3aca5bce59') in 0.031412583 seconds
+Project ID request failed, Reason: The requested URL returned error: 403 (403).
+Unknown Unity Connect error (400). Please contact support at support@unity.com while processing request "https://services.unity.com/api/unity/legacy/v1/projects/6fdea1c4-dedf-4e37-aa45-00cad7f0dea4", HTTP error code 403
+.[Worker0] Imported GUID: 797de070cebc73843b87d16d050ba05d - Path: Assets/Sounds/game sounds/LOST_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '51783ddd35d619e788592ae8136f4309') in 0.026625708 seconds
+[Worker0] Imported GUID: 58de9db0795332b4a83df10acaf253e6 - Path: Assets/C#/Gameplay/Interaction/Card/CardMovement.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '8defdfeb70ffda0a328af930d9374191') in 0.024547958 seconds
+[Worker0] Imported GUID: 984921e08d25aee4685307d1c8e7fadc - Path: Assets/Sounds/game sounds/ACCESSORY_DISAPPEAR_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'e84bd579caa41279a34897215b2184bc') in 0.02524125 seconds
+[Worker0] Imported GUID: 0b3bd835e43f4d4489982f59dfaee76f - Path: Assets/Shaders/Blood System/Shader  Overlay/Subgraph/Radial_Mask.shadersubgraph - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '6ab25334061257b7b6d19436e4def1f7') in 0.025790666 seconds
+[Worker0] Imported GUID: 9c400e151a8e9a24fbfc7379d9bd76c7 - Path: Assets/Shaders/Capillars/Additive/medium capillars_ADDITIVE.png - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '7f6ec4dd6fb75a82847ee0397f481b02') in 0.026373042 seconds
+[Worker0] Imported GUID: 4c573f14c6132ff458e58cba5a1a76a3 - Path: Assets/Data/Attacks/Glue.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'dbed85600fcef29d3595237c05d4eb7c') in 0.02466925 seconds
+[Worker0] Imported GUID: 19b900309b007ff479d5087cc2ac7834 - Path: Assets/Data/Attacks/Web.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'd74ec590f78b067a5090c57f0214f0d2') in 0.027776334 seconds
+[Worker0] Imported GUID: 8482324ee771c5c4a984be3ab7b76619 - Path: Assets/Sounds/flame - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '04df0e509883429faf008955f9ca1569') in 0.026852834 seconds
+[Worker0] Imported GUID: 6c14a9bfb0b3e584c8d5803f2e558041 - Path: Assets/Shaders/Blood System/Shader  Overlay/Subgraph - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '9456e6441b59e72c99ca31829bcefc82') in 0.022814584 seconds
+[Worker0] Imported GUID: 6a931d86a90cf624c9c4b43469a609e2 - Path: Assets/C#/Gameplay/AttackSequence.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'f3663d9179f6386fde1a77dce4399d74') in 0.023132458 seconds
+[Worker0] Imported GUID: 920815d973dd480478b7107840cdc0e1 - Path: Assets/Data/Attacks/Colt.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '58bc5b2fd2de500c84e36185ef64af64') in 0.026017833 seconds
+[Worker0] Imported GUID: 44a6c2c4f23362243a9572659f9ce231 - Path: Assets/C#/Gameplay/Interaction/PlayerInteractable.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'c727090713cf9abcf3f282d7242e27d8') in 0.023439083 seconds
+Worker ready: AssetImportWorkerHW1 1
+[Worker0] Imported GUID: 542379bfe4acae84f8194f8d1c67d90d - Path: Assets/Prefabs/card.prefab - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '9453ea109681b51debb2484eb270de8f') in 0.04157525 seconds
+[Worker0] Imported GUID: 534aabb6fb847f74dbd2ce44529c354c - Path: Assets/Sounds/game sounds/WIN_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '210172ea79a01ba0513509ec44680b58') in 0.024291208 seconds
+[Worker0] Imported GUID: 641290963a2bcf848b64cdb63cd8a399 - Path: Assets/Shaders/Blood System/Shader  Overlay/CS_Overlay_Shader.shadergraph - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '698fb966bac8112dd39a93c846b689ae') in 0.029870416 seconds
+[Worker0] Imported GUID: 69f7d078b8d6dd64c983c33898c3c321 - Path: Assets/Data/CardEffects/CE_Glue.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '38362a1e018c1d373e6624ec86dadc4f') in 0.025599334 seconds
+[Worker0] Imported GUID: d39ee0255c6dfc744ab376023cde6e17 - Path: Assets/C#/Gameplay/Player/PlayerActions.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '137e91c88b329e005a80421029f8ad0b') in 0.025568375 seconds
+[Worker0] Imported GUID: da3d5b79dff315a4b9b765d902b69128 - Path: Assets/Sounds/game sounds/NEXT_STAGE_SOUND.wav - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '441465b0278c4e2a559b63acce349cd0') in 0.024460208 seconds
+[Worker0] Imported GUID: 68022544d45693a4493bbf11d6d5cfc2 - Path: Assets/C#/Gameplay/Player/Player.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '27561055b09ea0afbe73c7e3b98962a8') in 0.025014167 seconds
+[Worker0] Imported GUID: bade9a0e49f0a5a4e8c2e6c517394a6b - Path: Assets/C#/Gameplay/Interaction/InteractableObject.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '5d38a9d2eb238c5b90204cf4d4a6828c') in 0.024189916 seconds
+[Worker0] Imported GUID: 792e2db102eafbd4ebf6c52d738153ae - Path: Assets/Shaders/Shower.vfx - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'ade35841002d0eec103a5460bf97ba90') in 0.029776709 seconds
+[Worker0] Imported GUID: 97eb47d0c82bba444aede656d7d7ce14 - Path: Assets/Shaders/Flame/Flame.shadergraph - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '01d3127b3ce55c65f03a355ce6d45946') in 0.026688125 seconds
+[Worker0] Imported GUID: d7a4ea8fac9429f4a86cb19bcfd52146 - Path: Assets/props/cards/ATK_FLAME_CARD 1.png - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '8a8023e045290f5986030af47a68e808') in 0.032036459 seconds
+[Worker0] Imported GUID: e2dbbc03beed1c7438fb4027755331d3 - Path: Assets/C#/Gameplay/Interaction/Card/CardVisual.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '5bde72c8792a18f164e19fa5c2384e32') in 0.02358075 seconds
+Thread 0x373987000 may have been prematurely finalized
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+2026-10-10 10:16:25.938 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be748d20 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-10-10 10:16:25.941 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be740280 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-10-10 10:16:25.945 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be748aa0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-10-10 10:16:25.948 Unity[61559:2720308] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0x9be740280 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+<CFData 0x9b4ab5130 [0x1f8d65308]>{length = 6, capacity = 6, bytes = 0x50a6d8c605a1}
+Symbol file LoadedFromMemory is not a mono symbol file
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.951 seconds
+Domain Reload Profiling: 1583ms
+	BeginReloadAssembly (427ms)
+		DisableScriptedObjects (25ms)
+		CreateAndSetChildDomain (304ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (161ms)
+		LoadAssemblies (103ms)
+		AnalyzeDomain (17ms)
+			TypeCache.Refresh (8ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (951ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (72ms)
+			ProcessInitializeOnLoadAttributes (280ms)
+			ProcessInitializeOnLoadMethodAttributes (68ms)
+		AwakeInstancesAfterBackupRestoration (242ms)
+No restricted APIs configured; Validation skipped.
+Checking 30 assemblies for restricted APIs found 0 usage(s) in 2 ms
+
+Asset Pipeline Refresh (id=8e392eaf7ae2644499e1b678f060857a): Total: 2.562 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1328 ms
+		Asset DB Callback time: managed=431 ms, native=148 ms
+		Scripting: domain reloads=1, domain reload time=652 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=2007, non-scripts=4390
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 0.951ms
+	ApplyChangesToAssetFolders: 0.214ms
+	Collect global state as custom dependencies: 1.142ms
+	ProcessAssetsWithTransientArtifactChanges: 133.092ms
+	CategorizeAssets: 76.981ms
+	CompileScripts: 1.289ms
+	ImportOutOfDateAssets: 1023.972ms (966.863ms without children)
+		CollectScriptTypesHashes: 2.893ms
+		ReloadNativeAssets: 1.596ms
+		UnloadImportedAssets: 0.942ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.658ms
+		ImportSchedulerStart: 53.877ms
+	PostProcessAllAssets: 569.543ms
+		AssemblyValidation.PostprocessAllAssets 24.667ms
+		PostProcessCallbackCreateDeferredMaterials 16.380ms
+		ShaderAssetModifiedCallback 9.123ms
+		RaytracingShaderImportPostprocess 9.095ms
+		ComputeShaderImportPostprocess 9.055ms
+		SpeedTreeImporter.PostprocessAllAssets 9.009ms
+		LocalizationDatabase.AssetDatabasePostprocessCallback 3.393ms
+		BlockShaderImporter.PostprocessAllAssets 3.338ms
+		XRBuildSystem.XRAssetImported 0.146ms
+		MonoPostProcessAllAssets: 430.247ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 155.714ms
+			AssetPostprocessor.OnPostprocessAllAssets 54.894ms
+			PostProcessor.OnPostprocessAllAssets 41.282ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 28.662ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 27.528ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 27.514ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 18.301ms
+			AssetChangedListener.OnPostprocessAllAssets 11.965ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 7.442ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.559ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 3.741ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 2.461ms
+			MaterialPostprocessor.OnPostprocessAllAssets 2.211ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.124ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 1.089ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.887ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.349ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.344ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.265ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.220ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.215ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.207ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.183ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.180ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.164ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.156ms
+			AssetEvents.OnPostprocessAllAssets 0.109ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.102ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.096ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.095ms
+			SyncVS.PostprocessSyncProject 0.068ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.062ms
+	PostAssetChangesProfiler: 9.952ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.456ms
+	UnloadStreamsBegin: 1.517ms
+	PersistCurrentRevisions: 0.137ms
+	GenerateScriptTypeHashes: 5.256ms
+	GenerateScriptTypeSerializationHashes: 8.549ms
+	Untracked: 738.872ms
+
+[S_API] SteamAPI_Init(): Loaded '/Users/davidfincher/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/steamclient.dylib' OK.
+Setting breakpad minidump AppID = 480
+SteamInternal_SetMinidumpSteamID:  Caching Steam ID:  76561199812387752 [API loaded no]
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            2.804 ms
+	Integration:            343.045 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.005 ms
+	Total Operation Time:   345.855 ms
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Lobby host: 76561199812387752
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:58)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/C#/UI/MainMenu.cs Line: 58)
+
+Starting server [SteamSockets].
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:ServerStart () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:159)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:149)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 159)
+
+Server started listening
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:165)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 165)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.876750 ms
+LobbyController: DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+SteamAvatarExtractor:Awake () (at Assets/C#/UI/SteamAvatarExtractor.cs:24)
+
+[Assets/C#/UI/SteamAvatarExtractor.cs line 24]
+
+Loaded scene 'Assets/Scenes/LobbyScene.unity'
+	Deserialize:            6.246 ms
+	Integration:            355.266 ms
+	Integration of assets:  0.190 ms
+	Thread Wait Time:       4.423 ms
+	Total Operation Time:   366.126 ms
+Unloading 7883 unused Assets / (4.5 MB). Loaded Objects now: 12623.
+Memory consumption went from 0.55 GB to 0.55 GB.
+Total: 29.816875 ms (FindLiveObjects: 7.533375 ms CreateObjectMapping: 2.448375 ms MarkObjects: 16.114958 ms  DeleteObjects: 3.719834 ms)
+
+Unloading 62 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.790333 ms
+Loaded scene 'Assets/Scenes/GameplayScene.unity'
+	Deserialize:            73.938 ms
+	Integration:            295.122 ms
+	Integration of assets:  4.959 ms
+	Thread Wait Time:       7.112 ms
+	Total Operation Time:   381.131 ms
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Unloading 275 unused Assets / (54.4 KB). Loaded Objects now: 15783.
+Memory consumption went from 0.65 GB to 0.65 GB.
+Total: 36.525750 ms (FindLiveObjects: 3.553750 ms CreateObjectMapping: 1.366417 ms MarkObjects: 28.944875 ms  DeleteObjects: 2.660417 ms)
+
+TrimDiskCacheJob: Current cache size 2mb
+Thread 0x17fec7000 may have been prematurely finalized
+Transport shut down - server.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:Shutdown () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:239)
+Mirror.Transport:OnApplicationQuit () (at Assets/Mirror/Core/Transport.cs:207)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 239)
+
+LobbyHandler instance is missing. Lobby refresh skipped.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+NetManager:OnServerDisconnect (Mirror.NetworkConnectionToClient) (at Assets/C#/Core/NetManager.cs:125)
+Mirror.NetworkManager:StopClient () (at Assets/Mirror/Core/NetworkManager.cs:622)
+Mirror.NetworkManager:OnApplicationQuit () (at Assets/Mirror/Core/NetworkManager.cs:648)
+
+(Filename: Assets/C#/Core/NetManager.cs Line: 125)
+
+Unloading 36 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            3.479 ms
+	Integration:            242.182 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.002 ms
+	Total Operation Time:   245.665 ms
+Unloading 829 unused Assets / (21.9 MB). Loaded Objects now: 12496.
+Memory consumption went from 0.52 GB to 0.50 GB.
+Total: 14.763417 ms (FindLiveObjects: 0.728500 ms CreateObjectMapping: 1.069333 ms MarkObjects: 11.334125 ms  DeleteObjects: 1.631042 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+MonoPathRemapper: Attempts to remap: 73195; Successful remaps: 23084
+Thread 0x373513000 may have been prematurely finalized
+Thread 0x17ff53000 may have been prematurely finalized
+Serialized file version minimum: 23, current 23
+[LAYOUT] About to save layout /Users/davidfincher/Documents/GitHub/Potos/UserSettings/Layouts/default-6000.dwlt
+[LAYOUT] About to save layout /Users/davidfincher/Library/Preferences/Unity/Editor-5.x/Layouts/current/default-6000.dwlt
+Clearing [NotoSerif-VariableFont_wdth,wght SDF] dynamic font asset data.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+TMPro.EditorEventCallbacks/<>c:<InitializeFontAssetResourceChangeCallBacks>b__0_0 () (at ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs:36)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:128)
+
+(Filename: ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs Line: 36)
+
+Clearing [LiberationSans SDF - Fallback] dynamic font asset data.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+TMPro.EditorEventCallbacks/<>c:<InitializeFontAssetResourceChangeCallBacks>b__0_0 () (at ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs:36)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:128)
+
+(Filename: ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs Line: 36)
+
+Asset Pipeline Refresh (id=04f3644e5834e4f12ad76aae547b4ef6): Total: 0.014 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Shutting down MSBuild server...
+Shutting down VB/C# compiler server...
+VB/C# compiler server shut down successfully.
+Importing 'GUID: a20cf97654237ff4b8deb48fe92bdf16 - Path: Assets/Fonts/NotoSerif-VariableFont_wdth,wght SDF.asset' with importer (NativeFormatImporter)
+Imported 'GUID: a20cf97654237ff4b8deb48fe92bdf16' -> (Import Result ID: '384c71ec9f61abce45e4bfe8967d29e1') in 0.018 seconds [static dependencies only]. Details - ImportResultOutputID=90ababe83ea23f6eb9f57d05908ad0a8 DependenciesID=fc7d2fc27ee26da5bd8c26c158bd6c2e StaticDependenciesID=625f62c1cc35c873a22b47539e19c252 
+Importing 'GUID: 2e498d1c8094910479dc3e1b768306a4 - Path: Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 2e498d1c8094910479dc3e1b768306a4' -> (Import Result ID: '97c74fceef73f6e872eddc65cf07c1cd') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=94ce4dace069634644df4d315a8acf11 DependenciesID=43f620936312dcb86ad1def4f238dfec StaticDependenciesID=2995676e0d66bc229fbb9602ed654a6b 
+MSBuild server shut down successfully.
+
+Asset Pipeline Refresh (id=1bc95fd7a3fe649369a839d077dd9e14): Total: 0.356 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=2 (actual=2, local cache=0, cache server=0)
+		Asset DB Process Time: managed=1 ms, native=342 ms
+		Asset DB Callback time: managed=3 ms, native=9 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=2007, non-scripts=4390
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 7
+	ApplyChangesToAssetFolders: 0.103ms
+	Scan: 4.207ms
+	OnSourceAssetsModified: 0.906ms
+	CategorizeScriptCompilationAssets: 0.298ms
+	ProcessAssetsWithTransientArtifactChanges: 0.264ms
+	CategorizeAssets: 160.488ms
+	ImportOutOfDateAssets: 129.176ms (34.844ms without children)
+		ImportManagerImport: 28.344ms (7.956ms without children)
+		ReloadNativeAssets: 0.283ms
+		UnloadImportedAssets: 0.091ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.665ms
+		InitializingProgressBar: 0.328ms
+		ImportSchedulerStart: 64.617ms
+	PostProcessAllAssets: 9.123ms
+		XRBuildSystem.XRAssetImported 4.820ms
+		AssemblyValidation.PostprocessAllAssets 0.269ms
+		PostProcessCallbackCreateDeferredMaterials 0.152ms
+		MonoPostProcessAllAssets: 2.522ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.912ms
+			AssetPostprocessor.OnPostprocessAllAssets 0.536ms
+			AssetChangedListener.OnPostprocessAllAssets 0.396ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.144ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.101ms
+	PostAssetChangesProfiler: 2.084ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.184ms
+	PersistCurrentRevisions: 0.186ms
+	Untracked: 48.407ms
+
+Thread 0x17ffdf000 may have been prematurely finalized
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+[Licensing::IpcConnector] LicenseClient-davidfincher-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-davidfincher channel disconnected successfully.
+Thread 0x16ec33000 may have been prematurely finalized
+Thread 0x16ecbf000 may have been prematurely finalized
+Thread 0x16edd7000 may have been prematurely finalized
+Thread 0x16ee63000 may have been prematurely finalized
+Thread 0x16ef7b000 may have been prematurely finalized
+Thread 0x16eeef000 may have been prematurely finalized
+Thread 0x16ed4b000 may have been prematurely finalized
+AcceleratorClientConnectionCallback - disconnected - :0
+Thread 0x17947f000 may have been prematurely finalized
+Cleanup mono
+CodeReloadManager destroyed
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      ALC ILPP context 1 is unloading
+debugger-agent: Unable to listen on 84
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1791620237812,"processId":61559,"allocatedMemory":51473098,"memoryLabels":[{"Default":263392},{"Permanent":15672},{"Thread":1055928},{"Manager":1410302},{"VertexData":8},{"Geometry":408},{"Texture":24},{"Shader":860686},{"Material":24},{"GfxDevice":41072},{"GfxThread":1280},{"Animation":50440},{"Audio":680},{"FreeType":8},{"FontEngine":736},{"Physics":2178},{"Physics2D":16},{"Serialization":175096},{"Input":43216},{"JobScheduler":448},{"TextLib":23427},{"Mono":56},{"MonoCode":216},{"ScriptingNativeRuntime":155024},{"BaseObject":1684208},{"Resource":984},{"Renderer":3600},{"Transform":4693},{"File":11510},{"WebCam":32},{"Culling":32},{"Terrain":11346},{"Wind":24},{"String":11984},{"StaticString":4140},{"Utility":2689152},{"Curl":1388},{"PoolAlloc":2392},{"AI":80},{"TypeTree":20941},{"CodeReload":448},{"RuntimeInitializeOnLoadManager":64},{"Sprites":102},{"SpriteAtlas":120},{"GI":7240},{"CloudService":8032},{"WebRequest":10784},{"VR":46890},{"SceneManager":616},{"Video":2112},{"LazyScriptCache":32},{"NativeArray":33020496},{"Camera":17},{"Secure":9865},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57504},{"StaticSafetyDebugInfo":278528},{"Baselib":16},{"Analytics":528},{"Hierarchy":1608},{"UIElements":300160},{"CoreStats":13768},{"Identifiers":6768},{"Gui":13082},{"EditorUtility":158183},{"VersionControl":8},{"Undo":939},{"AssetDatabase":8957626},{"AssetImporter":40},{"EditorGi":328},{"UnityConnect":36302},{"Upm":1788},{"UpmDiagnostics":8},{"AssetCompliance":64},{"DrivenProperties":72},{"HubClient":848},{"ChannelService":768},{"LocalIPC":211},{"ProfilerEditor":9738},{"CoreBusinessMetrics":3085},{"Windowing":416},{"Licensing":960},{"AssetReference":32},{"IPCStream":6811}]}

@@ -1,0 +1,2343 @@
+Unity Editor version:    6000.5.2f1 (eb73d3b415a1)
+Branch:                  6000.5/staging
+Build type:              Release
+Batch mode:              NO
+macOS version:           Version 26.6.2 (Build 25G83)
+Darwin version:          25.6.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        16384 MB
+Date:                    2026-09-22T19:40:47Z
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-davidfincher" at "2026-09-22T19:40:47.308757Z"
+
+COMMAND LINE ARGUMENTS:
+/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/MacOS/Unity
+-projectpath
+/Users/davidfincher/Documents/GitHub/Potos
+-acceptSoftwareTermsForThisRunOnly
+-useHub
+-hubIPC
+-cloudEnvironment
+production
+-licensingIpc
+LicenseClient-davidfincher
+-hubSessionId
+71329536-92d7-4e18-9277-6b806dd8b86f
+-accessToken
+Ko_sCxL3-EV-0NeYqZSmhE_7aMagB66VmcWmSPJpvuw007f
+Successfully changed project path to: /Users/davidfincher/Documents/GitHub/Potos
+/Users/davidfincher/Documents/GitHub/Potos
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              22e983db732d4700af85392c2ad4dbd2
+  Correlation Id:          f752fafce960dbcd54c683b680e8c794
+  External correlation Id: 8127408478036977544
+  Machine Id:              f4p26YZ5wnO3aIEtoswklvaZS+U=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-davidfincher" (connect: 0.00s, validation: 0.00s, handshake: 0.35s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-davidfincher-notifications" at "2026-09-22T19:40:47.656349Z"
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated the access token Ko_sCxL3-E...
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 7972487186709-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.36s
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=0"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [8421712256]  Target information:
+
+Player connection [8421712256]  * "[IP] 192.168.1.81 [Port] 55504 [Flags] 2 [Guid] 2671420142 [EditorId] 2671420142 [Version] 1048832 [Id] OSXEditor(0,Davids-MacBook-Air.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8421712256]  * "[IP] 198.18.0.1 [Port] 55504 [Flags] 2 [Guid] 2671420142 [EditorId] 2671420142 [Version] 1048832 [Id] OSXEditor(0,Davids-MacBook-Air.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8421712256] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8421712256] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-19419" after 0.1 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 2.06 ms, found 1 plugins.
+Initialize engine version: 6000.5.2f1 (eb73d3b415a1)
+[Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/davidfincher/Documents/GitHub/Potos/Assets
+GfxDevice: creating device client; kGfxThreadingModeThreaded
+ preferred device: Apple M3 (high power)
+Metal devices available: 1
+0: Apple M3 (high power)
+Using device Apple M3 (high power)
+Initializing Metal device caps: Apple M3
+Mac GPU Family: 2
+Apple GPU Family: 9
+MSL Version: 3.0
+Has Float MSAA: 1
+Has Float Filtering: 1
+ReadWrite Texture Tier: 2
+Initialize mono
+Mono path[0] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed'
+Mono path[1] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56419
+CodeReloadManager initialized
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.5.2f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
+Registered in 0.005994 seconds.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Package Manager log level set to [2]
+[Licensing::Client] Successfully resolved entitlement details
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in 17.049 seconds
+Domain Reload Profiling: 17402ms
+	BeginReloadAssembly (103ms)
+		CreateAndSetChildDomain (7ms)
+	RebuildCommonClasses (3ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (44ms)
+	LoadAllAssembliesAndSetupDomain (185ms)
+		LoadAssemblies (97ms)
+		AnalyzeDomain (142ms)
+			TypeCache.Refresh (141ms)
+				TypeCache.ScanAssembly (128ms)
+	FinalizeReload (17050ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (33ms)
+			BeforeProcessingInitializeOnLoad (46ms)
+			ProcessInitializeOnLoadAttributes (58ms)
+			ProcessInitializeOnLoadMethodAttributes (16859ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 65 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.collab-proxy@2.12.4 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.collab-proxy@0b1559bcd34e)
+    com.unity.inputsystem@1.19.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.inputsystem@21a28c3a6c83)
+    com.unity.multiplayer.playmode@2.0.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.multiplayer.playmode@d8888f6ed6aa)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.splines@2.9.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.splines@e6e1d5900acc)
+    com.unity.timeline@1.8.12 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.timeline@8cd8509afae5)
+    com.unity.visualscripting@1.9.11 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.visualscripting@8bed5ad90189)
+    com.unity.settings-manager@2.1.1 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.settings-manager@0b8638c5ce86)
+    com.unity.ide.visualstudio@2.0.26 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ide.visualstudio@a99d56dec63f)
+    com.unity.ide.rider@3.0.38 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ide.rider@1f60b3138684)
+    com.unity.editorcoroutines@1.1.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.editorcoroutines@87a15ed012c2)
+    com.unity.performance.profile-analyzer@1.4.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.performance.profile-analyzer@2bb26871883c)
+    com.unity.testtools.codecoverage@1.3.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.testtools.codecoverage@19a841221620)
+    com.unity.searcher@4.9.4 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.searcher@d45a78918735)
+    com.unity.burst@1.8.29 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.burst@6bb9aca3ef38)
+    com.unity.nuget.mono-cecil@1.11.6 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.test-framework.performance@8b56083ec0f0)
+  Built-in packages:
+    com.unity.feature.development@1.0.2 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.feature.development@767aadbc6eb7)
+    com.unity.multiplayer.center@1.0.1 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.multiplayer.center@b860850997d0)
+    com.unity.render-pipelines.high-definition@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.high-definition@debc963d8185)
+    com.unity.ugui@2.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ugui@3d1ea40b73ef)
+    com.unity.modules.accessibility@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physics2d)
+    com.unity.modules.physicscore2d@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.physicscore2d)
+    com.unity.modules.screencapture@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.modules.hierarchycore)
+    com.unity.mathematics@1.4.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.mathematics@981956d94fb6)
+    com.unity.render-pipelines.core@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.core@9fe9377312a8)
+    com.unity.shadergraph@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.shadergraph@2df19e8719bc)
+    com.unity.visualeffectgraph@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.visualeffectgraph@0c8858222b12)
+    com.unity.render-pipelines.high-definition-config@17.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.render-pipelines.high-definition-config@77f033cbf9c5)
+    com.unity.test-framework@1.7.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.test-framework@1405238725ab)
+    com.unity.collections@6.5.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.collections@a43cabe808ca)
+    com.unity.ext.nunit@2.1.0 (location: /Users/davidfincher/Documents/GitHub/Potos/Library/PackageCache/com.unity.ext.nunit@44f7d31723bd)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.00 seconds
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://unix:/tmp/ilpp.sock-b9850045288cc3c92f818a704df5b9b7
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/davidfincher/Documents/GitHub/Potos
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 23.9216ms
+Starting: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /Users/davidfincher/Documents/GitHub/Potos
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.runtime.interopservices.windowsruntime has duplicate hint path. Ignoring "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/UnityReferenceAssemblies/unity-4.8-api/Facades/System.Runtime.InteropServices.WindowsRuntime.dll" in favor of "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll"
+warn: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Assembly system.componentmodel.composition has duplicate hint path. Ignoring "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/UnityReferenceAssemblies/unity-4.8-api/System.ComponentModel.Composition.dll" in favor of "/Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/NetStandard/compat/2.1.0/shims/netfx/System.ComponentModel.Composition.dll"
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil, Version=0.11.6.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@6bb9aca3ef38/Unity.Burst.CodeGen/Unity.Burst.Cecil.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.Cecil, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.nuget.mono-cecil@ecb9724e46ff/Mono.Cecil.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.CecilX, Version=0.11.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Assets/Mirror/Plugins/Mono.Cecil/Mono.CecilX.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 16.6322ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with Library/Bee/artifacts/200b0aE.dag/Mirror.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/UnityEngine.CoreModule.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Scripting, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/Unity.Scripting.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved UnityEditor.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEngine/UnityEditor.CoreModule.dll
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Mono.CecilX.Rocks, Version=0.11.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Assets/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Rocks.dll
+Find all reader and writers took 36 milliseconds
+Script Module: Assembly-CSharp.dll
+Weave behaviours and messages took 66 milliseconds
+  ProcessSitesModule Assembly-CSharp.dll elapsed time:00:00:00.0028780
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null with Library/Bee/artifacts/200b0aE.dag/Unity.Collections.dll
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.6.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@6bb9aca3ef38/Unity.Burst.CodeGen/Unity.Burst.Cecil.Rocks.dll
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 542.4763ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+Find all reader and writers took 25 milliseconds
+Script Module: Assembly-CSharp-Editor.dll
+Weave behaviours and messages took 0 milliseconds
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 57.5975ms
+ExitCode: 0 Duration: 3s822ms
+[ 716/1016  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[1008/1016  1s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+[1009/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1010/1016  0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[1011/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[1012/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[1013/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1014/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[1015/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (3.80 seconds), 9 items updated, 1016 evaluated
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+AssetDatabase: script compilation time: 4.382821s
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Begin MonoManager ReloadAssembly
+Total cache size 264523732
+Total cache size after purge 264523732, took 00:00:00.2186484
+Symbol file LoadedFromMemory is not a mono symbol file
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Importing 'GUID: c0755ba388bcc5f438438e68abd33f1c - Path: Assets/Materials/interactive/Cards' with importer (DefaultImporter)
+Imported 'GUID: c0755ba388bcc5f438438e68abd33f1c' -> (Import Result ID: '51ba3213ac824f663a2db108187c4936') in 0.029 seconds [static dependencies only]. Details - ImportResultOutputID=ff155044fe0b75c71333fde418dd7eb0 DependenciesID=f999cf0e0f3f2d4f3bbab59b810b6022 StaticDependenciesID=e7cf8c2cbd894b5d6d49891ee49ce50b 
+Importing 'GUID: 81d122db91318e4418f263be8f23aafd - Path: Assets/Materials/interactive/Cards/Description' with importer (DefaultImporter)
+Imported 'GUID: 81d122db91318e4418f263be8f23aafd' -> (Import Result ID: '5512c81b20328721f6103082186f852d') in 0.003 seconds [static dependencies only]. Details - ImportResultOutputID=90385213ae99c1f99e6acd08ce1bbaa2 DependenciesID=eaf3e65db0398e0358f0ed7401cbba40 StaticDependenciesID=8fcb82eee79c77c32be3c9cba733e70a 
+Importing 'GUID: 7729cea5af95b4949ab3fd706afe0f46 - Path: Assets/Materials/interactive/Cards/Main' with importer (DefaultImporter)
+Imported 'GUID: 7729cea5af95b4949ab3fd706afe0f46' -> (Import Result ID: '10cb6930c194866d023bbec3d2a3d74c') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=77722d05bc5c0d20ae94644474a1a411 DependenciesID=13e7cde6283dfdde09340c912673fc65 StaticDependenciesID=d7f516f9700f92dc2e7a189209022625 
+Refreshing native plugins compatible for Editor in 3.29 ms, found 3 plugins.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Moved ScriptTemplates to Assets folder.
+Mirror | mirror-networking.com | discord.gg/N9QVxbM
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.954 seconds
+Domain Reload Profiling: 3608ms
+	BeginReloadAssembly (166ms)
+		DisableScriptedObjects (16ms)
+		CreateAndSetChildDomain (39ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (443ms)
+		LoadAssemblies (244ms)
+		AnalyzeDomain (214ms)
+			TypeCache.Refresh (168ms)
+				TypeCache.ScanAssembly (150ms)
+			BuildScriptInfoCaches (39ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (2954ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (42ms)
+			ProcessInitializeOnLoadAttributes (1894ms)
+			ProcessInitializeOnLoadMethodAttributes (889ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Importing 'GUID: 05b09eba375346b43a52dc48038e6721 - Path: Assets/_Recovery/0 (4).unity' with importer (DefaultImporter)
+Imported 'GUID: 05b09eba375346b43a52dc48038e6721' -> (Import Result ID: '819e6160ccd3d05a99fd111d4ea7c5f7') in 0.007 seconds [static dependencies only]. Details - ImportResultOutputID=6fed05a19281b2d2491234be9a80ec39 DependenciesID=881e92e80a053a8eeb8443987f23d4b8 StaticDependenciesID=340f40e873561701f03e86ef6ea9a93c 
+Importing 'GUID: 152ee0d99d5b0a94292bfe4a6048aaf9 - Path: Assets/Scenes/GameplayScene.unity' with importer (DefaultImporter)
+Imported 'GUID: 152ee0d99d5b0a94292bfe4a6048aaf9' -> (Import Result ID: 'ff552628fa12a4b80163621aec8220f6') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=9f4a09bf02428b06cc42f7203ece4672 DependenciesID=ce6c12a62c8308f8bf8a18d1d0a80a99 StaticDependenciesID=66195e4b4df92c8d60d1e6b41e356cf6 
+Importing 'GUID: bb60f6b779982e04d873bcb63bda991f - Path: Assets/_Recovery/0 (3).unity' with importer (DefaultImporter)
+Imported 'GUID: bb60f6b779982e04d873bcb63bda991f' -> (Import Result ID: 'cb93eaf1f5ad912452274c8cc77d87c0') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=7a7890481dfe6e36b9848ec2b9064008 DependenciesID=ebd07e791bf1076a8e9c73a931de404f StaticDependenciesID=7e7bc702c770c37f191d7863156e468e 
+Importing 'GUID: f22803ede97397b4a911fd7b4eb188fb - Path: Assets/Materials/interactive/cardCombo.mat' with importer (NativeFormatImporter)
+Imported 'GUID: f22803ede97397b4a911fd7b4eb188fb' -> (Import Result ID: '44c61623bee1e461ba38b2fd41d260c2') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=2140fff7a9af68a13cf313caf82ac94b DependenciesID=f40e20263c45ab508752f73a09103a26 StaticDependenciesID=f535aa787f6e588b91a53a6be5b2fcf0 
+Importing 'GUID: eec61302382984f42a2c09ba04918a7e - Path: Assets/Materials/interactive/Cards/Description/ATK_REVOLVER_CARD_DESCRIPTION.mat' with importer (NativeFormatImporter)
+Imported 'GUID: eec61302382984f42a2c09ba04918a7e' -> (Import Result ID: '69254f56567b9761ba0f7ec0ba8764cb') in 0.001 seconds [static dependencies only]. Details - ImportResultOutputID=da4f7418da532fff58d000bdde9f1505 DependenciesID=00cb409ade72b5b8bca8f7c9dec84912 StaticDependenciesID=080c42c428339ba4b7f4fff1f1fa5465 
+Importing 'GUID: 78f9ea0893f850a49bf98814bf37508e - Path: Assets/props/models/LocationMafia2-ready.blend' with importer (FBXImporter)
+00:03.395  blend            | Read blend: "/Users/davidfincher/Documents/GitHub/Potos/Assets/props/models/LocationMafia2-ready.blend"
+00:03.464  reports          | WARNING File written by newer Blender binary (502.44), expect loss of data!
+Blender 5.1.2 (hash ec6e62d40fa9 built 2026-05-19 01:30:33)
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.012/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.013/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.013/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.013/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.012/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.012/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.012/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.008/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.008/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.008/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.009/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.009/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.008/BONE_DONE() via 'Stretch To'
+                            |   OBArmature/Bone.008/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.008/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.009/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.009/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.011/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.011/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.011/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.010/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.010/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.011/BONE_DONE() via 'Stretch To'
+                            |   OBArmature/Bone.011/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.011/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.010/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.010/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.014/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.015/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.015/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.015/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.014/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.014/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.014/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.468  depsgraph        | WARNING Detected 6 dependency cycles
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.012/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.013/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.013/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.013/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.012/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.012/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.012/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.008/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.008/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.008/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.009/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.009/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.008/BONE_DONE() via 'Stretch To'
+                            |   OBArmature/Bone.008/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.008/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.009/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.009/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.009/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.011/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.011/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.011/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.010/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.010/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.011/BONE_DONE() via 'Stretch To'
+                            |   OBArmature/Bone.011/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.011/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.010/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.010/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.010/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Dependency cycle detected:
+                            |   OBArmature/Bone.014/BONE_CONSTRAINTS() depends on
+                            |   OBArmature/Bone.015/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.015/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.015/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            |   OBArmature/Bone.014/BONE_DONE() via 'Damped Track'
+                            |   OBArmature/Bone.014/BONE_READY() via 'Ready -> Done'
+                            |   OBArmature/Bone.014/BONE_CONSTRAINTS() via 'Constraints -> Ready'
+                            | 
+00:03.899  depsgraph        | WARNING Detected 6 dependency cycles
+Starting blender to FBX conversion /Users/davidfincher/Documents/GitHub/Potos/Temp/FBXExport/78f9ea0893f850a49bf98814bf37508e.fbx
+
+FBX export starting... '/Users/davidfincher/Documents/GitHub/Potos/Temp/FBXExport/78f9ea0893f850a49bf98814bf37508e.fbx'
+export finished in 0.3845 sec.
+Finished blender to FBX conversion /Users/davidfincher/Documents/GitHub/Potos/Temp/FBXExport/78f9ea0893f850a49bf98814bf37508e.fbx
+
+Blender quit
+Launching external process: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Helpers/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
+Keyframe reduction: Ratio: 0.363636%;
+Imported 'GUID: 78f9ea0893f850a49bf98814bf37508e' -> (Import Result ID: '9c84f4efe932a8346964f735b6628d51') in 5.157 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=65dae5a6a3ec5011f1f7cac6c22e8c47 DependenciesID=2b2ede2439e2260bc77a856c0b5c50e7 StaticDependenciesID=a4af73b12f4e192ebeb643bd262001ef 
+Importing 'GUID: 0c43ac87d59bd2d4595b78e3229a94e0 - Path: Assets/props/models/hands.fbx' with importer (FBXImporter)
+Keyframe reduction: Ratio: 1.830622%;
+Keyframe reduction: Ratio: 2.157102%;
+Keyframe reduction: Ratio: 1.554752%;
+Keyframe reduction: Ratio: 2.318193%;
+Keyframe reduction: Ratio: 1.597258%;
+Keyframe reduction: Ratio: 1.449658%;
+Keyframe reduction: Ratio: 1.323824%;
+Keyframe reduction: Ratio: 3.977511%;
+Keyframe reduction: Ratio: 1.343632%;
+Keyframe reduction: Ratio: 2.325739%;
+Keyframe reduction: Ratio: 1.702373%;
+Keyframe reduction: Ratio: 3.026697%;
+Keyframe reduction: Ratio: 1.659719%;
+Keyframe reduction: Ratio: 1.486414%;
+Keyframe reduction: Ratio: 2.297426%;
+Keyframe reduction: Ratio: 1.742788%;
+Keyframe reduction: Ratio: 2.297009%;
+Keyframe reduction: Ratio: 2.149503%;
+Keyframe reduction: Ratio: 2.253606%;
+Keyframe reduction: Ratio: 1.505321%;
+Keyframe reduction: Ratio: 2.308779%;
+Keyframe reduction: Ratio: 1.548037%;
+Keyframe reduction: Ratio: 1.641027%;
+Keyframe reduction: Ratio: 1.927959%;
+Keyframe reduction: Ratio: 1.628799%;
+Keyframe reduction: Ratio: 1.896367%;
+Keyframe reduction: Ratio: 3.014114%;
+Keyframe reduction: Ratio: 1.504819%;
+Keyframe reduction: Ratio: 1.862981%;
+Keyframe reduction: Ratio: 1.766705%;
+Keyframe reduction: Ratio: 2.026354%;
+Keyframe reduction: Ratio: 1.442307%;
+Keyframe reduction: Ratio: 1.206085%;
+Keyframe reduction: Ratio: 2.743028%;
+Keyframe reduction: Ratio: 2.384833%;
+Keyframe reduction: Ratio: 1.983043%;
+Keyframe reduction: Ratio: 1.933760%;
+Keyframe reduction: Ratio: 1.704402%;
+Keyframe reduction: Ratio: 0.865784%;
+Keyframe reduction: Ratio: 7.698471%;
+Keyframe reduction: Ratio: 2.207219%;
+Keyframe reduction: Ratio: 100.000000%;
+Keyframe reduction: Ratio: 1.759616%;
+Keyframe reduction: Ratio: 1.767535%;
+Keyframe reduction: Ratio: 2.025311%;
+Keyframe reduction: Ratio: 2.571556%;
+Model 'hands' contains animation clip 'hands|HANDS_IDLE' which has length of 0 frames (start=0, end=0). It will result in empty animation. 
+ImportFBX Warnings:
+Mesh 'BirdCage' has 1 (out of 2101) vertices with no weight and bone assigned (they will be assigned to bone #0 with weight 1). The list of vertices: 1410
+Mesh 'shearsIronRightHandle' has 1 (out of 725) vertices with no weight and bone assigned (they will be assigned to bone #0 with weight 1). The list of vertices: 482
+Imported 'GUID: 0c43ac87d59bd2d4595b78e3229a94e0' -> (Import Result ID: 'ec4c75bdac188a4cfb3023295c46e7dd') in 6.501 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=73a11dfdcbffa7c84edfadf1888f42d0 DependenciesID=f4e0cc499d24ae12b9371582a99bf8d9 StaticDependenciesID=441a3ed9c35112dfe9d33ed5797afe22 
+Importing 'GUID: 50f3ff790e3088b4bb94576a146603ab - Path: Assets/Prefabs/cardHold.prefab' with importer (PrefabImporter)
+Card on card (2) requires a NetworkIdentity. Please add a NetworkIdentity component to card (2) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card requires a NetworkIdentity. Please add a NetworkIdentity component to card or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (3) requires a NetworkIdentity. Please add a NetworkIdentity component to card (3) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (4) requires a NetworkIdentity. Please add a NetworkIdentity component to card (4) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Card on card (1) requires a NetworkIdentity. Please add a NetworkIdentity component to card (1) or its parents.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkBehaviour:OnValidate () (at Assets/Mirror/Core/NetworkBehaviour.cs:169)
+
+(Filename: Assets/Mirror/Core/NetworkBehaviour.cs Line: 169)
+
+Imported 'GUID: 50f3ff790e3088b4bb94576a146603ab' -> (Import Result ID: '17d854b7543bd5ad095a46aa8eadc48e') in 0.011 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=7b219c51359deabde48bef37d85505b5 DependenciesID=1597d9b818d57a5c92b253b18f80b5f8 StaticDependenciesID=9074a63ee42eaa138f00044e9022852c 
+Importing 'GUID: 542379bfe4acae84f8194f8d1c67d90d - Path: Assets/Prefabs/card.prefab' with importer (PrefabImporter)
+Imported 'GUID: 542379bfe4acae84f8194f8d1c67d90d' -> (Import Result ID: '54a3843ef2939c00b2f48bc304f88aff') in 0.016 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=6731be1eacaabee9e61e4dcd9a0b438c DependenciesID=1c86d4f7c996d07b01fe48a2cde61e51 StaticDependenciesID=4ae433a9575e2b5c8b37c1f03501ac2c 
+Importing 'GUID: 2b2950971998e1c4abd4d430fc9278f0 - Path: Assets/Prefabs/Player.prefab' with importer (PrefabImporter)
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+Imported 'GUID: 2b2950971998e1c4abd4d430fc9278f0' -> (Import Result ID: '2818d4b9d201468a695e53776aec2c83') in 0.101 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=87b65956626909f0d09d186a36106dfe DependenciesID=9b724edd448b09061eb681aaca1a0603 StaticDependenciesID=f6b5f3615939ce5ac8ca920f31c5d0cd 
+Starting new worker id: 0 with log in /Users/davidfincher/Documents/GitHub/Potos/Logs/AssetImportWorkerHW0.log
+Refreshing native plugins compatible for Editor in 8.58 ms, found 3 plugins.
+
+Asset Pipeline Refresh (id=7336ab51f754d42909e992c91fc1cf15): Total: 31.662 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=13 (actual=13, local cache=0, cache server=0)
+		Asset DB Process Time: managed=100 ms, native=26253 ms
+		Asset DB Callback time: managed=129 ms, native=32 ms
+		Scripting: domain reloads=1, domain reload time=700 ms, compile time=4385 ms, other=59 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=6, changed=18, moved=3, deleted=0
+		Scan Filter Count: 1
+	InvokePackagesCallback: 7.409ms
+	ApplyChangesToAssetFolders: 0.239ms
+	Scan: 789.483ms
+	Collect global state as custom dependencies: 1.880ms
+	OnSourceAssetsModified: 0.526ms
+	CategorizeScriptCompilationAssets: 82.155ms
+	ProcessAssetsWithTransientArtifactChanges: 63.769ms
+	CategorizeAssets: 266.860ms
+	CompileScripts: 4385.184ms
+	ImportOutOfDateAssets: 14926.255ms (2984.845ms without children)
+		ImportManagerImport: 11873.209ms (14.613ms without children)
+			UpdateCategorizedAssets: 0.622ms
+		UnloadImportedAssets: 1.516ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.700ms
+		ImportSchedulerStart: 65.931ms
+	PostProcessAllAssets: 135.488ms
+		VCAutoAddAssetPostprocess 1.985ms
+		PostProcessCallbackCreateDeferredMaterials 0.350ms
+		XRBuildSystem.XRAssetImported 0.154ms
+		ShaderAssetModifiedCallback 0.056ms
+		MonoPostProcessAllAssets: 128.283ms
+			AssetPostprocessor.OnPostprocessAllAssets 81.073ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 12.130ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 9.180ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.018ms
+			AssetChangedListener.OnPostprocessAllAssets 2.808ms
+			MaterialPostprocessor.OnPostprocessAllAssets 2.649ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 1.116ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.984ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.876ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.853ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 0.731ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 0.728ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.383ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.354ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.330ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.260ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.257ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.256ms
+			PostProcessor.OnPostprocessAllAssets 0.236ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.195ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.186ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.169ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.162ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.148ms
+			AssetEvents.OnPostprocessAllAssets 0.144ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.136ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.135ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.108ms
+			SyncVS.PostprocessSyncProject 0.087ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.081ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.079ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.077ms
+	PostAssetChangesProfiler: 20.432ms
+	UnloadStreamsBegin: 11.745ms
+	PersistCurrentRevisions: 0.249ms
+	GenerateScriptTypeHashes: 119.267ms
+	GenerateScriptTypeSerializationHashes: 166.976ms
+	Untracked: 10921.689ms
+
+Application.AssetDatabase Initial Refresh End
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Shader Hidden/ChartRasterizerHardware is not supported: GPU does not support conservative rasterization
+Scanning for USB devices : 0.025ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Potos
+2026-09-22 22:41:38.660 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8cd9a0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Unloading 52 Unused Serialized files (Serialized files now loaded: 0)
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+UnityEditor.EditorApplication:Internal_RestoreLastOpenedScenes () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:640)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+Loaded scene 'Assets/Scenes/MainMenu.unity'
+	Deserialize:            44.976 ms
+	Integration:            267.913 ms
+	Integration of assets:  7.412 ms
+	Thread Wait Time:       0.039 ms
+	Total Operation Time:   320.340 ms
+Unloading 8441 unused Assets / (11.3 MB). Loaded Objects now: 11496.
+Memory consumption went from 419.5 MB to 408.2 MB.
+Total: 13.273417 ms (FindLiveObjects: 0.566083 ms CreateObjectMapping: 2.423125 ms MarkObjects: 7.271583 ms  DeleteObjects: 3.010833 ms)
+
+[LAYOUT] About to load UserSettings/Layouts/default-6000.dwlt, keepMainWindow=False
+[LAYOUT] About to save layout /Users/davidfincher/Documents/GitHub/Potos/UserSettings/Layouts/default-6000.dwlt
+[LAYOUT] About to save layout /Users/davidfincher/Library/Preferences/Unity/Editor-5.x/Layouts/current/default-6000.dwlt
+[MODES] ModeService[default].InitializeCurrentMode
+[MODES] ModeService[default].RaiseModeChanged(default, default)
+2026-09-22 22:41:39.315 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8ccf00 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+[Project] Loading completed in 52.042 seconds
+	Project init time: 				51.004 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.071 seconds
+		Asset Database init time: 		0.513 seconds
+		Global illumination init time: 	0.001 seconds
+		Assemblies load time: 			17.460 seconds
+		Unity extensions init time: 	0.047 seconds
+		Asset Database refresh time: 	31.673 seconds
+	Scene opening time: 			0.759 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1790106099327,"processId":19419,"projectLoad":52.04157808400001,"projectInit":51.004157334,"templateInit":0.0,"packageManagerInit":0.071290791,"assetDatabaseInit":0.512693375,"globalIlluminationInit":0.000655959,"assembliesLoad":17.4598655,"unityExtensionsInit":0.047442166,"assetDatabaseRefresh":31.673237959,"sceneOpening":0.758743334}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1790106099327,"processId":19419,"editorVersion":"6000.5.2f1 (eb73d3b415a1)","branch":"6000.5/staging","buildType":"Release","platform":"OSX"}
+Subscribe to USB device events
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=fc20da7574a7c4ff0b6c9550c13b5d4d): Total: 0.439 seconds - Initiated by RefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=438 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokePackagesCallback: 0.393ms
+	ApplyChangesToAssetFolders: 0.107ms
+	Scan: 193.396ms
+	Collect global state as custom dependencies: 0.088ms
+	ProcessAssetsWithTransientArtifactChanges: 0.333ms
+	CategorizeAssets: 56.974ms
+	ImportOutOfDateAssets: 58.532ms (8.331ms without children)
+		ReloadNativeAssets: 0.055ms
+		UnloadImportedAssets: 0.072ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.477ms
+		ImportSchedulerStart: 49.595ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.121ms
+	UnloadStreamsBegin: 1.097ms
+	PersistCurrentRevisions: 0.134ms
+	Untracked: 6.621ms
+
+Worker ready: AssetImportWorkerHW0 0
+Created GICache directory at /Users/davidfincher/Library/Caches/com.unity3d.UnityEditor/GiCache. Took: 0.026s, timestamps: [52.047 - 52.073]
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "Ko_sCxL3"... (expires: 2026-09-22T21:40:11Z)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Asset Pipeline Refresh (id=3ff951eecad374903a00f1f18071c783): Total: 0.192 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Start Indexing on Editor startup
+[Indexing] Starting Initial Indexing for Assets
+[Licensing::Client] Successfully resolved entitlement details
+Project ID request failed, Reason: The requested URL returned error: 403 (403).
+Unknown Unity Connect error (400). Please contact support at support@unity.com while processing request "https://services.unity.com/api/unity/legacy/v1/projects/6fdea1c4-dedf-4e37-aa45-00cad7f0dea4", HTTP error code 403
+.[Licensing::Client] Successfully resolved entitlement details
+Starting new worker id: 1 with log in /Users/davidfincher/Documents/GitHub/Potos/Logs/AssetImportWorkerHW1.log
+[Worker0] Imported GUID: 54cce03b1ca5a174eb6e1496e5d4e7be - Path: Assets/Materials/interactive/Cards/Card back.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '786ba932442145f8923b0b9b4d6059d8') in 0.195688334 seconds
+[Worker0] Imported GUID: 62360a0955939d244a9e6a5aa9a2eed9 - Path: Assets/C#/Gameplay/Player/CameraLook.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '9977784aadebb61ec2c26515d2a58f8e') in 0.037889958 seconds
+[Worker0] Imported GUID: dd9126eac17fa4e40975d98c2f13b52c - Path: Assets/C#/Gameplay/Interaction/Card.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'fbb914a8899d1c9722c5b08b8856fc87') in 0.027542917 seconds
+[Worker0] Imported GUID: f22803ede97397b4a911fd7b4eb188fb - Path: Assets/Materials/interactive/cardCombo.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '15f2dff417304d595bf2eda1f0d8d190') in 0.02641525 seconds
+[Worker0] Imported GUID: 0c43ac87d59bd2d4595b78e3229a94e0 - Path: Assets/props/models/hands.fbx - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '92618bfa3e4edf705a7e08be9e980f6e') in 0.257592416 seconds
+[Worker0] Imported GUID: 05b09eba375346b43a52dc48038e6721 - Path: Assets/_Recovery/0 (4).unity - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '1f85eed6bfe9a52aa8827f9893da7cfc') in 0.03069325 seconds
+[Worker0] Imported GUID: bb60f6b779982e04d873bcb63bda991f - Path: Assets/_Recovery/0 (3).unity - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '5a23e0732d4314f6b048c90cc239d4cb') in 0.031206167 seconds
+[Worker0] Imported GUID: 542379bfe4acae84f8194f8d1c67d90d - Path: Assets/Prefabs/card.prefab - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '1aabadc33444cc986a17d11a192852ca') in 0.055977167 seconds
+[Worker0] Imported GUID: 2e498d1c8094910479dc3e1b768306a4 - Path: Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '27042a903517a1a3ff21d4989ccc1bad') in 0.038352625 seconds
+[Worker0] Imported GUID: 7729cea5af95b4949ab3fd706afe0f46 - Path: Assets/Materials/interactive/Cards/Main - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'ba997ba8d97525c49e2cf2a4883c2597') in 0.025401584 seconds
+[Worker0] Imported GUID: c0755ba388bcc5f438438e68abd33f1c - Path: Assets/Materials/interactive/Cards - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '0db9361a01d38a976204c23927ff2fab') in 0.03028925 seconds
+[Worker0] Imported GUID: b72965b45156b2b4a93b8a262ab65e83 - Path: Assets/C#/Gameplay/Interaction/Interactor.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '1cb4758526c25ae884fd3ee9b8d148d8') in 0.025188083 seconds
+[Worker0] Imported GUID: a63270c091597044faead7af7f882c43 - Path: Assets/Materials/interactive/Cards/Main/cardAsh.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '58efb1242701d4c2d5cb57f5b1a93397') in 0.025379542 seconds
+[Worker0] Imported GUID: 78f9ea0893f850a49bf98814bf37508e - Path: Assets/props/models/LocationMafia2-ready.blend - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '30b883764362f93fcce8f68e5179a965') in 0.093581042 seconds
+[Worker0] Imported GUID: 152ee0d99d5b0a94292bfe4a6048aaf9 - Path: Assets/Scenes/GameplayScene.unity - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '260d72ab749fe483add2eebff5404166') in 0.027975083 seconds
+[Worker0] Imported GUID: eec61302382984f42a2c09ba04918a7e - Path: Assets/Materials/interactive/Cards/Description/ATK_REVOLVER_CARD_DESCRIPTION.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'a0672b15701fd00d498a109c987edea0') in 0.027 seconds
+[Worker0] Imported GUID: 68022544d45693a4493bbf11d6d5cfc2 - Path: Assets/C#/Gameplay/Player/Player.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '103e2d992151e579fb38bb8fa26dbb5c') in 0.023119959 seconds
+[Worker0] Imported GUID: bade9a0e49f0a5a4e8c2e6c517394a6b - Path: Assets/C#/Gameplay/Interaction/InteractableObject.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '1569514167d0eabb629d75d7259840cc') in 0.023312041 seconds
+[Worker0] Imported GUID: 64289121a881feb4985c7c401dd664c2 - Path: Assets/C#/Gameplay/Player/PlayerAnimator.cs - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '5e29f87b906035f27534122eee42bda6') in 0.024365042 seconds
+[Worker0] 'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+UnityEditor.AssetDatabase:LoadAssetAtPath (string,System.Type)
+UnityEditor.AssetDatabase:LoadAssetAtPath<UnityEngine.GameObject> (string) (at /Users/bokken/build/output/unity/unity/Modules/AssetDatabase/Editor/ScriptBindings/AssetDatabase.bindings.cs:447)
+UnityEditor.Search.AssetIndexer:IndexDocument (string,bool) (at /Users/bokken/build/output/unity/unity/Modules/QuickSearch/Editor/Indexing/AssetIndexer.cs:193)
+UnityEditor.Search.SearchIndexArtifactImporter:OnImportAsset (UnityEditor.AssetImporters.AssetImportContext) (at /Users/bokken/build/output/unity/unity/Modules/QuickSearch/Editor/Indexing/SearchIndexArtifactImporter.cs:42)
+UnityEditor.AssetImporters.ScriptedImporter:GenerateAssetData (UnityEditor.AssetImporters.AssetImportContext) (at /Users/bokken/build/output/unity/unity/Modules/AssetPipelineEditor/Public/ScriptedImporter.cs:25)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+[Worker0] Imported GUID: 2b2950971998e1c4abd4d430fc9278f0 - Path: Assets/Prefabs/Player.prefab - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'cfa283c3709d51df6dde3f3a086d5e99') in 0.108458583 seconds
+[Worker0] Imported GUID: 81d122db91318e4418f263be8f23aafd - Path: Assets/Materials/interactive/Cards/Description - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '7876f501b3fe290ea61b2af5725fe8d0') in 0.023233583 seconds
+[Worker0] Imported GUID: a20cf97654237ff4b8deb48fe92bdf16 - Path: Assets/Fonts/NotoSerif-VariableFont_wdth,wght SDF.asset - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: '7dfe52b321f2656dba83182dbf77ee1b') in 0.052787167 seconds
+[Worker0] Imported GUID: 787198041f0f7ae499e310f08389a5d0 - Path: Assets/Materials/interactive/Cards/Main/cardCrow.mat - Importer: ScriptedImporter/UnityEditor.QuickSearchModule:UnityEditor.Search:ASIAI0B -> (ImportResultId: 'ecee11f7aa4c61354ef99da1a6204104') in 0.026635333 seconds
+Worker ready: AssetImportWorkerHW1 1
+Thread 0x361ecb000 may have been prematurely finalized
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+2026-09-22 22:41:54.927 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8cf7a0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 22:41:54.931 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8cc140 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 22:41:54.934 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8cd360 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 22:41:54.938 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8d1180 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+<CFData 0xb95454820 [0x1f7625308]>{length = 6, capacity = 6, bytes = 0x50a6d8c605a1}
+Symbol file LoadedFromMemory is not a mono symbol file
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.897 seconds
+Domain Reload Profiling: 1554ms
+	BeginReloadAssembly (477ms)
+		DisableScriptedObjects (27ms)
+		CreateAndSetChildDomain (344ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (135ms)
+		LoadAssemblies (85ms)
+		AnalyzeDomain (16ms)
+			TypeCache.Refresh (7ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (898ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (56ms)
+			ProcessInitializeOnLoadAttributes (251ms)
+			ProcessInitializeOnLoadMethodAttributes (65ms)
+		AwakeInstancesAfterBackupRestoration (237ms)
+No restricted APIs configured; Validation skipped.
+Checking 30 assemblies for restricted APIs found 0 usage(s) in 2 ms
+
+Asset Pipeline Refresh (id=711b4159407a34b439f8eb1e5ac39113): Total: 2.521 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1251 ms
+		Asset DB Callback time: managed=432 ms, native=147 ms
+		Scripting: domain reloads=1, domain reload time=687 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 0.709ms
+	ApplyChangesToAssetFolders: 0.251ms
+	Collect global state as custom dependencies: 1.173ms
+	ProcessAssetsWithTransientArtifactChanges: 133.957ms
+	CategorizeAssets: 75.754ms
+	CompileScripts: 1.294ms
+	ImportOutOfDateAssets: 968.510ms (911.805ms without children)
+		CollectScriptTypesHashes: 3.251ms
+		ReloadNativeAssets: 1.588ms
+		UnloadImportedAssets: 0.841ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.623ms
+		ImportSchedulerStart: 53.615ms
+	PostProcessAllAssets: 570.354ms
+		AssemblyValidation.PostprocessAllAssets 25.457ms
+		PostProcessCallbackCreateDeferredMaterials 16.126ms
+		ComputeShaderImportPostprocess 9.972ms
+		ShaderAssetModifiedCallback 9.183ms
+		RaytracingShaderImportPostprocess 8.326ms
+		SpeedTreeImporter.PostprocessAllAssets 7.566ms
+		LocalizationDatabase.AssetDatabasePostprocessCallback 3.609ms
+		BlockShaderImporter.PostprocessAllAssets 3.387ms
+		XRBuildSystem.XRAssetImported 0.121ms
+		MonoPostProcessAllAssets: 432.049ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 155.355ms
+			AssetPostprocessor.OnPostprocessAllAssets 54.052ms
+			PostProcessor.OnPostprocessAllAssets 40.525ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 28.770ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 27.608ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 27.503ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 19.269ms
+			AssetChangedListener.OnPostprocessAllAssets 13.217ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 7.465ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.139ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 3.700ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 3.012ms
+			MaterialPostprocessor.OnPostprocessAllAssets 2.436ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.138ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 1.091ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.921ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.340ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.315ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.305ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.262ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.256ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.216ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.192ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.171ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.168ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.161ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.152ms
+			AssetEvents.OnPostprocessAllAssets 0.113ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.110ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.089ms
+			SyncVS.PostprocessSyncProject 0.065ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.060ms
+	PostAssetChangesProfiler: 10.352ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.627ms
+	UnloadStreamsBegin: 2.452ms
+	PersistCurrentRevisions: 0.138ms
+	GenerateScriptTypeHashes: 5.379ms
+	GenerateScriptTypeSerializationHashes: 8.834ms
+	Untracked: 750.864ms
+
+[S_API] SteamAPI_Init(): Loaded '/Users/davidfincher/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/steamclient.dylib' OK.
+Setting breakpad minidump AppID = 480
+SteamInternal_SetMinidumpSteamID:  Caching Steam ID:  76561199812387752 [API loaded no]
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            2.807 ms
+	Integration:            726.870 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.004 ms
+	Total Operation Time:   729.682 ms
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Lobby host: 76561199812387752
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:58)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/C#/UI/MainMenu.cs Line: 58)
+
+Starting server [SteamSockets].
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:ServerStart () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:159)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:149)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 159)
+
+Server started listening
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:165)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 165)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.259416 ms
+LobbyController: DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+SteamAvatarExtractor:Awake () (at Assets/C#/UI/SteamAvatarExtractor.cs:24)
+
+[Assets/C#/UI/SteamAvatarExtractor.cs line 24]
+
+Loaded scene 'Assets/Scenes/LobbyScene.unity'
+	Deserialize:            9.218 ms
+	Integration:            357.256 ms
+	Integration of assets:  0.206 ms
+	Thread Wait Time:       5.040 ms
+	Total Operation Time:   371.719 ms
+Unloading 7814 unused Assets / (3.4 MB). Loaded Objects now: 12703.
+Memory consumption went from 0.54 GB to 0.53 GB.
+Total: 25.186042 ms (FindLiveObjects: 5.849959 ms CreateObjectMapping: 2.505791 ms MarkObjects: 14.121750 ms  DeleteObjects: 2.707500 ms)
+
+Unloading 66 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.607167 ms
+Loaded scene 'Assets/Scenes/GameplayScene.unity'
+	Deserialize:            72.377 ms
+	Integration:            259.222 ms
+	Integration of assets:  9.955 ms
+	Thread Wait Time:       10.304 ms
+	Total Operation Time:   351.859 ms
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Unloading 275 unused Assets / (54.2 KB). Loaded Objects now: 15942.
+Memory consumption went from 0.62 GB to 0.62 GB.
+Total: 29.425042 ms (FindLiveObjects: 4.113542 ms CreateObjectMapping: 1.206958 ms MarkObjects: 23.177333 ms  DeleteObjects: 0.926542 ms)
+
+GameMaster: captured 1 lobby connections.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:CaptureLobbyConnections () (at Assets/C#/Gameplay/GameMaster.cs:147)
+GameMaster/<InitializeLobbyConnections>d__24:MoveNext () (at Assets/C#/Gameplay/GameMaster.cs:117)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 147)
+
+GameMaster: player loaded. Connection=0, loaded=1/1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:PlayerLoaded (Mirror.NetworkConnectionToClient) (at Assets/C#/Gameplay/GameMaster.cs:188)
+Player:UserCode_CmdNotifyLoaded () (at Assets/C#/Gameplay/Player/Player.cs:161)
+Player:InvokeUserCode_CmdNotifyLoaded (Mirror.NetworkBehaviour,Mirror.NetworkReader,Mirror.NetworkConnectionToClient)
+Mirror.RemoteCalls.RemoteProcedureCalls:Invoke (uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkBehaviour,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/RemoteCalls.cs:133)
+Mirror.NetworkIdentity:HandleRemoteCall (byte,uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/NetworkIdentity.cs:245)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:396)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 188)
+
+Launching external process: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Helpers/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.09 seconds
+Launching external process: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Helpers/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.03 seconds
+TrimDiskCacheJob: Current cache size 2mb
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Asset Pipeline Refresh (id=a8d779086f42c4e0da2aa12f04f11a1d): Total: 0.154 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Asset Pipeline Refresh (id=72e4946fbf8024477ad2e7298335ce5d): Total: 0.176 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=88e1391d80ef5464c91c3a1adfafcc82): Total: 0.308 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=307 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	ApplyChangesToAssetFolders: 0.294ms
+	Scan: 299.515ms
+	Collect global state as custom dependencies: 0.399ms
+	GatherAllCurrentPrimaryImportResultRevisions: 6.634ms
+	UnloadStreamsEnd: 0.135ms
+	Untracked: 1.427ms
+
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=c66f6eb8011f7451bacb293d2c656000): Total: 0.328 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=327 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	ApplyChangesToAssetFolders: 0.121ms
+	Scan: 322.242ms
+	Collect global state as custom dependencies: 0.144ms
+	GatherAllCurrentPrimaryImportResultRevisions: 4.423ms
+	UnloadStreamsEnd: 0.134ms
+	Untracked: 0.955ms
+
+Thread 0x177def000 may have been prematurely finalized
+LobbyHandler instance is missing. Lobby refresh skipped.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+NetManager:OnServerDisconnect (Mirror.NetworkConnectionToClient) (at Assets/C#/Core/NetManager.cs:125)
+Mirror.NetworkManager:StopClient () (at Assets/Mirror/Core/NetworkManager.cs:622)
+Mirror.NetworkManager:OnApplicationQuit () (at Assets/Mirror/Core/NetworkManager.cs:648)
+
+(Filename: Assets/C#/Core/NetManager.cs Line: 125)
+
+Transport shut down - server.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:Shutdown () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:239)
+Mirror.FizzySteam.FizzySteamworks:ServerStop () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:222)
+Mirror.NetworkServer:Shutdown () (at Assets/Mirror/Core/NetworkServer.cs:241)
+Mirror.NetworkManager:StopServer () (at Assets/Mirror/Core/NetworkManager.cs:596)
+Mirror.NetworkManager:OnApplicationQuit () (at Assets/Mirror/Core/NetworkManager.cs:655)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 239)
+
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            5.358 ms
+	Integration:            262.154 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.005 ms
+	Total Operation Time:   267.519 ms
+Unloading 834 unused Assets / (21.4 MB). Loaded Objects now: 12519.
+Memory consumption went from 479.0 MB to 457.6 MB.
+Total: 21.318833 ms (FindLiveObjects: 0.432750 ms CreateObjectMapping: 1.259083 ms MarkObjects: 16.738125 ms  DeleteObjects: 2.888542 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+[Licensing::Client] Successfully resolved entitlement details
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 3.0431ms
+Starting: /Applications/Unity/Hub/Editor/6000.5.2f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /Users/davidfincher/Documents/GitHub/Potos
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Current configuration matches the requested one, skipping
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 5.6910ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Mirror.Weaver.ILPostProcessorHook
+Find all reader and writers took 32 milliseconds
+Script Module: Assembly-CSharp.dll
+Find all reader and writers took 18 milliseconds
+Script Module: Assembly-CSharp-Editor.dll
+Weave behaviours and messages took 0 milliseconds
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+Weave behaviours and messages took 19 milliseconds
+  ProcessSitesModule Assembly-CSharp.dll elapsed time:00:00:00.0007810
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 76.4697ms
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running Unity.Jobs.CodeGen.JobsILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+      running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 104.1640ms
+ExitCode: 0 Duration: 2s809ms
+[ 770/1016  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[1008/1016  2s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+[1010/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 144 defines and 362 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1011/1016  0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll, with 142 defines and 386 references
+processors: Mirror.Weaver.ILPostProcessorHook, Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
+running Mirror.Weaver.ILPostProcessorHook
+running Unity.Jobs.CodeGen.JobsILPostProcessor
+running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+[1014/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[1015/1016  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+*** Tundra build success (2.78 seconds), 6 items updated, 1016 evaluated
+Assets/C#/Gameplay/Interaction/Interactor.cs(47,13): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets/C#/UI/LobbyMenu.cs(21,35): warning CS0642: Possible mistaken empty statement
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+2026-09-22 23:00:27.305 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8d0640 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:27.309 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8d0640 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:27.313 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d996f80 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:27.317 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8cf660 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Total cache size 264523732
+Total cache size after purge 264523732, took 00:00:00.3108766
+Thread 0x303493000 may have been prematurely finalized
+Symbol file LoadedFromMemory is not a mono symbol file
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Refreshing native plugins compatible for Editor in 3.26 ms, found 3 plugins.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+2026-09-22 23:00:28.878 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d995900 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.994 seconds
+Domain Reload Profiling: 2015ms
+	BeginReloadAssembly (698ms)
+		DisableScriptedObjects (128ms)
+		CreateAndSetChildDomain (307ms)
+	RebuildCommonClasses (6ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (35ms)
+	LoadAllAssembliesAndSetupDomain (272ms)
+		LoadAssemblies (127ms)
+		AnalyzeDomain (155ms)
+			TypeCache.Refresh (10ms)
+			BuildScriptInfoCaches (138ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (994ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			BeforeProcessingInitializeOnLoad (145ms)
+			ProcessInitializeOnLoadAttributes (288ms)
+			ProcessInitializeOnLoadMethodAttributes (69ms)
+		AwakeInstancesAfterBackupRestoration (173ms)
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+Importing 'GUID: a20cf97654237ff4b8deb48fe92bdf16 - Path: Assets/Fonts/NotoSerif-VariableFont_wdth,wght SDF.asset' with importer (NativeFormatImporter)
+Imported 'GUID: a20cf97654237ff4b8deb48fe92bdf16' -> (Import Result ID: 'f1ae85d61ef12c12a485ced6b139dc71') in 0.023 seconds [static dependencies only]. Details - ImportResultOutputID=90ababe83ea23f6eb9f57d05908ad0a8 DependenciesID=c992e9502d1818cb72306ce3ac9ef7df StaticDependenciesID=6079574f08df7104eae634a05aea06af 
+Importing 'GUID: 2e498d1c8094910479dc3e1b768306a4 - Path: Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 2e498d1c8094910479dc3e1b768306a4' -> (Import Result ID: 'c771625e106d497e955a3ba6d7f31a0c') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=94ce4dace069634644df4d315a8acf11 DependenciesID=3f2b6730d47a79e92b0239e1e3649446 StaticDependenciesID=b515cd82159fb3c41f4d5d939023819f 
+Importing 'GUID: 2b2950971998e1c4abd4d430fc9278f0 - Path: Assets/Prefabs/Player.prefab' with importer (PrefabImporter)
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+Imported 'GUID: 2b2950971998e1c4abd4d430fc9278f0' -> (Import Result ID: '43e763eec36c870ce9523287d43fc1bc') in 0.052 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=8c720a3083d15525acd6ce262dafaf30 DependenciesID=140deda39a5411d3b72db7a06772590c StaticDependenciesID=58b161325fd872f92fac6c71c578ee59 
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+
+Asset Pipeline Refresh (id=f327bd94f61824f76abd2769dd4ab3ab): Total: 6.398 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=3 (actual=3, local cache=0, cache server=0)
+		Asset DB Process Time: managed=1 ms, native=2107 ms
+		Asset DB Callback time: managed=39 ms, native=8 ms
+		Scripting: domain reloads=1, domain reload time=1070 ms, compile time=2 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=4, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokePackagesCallback: 0.600ms
+	ApplyChangesToAssetFolders: 0.408ms
+	Scan: 364.798ms
+	Collect global state as custom dependencies: 2.611ms
+	ProcessAssetsWithTransientArtifactChanges: 5.507ms
+	CategorizeAssets: 189.221ms
+	CompileScripts: 1.617ms
+	ImportOutOfDateAssets: 1237.536ms (1010.991ms without children)
+		ImportManagerImport: 134.912ms (23.959ms without children)
+			UpdateCategorizedAssets: 0.069ms
+		CollectScriptTypesHashes: 2.689ms
+		ReloadNativeAssets: 31.513ms
+		UnloadImportedAssets: 1.876ms
+		ReloadImportedAssets: 10.265ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.833ms
+		ImportSchedulerStart: 57.373ms
+	PostProcessAllAssets: 38.169ms
+		PostProcessCallbackCreateDeferredMaterials 0.187ms
+		XRBuildSystem.XRAssetImported 0.185ms
+		MonoPostProcessAllAssets: 37.013ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 7.966ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.293ms
+			AssetChangedListener.OnPostprocessAllAssets 3.363ms
+			AssetPostprocessor.OnPostprocessAllAssets 3.306ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 2.055ms
+			MaterialPostprocessor.OnPostprocessAllAssets 1.859ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 1.030ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.994ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.947ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.832ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 0.691ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 0.571ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.503ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.327ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.255ms
+			PostProcessor.OnPostprocessAllAssets 0.218ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.199ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.194ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.192ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.181ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.176ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.172ms
+			AssetEvents.OnPostprocessAllAssets 0.136ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.135ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.123ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.118ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.103ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.085ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.075ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.073ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.063ms
+			SyncVS.PostprocessSyncProject 0.053ms
+	PostAssetChangesProfiler: 3.448ms
+	PersistCurrentRevisions: 0.198ms
+	GenerateScriptTypeHashes: 3.914ms
+	GenerateScriptTypeSerializationHashes: 6.411ms
+	Untracked: 1114.674ms
+
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+2026-09-22 23:00:31.748 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d9964e0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:31.752 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d9952c0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:31.755 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d9c7a20 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:00:31.759 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8d7f7980 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Symbol file LoadedFromMemory is not a mono symbol file
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.920 seconds
+Domain Reload Profiling: 1497ms
+	BeginReloadAssembly (425ms)
+		DisableScriptedObjects (28ms)
+		CreateAndSetChildDomain (292ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (109ms)
+		LoadAssemblies (57ms)
+		AnalyzeDomain (15ms)
+			TypeCache.Refresh (7ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (921ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (54ms)
+			ProcessInitializeOnLoadAttributes (253ms)
+			ProcessInitializeOnLoadMethodAttributes (67ms)
+		AwakeInstancesAfterBackupRestoration (203ms)
+
+Asset Pipeline Refresh (id=30ce1e5191ac741b3a78655abfaaa566): Total: 1.733 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1114 ms
+		Asset DB Callback time: managed=16 ms, native=0 ms
+		Scripting: domain reloads=1, domain reload time=600 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 0.552ms
+	ApplyChangesToAssetFolders: 0.235ms
+	Collect global state as custom dependencies: 0.864ms
+	ProcessAssetsWithTransientArtifactChanges: 0.129ms
+	CategorizeAssets: 76.157ms
+	CompileScripts: 1.232ms
+	ImportOutOfDateAssets: 985.762ms (932.421ms without children)
+		CollectScriptTypesHashes: 1.244ms
+		ReloadNativeAssets: 1.572ms
+		UnloadImportedAssets: 0.096ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.582ms
+		ImportSchedulerStart: 51.056ms
+	PostProcessAllAssets: 16.563ms
+		MonoPostProcessAllAssets: 16.561ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 7.351ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.293ms
+			AssetChangedListener.OnPostprocessAllAssets 3.363ms
+			AssetPostprocessor.OnPostprocessAllAssets 3.306ms
+			MaterialPostprocessor.OnPostprocessAllAssets 1.859ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 1.093ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 1.072ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.994ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.947ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.878ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 0.691ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 0.571ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.503ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.409ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.255ms
+			PostProcessor.OnPostprocessAllAssets 0.218ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.192ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.192ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.181ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.176ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.152ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.150ms
+			AssetEvents.OnPostprocessAllAssets 0.136ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.135ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.118ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.103ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.098ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.092ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.085ms
+			SyncVS.PostprocessSyncProject 0.080ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.073ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.063ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.216ms
+	PersistCurrentRevisions: 0.135ms
+	GenerateScriptTypeHashes: 3.812ms
+	GenerateScriptTypeSerializationHashes: 6.225ms
+	Untracked: 648.481ms
+
+[S_API] SteamAPI_Init(): Loaded '/Users/davidfincher/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/steamclient.dylib' OK.
+SteamInternal_SetMinidumpSteamID:  Caching Steam ID:  76561199812387752 [API loaded no]
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            2.873 ms
+	Integration:            245.163 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.004 ms
+	Total Operation Time:   248.041 ms
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Lobby host: 76561199812387752
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:58)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/C#/UI/MainMenu.cs Line: 58)
+
+Starting server [SteamSockets].
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:ServerStart () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:159)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:149)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 159)
+
+Server started listening
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:165)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 165)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.501625 ms
+LobbyController: DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+SteamAvatarExtractor:Awake () (at Assets/C#/UI/SteamAvatarExtractor.cs:24)
+
+[Assets/C#/UI/SteamAvatarExtractor.cs line 24]
+
+Loaded scene 'Assets/Scenes/LobbyScene.unity'
+	Deserialize:            6.022 ms
+	Integration:            299.352 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       4.449 ms
+	Total Operation Time:   309.824 ms
+Unloading 117 unused Assets / (48.7 KB). Loaded Objects now: 13733.
+Memory consumption went from 0.58 GB to 0.58 GB.
+Total: 25.884583 ms (FindLiveObjects: 7.759750 ms CreateObjectMapping: 2.395416 ms MarkObjects: 15.274334 ms  DeleteObjects: 0.454625 ms)
+
+Unloading 55 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.560875 ms
+Loaded scene 'Assets/Scenes/GameplayScene.unity'
+	Deserialize:            77.832 ms
+	Integration:            181.188 ms
+	Integration of assets:  4.154 ms
+	Thread Wait Time:       6.293 ms
+	Total Operation Time:   269.467 ms
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Unloading 275 unused Assets / (57.6 KB). Loaded Objects now: 16872.
+Memory consumption went from 0.66 GB to 0.66 GB.
+Total: 21.166292 ms (FindLiveObjects: 1.636208 ms CreateObjectMapping: 1.779917 ms MarkObjects: 17.402791 ms  DeleteObjects: 0.347167 ms)
+
+GameMaster: captured 1 lobby connections.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:CaptureLobbyConnections () (at Assets/C#/Gameplay/GameMaster.cs:147)
+GameMaster/<InitializeLobbyConnections>d__24:MoveNext () (at Assets/C#/Gameplay/GameMaster.cs:117)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 147)
+
+GameMaster: player loaded. Connection=0, loaded=1/1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:PlayerLoaded (Mirror.NetworkConnectionToClient) (at Assets/C#/Gameplay/GameMaster.cs:188)
+Player:UserCode_CmdNotifyLoaded () (at Assets/C#/Gameplay/Player/Player.cs:161)
+Player:InvokeUserCode_CmdNotifyLoaded (Mirror.NetworkBehaviour,Mirror.NetworkReader,Mirror.NetworkConnectionToClient)
+Mirror.RemoteCalls.RemoteProcedureCalls:Invoke (uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkBehaviour,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/RemoteCalls.cs:133)
+Mirror.NetworkIdentity:HandleRemoteCall (byte,uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/NetworkIdentity.cs:245)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:396)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 188)
+
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=7e860536be5434c22a3bc03004a37051): Total: 0.338 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=337 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	ApplyChangesToAssetFolders: 0.289ms
+	Scan: 331.457ms
+	Collect global state as custom dependencies: 0.143ms
+	GatherAllCurrentPrimaryImportResultRevisions: 3.027ms
+	UnloadStreamsBegin: 0.564ms
+	UnloadStreamsEnd: 0.093ms
+	Untracked: 1.497ms
+
+Thread 0x303bf7000 may have been prematurely finalized
+Transport shut down - server.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:Shutdown () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:239)
+Mirror.MultiplexTransport:Shutdown () (at Assets/Mirror/Transports/Multiplex/MultiplexTransport.cs:444)
+Mirror.Transport:OnApplicationQuit () (at Assets/Mirror/Core/Transport.cs:207)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 239)
+
+LobbyHandler instance is missing. Lobby refresh skipped.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+NetManager:OnServerDisconnect (Mirror.NetworkConnectionToClient) (at Assets/C#/Core/NetManager.cs:125)
+Mirror.NetworkManager:StopClient () (at Assets/Mirror/Core/NetworkManager.cs:622)
+Mirror.NetworkManager:OnApplicationQuit () (at Assets/Mirror/Core/NetworkManager.cs:648)
+
+(Filename: Assets/C#/Core/NetManager.cs Line: 125)
+
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            2.441 ms
+	Integration:            275.578 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.013 ms
+	Total Operation Time:   278.034 ms
+Unloading 834 unused Assets / (16.4 MB). Loaded Objects now: 13443.
+Memory consumption went from 0.51 GB to 509.7 MB.
+Total: 21.661041 ms (FindLiveObjects: 0.616250 ms CreateObjectMapping: 1.601750 ms MarkObjects: 18.001291 ms  DeleteObjects: 1.441208 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+Importing 'GUID: a20cf97654237ff4b8deb48fe92bdf16 - Path: Assets/Fonts/NotoSerif-VariableFont_wdth,wght SDF.asset' with importer (NativeFormatImporter)
+Imported 'GUID: a20cf97654237ff4b8deb48fe92bdf16' -> (Import Result ID: '97181a0ca13f5780e166b038e5d9b269') in 0.018 seconds [static dependencies only]. Details - ImportResultOutputID=90ababe83ea23f6eb9f57d05908ad0a8 DependenciesID=0d8e186dc1d595eac923bddeae962033 StaticDependenciesID=af48648000d8818b10b4d6764e86d09b 
+Asset Pipeline Refresh (id=c10f3623bbb4a437abcee52262548e53): Total: 0.207 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Thread 0x302d17000 may have been prematurely finalized
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+2026-09-22 23:10:50.528 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8c4280 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:10:50.532 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8ce9e0 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:10:50.535 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8c7340 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+2026-09-22 23:10:50.539 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8ccb40 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Symbol file LoadedFromMemory is not a mono symbol file
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+'Player' has another NetworkIdentity component on 'card'. There should only be one NetworkIdentity, and it must be on the root object. Please remove the other one.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object)
+UnityEngine.Debug:LogError (object,UnityEngine.Object)
+Mirror.NetworkIdentity:DisallowChildNetworkIdentities () (at Assets/Mirror/Core/NetworkIdentity.cs:383)
+Mirror.NetworkIdentity:OnValidate () (at Assets/Mirror/Core/NetworkIdentity.cs:357)
+
+(Filename: Assets/Mirror/Core/NetworkIdentity.cs Line: 383)
+
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.950 seconds
+Domain Reload Profiling: 1593ms
+	BeginReloadAssembly (457ms)
+		DisableScriptedObjects (28ms)
+		CreateAndSetChildDomain (235ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (139ms)
+		LoadAssemblies (121ms)
+		AnalyzeDomain (15ms)
+			TypeCache.Refresh (7ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (951ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (5ms)
+			BeforeProcessingInitializeOnLoad (52ms)
+			ProcessInitializeOnLoadAttributes (258ms)
+			ProcessInitializeOnLoadMethodAttributes (64ms)
+		AwakeInstancesAfterBackupRestoration (232ms)
+
+Asset Pipeline Refresh (id=9f81adcb30ae8424ba481a2e6dc5337e): Total: 1.908 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=1143 ms
+		Asset DB Callback time: managed=15 ms, native=1 ms
+		Scripting: domain reloads=1, domain reload time=746 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 1.865ms
+	ApplyChangesToAssetFolders: 0.241ms
+	Collect global state as custom dependencies: 1.042ms
+	ProcessAssetsWithTransientArtifactChanges: 0.075ms
+	CategorizeAssets: 77.889ms
+	CompileScripts: 1.265ms
+	ImportOutOfDateAssets: 1022.621ms (963.517ms without children)
+		CollectScriptTypesHashes: 1.071ms
+		ReloadNativeAssets: 1.611ms
+		UnloadImportedAssets: 0.129ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.617ms
+		ImportSchedulerStart: 56.705ms
+	PostProcessAllAssets: 15.520ms
+		MonoPostProcessAllAssets: 15.518ms
+			HDRenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 6.857ms
+			AssetChangedListener.OnPostprocessAllAssets 4.133ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 3.921ms
+			AssetPostprocessor.OnPostprocessAllAssets 2.974ms
+			MaterialPostprocessor.OnPostprocessAllAssets 2.549ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 1.129ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 0.926ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 0.854ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.829ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 0.800ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 0.683ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 0.657ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.630ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.453ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.441ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.345ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.305ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.268ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.255ms
+			PostProcessor.OnPostprocessAllAssets 0.237ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.235ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.153ms
+			ShaderReflectionAssetPostProcessor.OnPostprocessAllAssets 0.152ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.134ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.118ms
+			AssetEvents.OnPostprocessAllAssets 0.115ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.109ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.082ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.081ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.071ms
+			ProjectSettingsPostprocessor.OnPostprocessAllAssets 0.066ms
+	GatherAllCurrentPrimaryImportResultRevisions: 0.578ms
+	PersistCurrentRevisions: 0.135ms
+	GenerateScriptTypeHashes: 4.034ms
+	GenerateScriptTypeSerializationHashes: 6.485ms
+	Untracked: 784.466ms
+
+[S_API] SteamAPI_Init(): Loaded '/Users/davidfincher/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/steamclient.dylib' OK.
+SteamInternal_SetMinidumpSteamID:  Caching Steam ID:  76561199812387752 [API loaded no]
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            2.793 ms
+	Integration:            237.025 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.004 ms
+	Total Operation Time:   239.823 ms
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Lobby host: 76561199812387752
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:58)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/C#/UI/MainMenu.cs Line: 58)
+
+Starting server [SteamSockets].
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.FizzySteam.FizzySteamworks:ServerStart () (at Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs:159)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:149)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Transports/FizzySteamworks/FizzySteamworks.cs Line: 159)
+
+Server started listening
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Mirror.NetworkServer:Listen (int) (at Assets/Mirror/Core/NetworkServer.cs:165)
+Mirror.NetworkManager:SetupServer () (at Assets/Mirror/Core/NetworkManager.cs:305)
+Mirror.NetworkManager:StartHost () (at Assets/Mirror/Core/NetworkManager.cs:471)
+MainMenu:OnLobbyCreated (Steamworks.LobbyCreated_t) (at Assets/C#/UI/MainMenu.cs:60)
+Steamworks.Callback`1<Steamworks.LobbyCreated_t>:OnRunCallback (intptr) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:326)
+Steamworks.CallbackDispatcher:RunFrame (bool) (at Assets/com.rlabrecque.steamworks.net/Runtime/CallbackDispatcher.cs:222)
+Steamworks.SteamAPI:RunCallbacks () (at Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs:183)
+SteamManager:Update () (at Assets/Scripts/Steamworks.NET/SteamManager.cs:173)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 165)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 14.859667 ms
+LobbyController: DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+SteamAvatarExtractor:Awake () (at Assets/C#/UI/SteamAvatarExtractor.cs:24)
+
+[Assets/C#/UI/SteamAvatarExtractor.cs line 24]
+
+Loaded scene 'Assets/Scenes/LobbyScene.unity'
+	Deserialize:            44.827 ms
+	Integration:            940.182 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       22.484 ms
+	Total Operation Time:   1007.496 ms
+Unloading 116 unused Assets / (46.6 KB). Loaded Objects now: 13753.
+Memory consumption went from 0.56 GB to 0.56 GB.
+Total: 71.678208 ms (FindLiveObjects: 17.221541 ms CreateObjectMapping: 6.161292 ms MarkObjects: 47.398042 ms  DeleteObjects: 0.896291 ms)
+
+Unloading 55 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 11.943916 ms
+Loaded scene 'Assets/Scenes/GameplayScene.unity'
+	Deserialize:            175.558 ms
+	Integration:            544.046 ms
+	Integration of assets:  17.466 ms
+	Thread Wait Time:       43.352 ms
+	Total Operation Time:   780.421 ms
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Command CmdChangeReadyState__Boolean received for LobbyPlayer(Clone) [netId=2] component LobbyPlayer(Clone) [index=0] when client not ready.
+This may be ignored if client intentionally set NotReady.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:349)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/Mirror/Core/NetworkServer.cs Line: 349)
+
+Unloading 275 unused Assets / (54.1 KB). Loaded Objects now: 16892.
+Memory consumption went from 0.63 GB to 0.63 GB.
+Total: 69.657291 ms (FindLiveObjects: 6.254042 ms CreateObjectMapping: 8.004083 ms MarkObjects: 54.636792 ms  DeleteObjects: 0.761708 ms)
+
+GameMaster: captured 1 lobby connections.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:CaptureLobbyConnections () (at Assets/C#/Gameplay/GameMaster.cs:147)
+GameMaster/<InitializeLobbyConnections>d__24:MoveNext () (at Assets/C#/Gameplay/GameMaster.cs:117)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 147)
+
+GameMaster: player loaded. Connection=0, loaded=1/1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+GameMaster:PlayerLoaded (Mirror.NetworkConnectionToClient) (at Assets/C#/Gameplay/GameMaster.cs:188)
+Player:UserCode_CmdNotifyLoaded () (at Assets/C#/Gameplay/Player/Player.cs:161)
+Player:InvokeUserCode_CmdNotifyLoaded (Mirror.NetworkBehaviour,Mirror.NetworkReader,Mirror.NetworkConnectionToClient)
+Mirror.RemoteCalls.RemoteProcedureCalls:Invoke (uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkBehaviour,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/RemoteCalls.cs:133)
+Mirror.NetworkIdentity:HandleRemoteCall (byte,uint16,Mirror.RemoteCalls.RemoteCallType,Mirror.NetworkReader,Mirror.NetworkConnectionToClient) (at Assets/Mirror/Core/NetworkIdentity.cs:245)
+Mirror.NetworkServer:OnCommandMessage (Mirror.NetworkConnectionToClient,Mirror.CommandMessage,int) (at Assets/Mirror/Core/NetworkServer.cs:396)
+Mirror.NetworkMessages/<>c__DisplayClass8_0`2<Mirror.CommandMessage, Mirror.NetworkConnectionToClient>:<WrapHandler>b__0 (Mirror.NetworkConnection,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkMessages.cs:179)
+Mirror.NetworkServer:UnpackAndInvoke (Mirror.NetworkConnectionToClient,Mirror.NetworkReader,int) (at Assets/Mirror/Core/NetworkServer.cs:742)
+Mirror.NetworkServer:OnTransportData (int,System.ArraySegment`1<byte>,int) (at Assets/Mirror/Core/NetworkServer.cs:813)
+Mirror.LocalConnectionToClient:Update () (at Assets/Mirror/Core/LocalConnectionToClient.cs:57)
+Mirror.NetworkServer:Broadcast () (at Assets/Mirror/Core/NetworkServer.cs:2029)
+Mirror.NetworkServer:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkServer.cs:2080)
+Mirror.NetworkLoop:NetworkLateUpdate () (at Assets/Mirror/Core/NetworkLoop.cs:207)
+
+(Filename: Assets/C#/Gameplay/GameMaster.cs Line: 188)
+
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=0928726a26e5941879fff672a4fc9df0): Total: 0.396 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=394 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	ApplyChangesToAssetFolders: 0.309ms
+	Scan: 386.120ms
+	Collect global state as custom dependencies: 1.839ms
+	GatherAllCurrentPrimaryImportResultRevisions: 1.207ms
+	UnloadStreamsBegin: 0.913ms
+	UnloadStreamsEnd: 0.073ms
+	Untracked: 3.658ms
+
+[Licensing::Client] Successfully resolved entitlement details
+Scanning for USB devices : 0.337ms
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "h5xrf05z"... (expires: 2026-09-22T23:39:23Z)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "t06wmRu6"... (expires: 2026-09-23T01:39:02Z)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "8j8vBO24"... (expires: 2026-09-23T03:38:36Z)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "t4VOPfGU"... (expires: 2026-09-23T05:38:09Z)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully updated the access token
+[Licensing::Module] Successfully updated access token: "j_E91-AN"... (expires: 2026-09-23T07:37:50Z)
+[Licensing::Client] Successfully resolved entitlement details
+Scanning for USB devices : 0.149ms
+The GUID inside 'Assets/props/models/coin.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/falseTeeth.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+The GUID inside 'Assets/props/models/manEgg.blend.meta' cannot be extracted by the YAML Parser. Attempting to extract it via string matching instead. Please verify the file does not contain unexpected data.
+
+Asset Pipeline Refresh (id=da7f51c94b9e14a9fae4ad37563e76f6): Total: 0.461 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=460 ms
+		Asset DB Callback time: managed=0 ms, native=0 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	ApplyChangesToAssetFolders: 0.222ms
+	Scan: 452.824ms
+	Collect global state as custom dependencies: 1.752ms
+	GatherAllCurrentPrimaryImportResultRevisions: 2.127ms
+	UnloadStreamsBegin: 0.204ms
+	UnloadStreamsEnd: 0.203ms
+	Untracked: 3.837ms
+
+2026-09-23 09:05:04.006 Unity[19419:5692441] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xb8e8c6080 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+MonoPathRemapper: Attempts to remap: 112167; Successful remaps: 46094
+Thread 0x364a0f000 may have been prematurely finalized
+Thread 0x17b25f000 may have been prematurely finalized
+Serialized file version minimum: 23, current 23
+[LAYOUT] About to save layout /Users/davidfincher/Documents/GitHub/Potos/UserSettings/Layouts/default-6000.dwlt
+[LAYOUT] About to save layout /Users/davidfincher/Library/Preferences/Unity/Editor-5.x/Layouts/current/default-6000.dwlt
+Clearing [NotoSerif-VariableFont_wdth,wght SDF] dynamic font asset data.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+TMPro.EditorEventCallbacks/<>c:<InitializeFontAssetResourceChangeCallBacks>b__0_0 () (at ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs:36)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:128)
+
+(Filename: ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs Line: 36)
+
+Clearing [LiberationSans SDF - Fallback] dynamic font asset data.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+TMPro.EditorEventCallbacks/<>c:<InitializeFontAssetResourceChangeCallBacks>b__0_0 () (at ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs:36)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:128)
+
+(Filename: ./Library/PackageCache/com.unity.ugui@3d1ea40b73ef/Editor/TMP/TMP_EditorResourceManager.cs Line: 36)
+
+Shutting down MSBuild server...
+Shutting down VB/C# compiler server...
+Importing 'GUID: a20cf97654237ff4b8deb48fe92bdf16 - Path: Assets/Fonts/NotoSerif-VariableFont_wdth,wght SDF.asset' with importer (NativeFormatImporter)
+VB/C# compiler server shut down successfully.
+Imported 'GUID: a20cf97654237ff4b8deb48fe92bdf16' -> (Import Result ID: '384c71ec9f61abce45e4bfe8967d29e1') in 0.027 seconds [static dependencies only]. Details - ImportResultOutputID=90ababe83ea23f6eb9f57d05908ad0a8 DependenciesID=fc7d2fc27ee26da5bd8c26c158bd6c2e StaticDependenciesID=625f62c1cc35c873a22b47539e19c252 
+Importing 'GUID: 2e498d1c8094910479dc3e1b768306a4 - Path: Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset' with importer (NativeFormatImporter)
+Imported 'GUID: 2e498d1c8094910479dc3e1b768306a4' -> (Import Result ID: 'ab7f8eb1bab8498ab9be4c8f2650f60b') in 0.002 seconds [static dependencies only]. Details - ImportResultOutputID=94ce4dace069634644df4d315a8acf11 DependenciesID=11cd1b617f2dc72e1f3c9c6d9e18c7d0 StaticDependenciesID=da5548b56684425a2456f39d19391080 
+MSBuild server shut down successfully.
+
+Asset Pipeline Refresh (id=d3fd76ccb63814528874daf454179f5d): Total: 0.397 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=2 (actual=2, local cache=0, cache server=0)
+		Asset DB Process Time: managed=2 ms, native=347 ms
+		Asset DB Callback time: managed=35 ms, native=11 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1980, non-scripts=4341
+		Asset File Changes: new=0, changed=2, moved=0, deleted=0
+		Scan Filter Count: 7
+	ApplyChangesToAssetFolders: 0.289ms
+	Scan: 9.638ms
+	OnSourceAssetsModified: 1.599ms
+	CategorizeScriptCompilationAssets: 0.480ms
+	ProcessAssetsWithTransientArtifactChanges: 2.971ms
+	CategorizeAssets: 125.925ms
+	ImportOutOfDateAssets: 137.565ms (35.553ms without children)
+		ImportManagerImport: 38.691ms (7.989ms without children)
+		ReloadNativeAssets: 0.098ms
+		UnloadImportedAssets: 0.098ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.617ms
+		InitializingProgressBar: 0.339ms
+		ImportSchedulerStart: 62.168ms
+	PostProcessAllAssets: 40.512ms
+		XRBuildSystem.XRAssetImported 4.630ms
+		AssemblyValidation.PostprocessAllAssets 0.210ms
+		MonoPostProcessAllAssets: 34.119ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 6.484ms
+			AssetPostprocessor.OnPostprocessAllAssets 5.095ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 4.394ms
+			MaterialPostprocessor.OnPostprocessAllAssets 3.184ms
+			ShaderGraphAssetPostProcessor.OnPostprocessAllAssets 2.399ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.905ms
+			VFXGraphPreprocessor.OnPostprocessAllAssets 1.904ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 1.204ms
+			SampleDependencyImporterPostProcessor.OnPostprocessAllAssets 1.126ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.632ms
+			PostProcessor.OnPostprocessAllAssets 0.570ms
+			InputActionAssetPostprocessor.OnPostprocessAllAssets 0.563ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.560ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.522ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.444ms
+			InputActionJsonNameModifierAssetProcessor.OnPostprocessAllAssets 0.423ms
+			AssetChangedListener.OnPostprocessAllAssets 0.274ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.215ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.205ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.166ms
+			AssetEvents.OnPostprocessAllAssets 0.134ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 0.108ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.098ms
+	PostAssetChangesProfiler: 4.555ms
+	GatherAllCurrentPrimaryImportResultRevisions: 5.188ms
+	UnloadStreamsBegin: 0.075ms
+	PersistCurrentRevisions: 0.189ms
+	Untracked: 67.604ms
+
+Thread 0x1741ef000 may have been prematurely finalized
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+[Licensing::IpcConnector] LicenseClient-davidfincher-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-davidfincher channel disconnected successfully.
+Thread 0x16fd77000 may have been prematurely finalized
+Thread 0x16fe8f000 may have been prematurely finalized
+Thread 0x16ffa7000 may have been prematurely finalized
+Thread 0x16fe03000 may have been prematurely finalized
+Thread 0x170033000 may have been prematurely finalized
+Thread 0x16ff1b000 may have been prematurely finalized
+Thread 0x1700bf000 may have been prematurely finalized
+AcceleratorClientConnectionCallback - disconnected - :0
+Thread 0x1767ff000 may have been prematurely finalized
+Cleanup mono
+CodeReloadManager destroyed
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      ALC ILPP context 1 is unloading
+debugger-agent: Unable to listen on 83
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1790143514233,"processId":19419,"allocatedMemory":51868543,"memoryLabels":[{"Default":276279},{"Permanent":15672},{"Thread":1055928},{"Manager":1415710},{"VertexData":8},{"Geometry":408},{"Texture":24},{"Shader":860110},{"Material":24},{"GfxDevice":41072},{"GfxThread":1280},{"Animation":97064},{"Audio":776},{"FreeType":8},{"FontEngine":736},{"Physics":2178},{"Physics2D":16},{"Serialization":329320},{"Input":43216},{"JobScheduler":448},{"TextLib":24027},{"Mono":56},{"MonoCode":360},{"ScriptingNativeRuntime":155024},{"BaseObject":1759003},{"Resource":984},{"Renderer":3600},{"Transform":4693},{"File":15052},{"WebCam":32},{"Culling":32},{"Terrain":11346},{"Wind":24},{"String":11861},{"StaticString":4140},{"Utility":2689152},{"Curl":1444},{"PoolAlloc":2392},{"AI":80},{"TypeTree":231031},{"CodeReload":448},{"RuntimeInitializeOnLoadManager":64},{"Sprites":102},{"SpriteAtlas":120},{"GI":7240},{"CloudService":7024},{"WebRequest":8484},{"VR":46890},{"SceneManager":616},{"Video":2112},{"LazyScriptCache":32},{"NativeArray":33020968},{"Camera":17},{"Secure":9865},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57504},{"StaticSafetyDebugInfo":278528},{"Baselib":16},{"Analytics":528},{"Hierarchy":1608},{"UIElements":218040},{"CoreStats":13768},{"Identifiers":6768},{"Gui":13082},{"EditorUtility":177648},{"VersionControl":8},{"Undo":939},{"AssetDatabase":8957442},{"AssetImporter":40},{"EditorGi":328},{"UnityConnect":36302},{"Upm":1788},{"UpmDiagnostics":8},{"AssetCompliance":64},{"DrivenProperties":72},{"HubClient":848},{"ChannelService":768},{"LocalIPC":268},{"ProfilerEditor":9738},{"CoreBusinessMetrics":3085},{"Windowing":416},{"Licensing":960},{"AssetReference":32},{"IPCStream":6811}]}

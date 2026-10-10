@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a9fd563a953d54cb21c3d5ed54db70, type: 3}
+  m_Name: Dove
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardName: "\u0413\u043E\u043B\u0443\u0431\u044C"
+  CardClass: 2
+  description: "\u0413\u043E\u043B\u0443\u0431\u044C)"
+  interactableCards:
+  - {fileID: 11400000, guid: 920815d973dd480478b7107840cdc0e1, type: 2}
+  actionId: DOVE
+  emissiveColor: {r: 0.2, g: 0.4, b: 0.8, a: 0}
+  sprite: {fileID: 21300000, guid: 5aabdbccf1c12f64ea223d7a72a4b525, type: 3}
+  texture: {fileID: 2800000, guid: e6fc7d47d263d0d4e8e846556e69075f, type: 3}

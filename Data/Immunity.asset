@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a9fd563a953d54cb21c3d5ed54db70, type: 3}
+  m_Name: Immunity
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardName: "\u041D\u0435\u043F\u0440\u0438\u043A\u043E\u0441\u043D\u043E\u0432\u0435\u043D\u043D\u043E\u0441\u0442\u044C"
+  CardClass: 4
+  description: "\u041D\u0435\u043F\u0440\u0438\u043A\u043E\u0441\u043D\u043E\u0432\u0435\u043D\u043D\u043E\u0441\u0442\u044C"
+  interactableCards:
+  - {fileID: 0}
+  actionId: IMMUNITY
+  emissiveColor: {r: 0.5058824, g: 0.2901961, b: 0.61960787, a: 0}
+  sprite: {fileID: 21300000, guid: 6e87fcc0db107bf43a6aaecf1e9c3a33, type: 3}
+  texture: {fileID: 2800000, guid: 13499c5ec4c4b9c46a37225cde78aaa5, type: 3}

@@ -9,7 +9,8 @@ public class Card : InteractableObject
     public enum UnavailableReason
     {
         SampleReason,
-        WrongTurnPhase
+        WrongTurnPhase,
+        Effect
     }
 
     public enum CardClass
@@ -74,6 +75,9 @@ public class Card : InteractableObject
         interaction != null &&
         interaction.IsZoomed;
 
+    public uint OwnerNetId =>
+        ownerNetId;
+
     private void OnEnable()
     {
         SubscribeToGamePhase();
@@ -88,6 +92,7 @@ public class Card : InteractableObject
     private void Start()
     {
         ResetLocalState();
+        ApplyVisualState();
 
         if (GameMaster.Instance != null)
         {
@@ -96,15 +101,23 @@ public class Card : InteractableObject
         }
     }
 
+    [ServerCallback]
     private void Update()
     {
-        if (!IsOwnedByLocalPlayer())
-            return;
+        movement?.UpdateMovement();
+    }
 
+    [Server]
+    public void RefreshAvailability()
+    {
         if (isInRoulette)
             return;
 
-        movement?.UpdateMovement();
+        if (GameMaster.Instance == null)
+            return;
+
+        OnGamePhaseChanged(
+            GameMaster.Instance.CurrentPhase);
     }
 
     private void SubscribeToGamePhase()
@@ -286,9 +299,18 @@ public class Card : InteractableObject
 
         if (value)
         {
+            movement?.Detach();
             ResetLocalState();
+
+            visual?.HideUnavailableOverlay();
+            visual?.SetColliderEnabled(false);
+
+            return;
         }
-        else if (GameMaster.Instance != null)
+
+        ApplyVisualState();
+
+        if (GameMaster.Instance != null)
         {
             OnGamePhaseChanged(
                 GameMaster.Instance.CurrentPhase);
@@ -301,14 +323,16 @@ public class Card : InteractableObject
     {
         if (newValue)
         {
+            movement?.Detach();
             ResetLocalState();
+
+            visual?.HideUnavailableOverlay();
+            visual?.SetColliderEnabled(false);
+
             return;
         }
 
-        if (IsOwnedByLocalPlayer())
-        {
-            visual?.ApplyAvailability(isAvailable);
-        }
+        ApplyVisualState();
     }
 
     [Server]
@@ -331,6 +355,7 @@ public class Card : InteractableObject
         AttachToSocket();
         ApplyCardData();
         ResetLocalState();
+        ApplyVisualState();
 
         if (isInRoulette)
         {
@@ -340,8 +365,6 @@ public class Card : InteractableObject
 
             return;
         }
-
-        visual?.ApplyAvailability(isAvailable);
 
         if (IsOwnedByLocalPlayer())
         {
@@ -363,16 +386,13 @@ public class Card : InteractableObject
         bool oldValue,
         bool newValue)
     {
-        if (!IsOwnedByLocalPlayer())
+        if (!newValue)
         {
-            DisableLocalInteraction();
-            return;
+            interaction?.ResetState();
+            movement?.ResetState();
         }
 
-        visual?.ApplyAvailability(newValue);
-
-        if (!newValue)
-            ResetLocalState();
+        ApplyVisualState();
     }
 
     private void OnOwnerChanged(
@@ -382,6 +402,7 @@ public class Card : InteractableObject
         ResetLocalState();
 
         AttachToSocket();
+        ApplyVisualState();
 
         if (IsOwnedByLocalPlayer())
         {
@@ -395,8 +416,6 @@ public class Card : InteractableObject
 
                 return;
             }
-
-            visual?.ApplyAvailability(isAvailable);
 
             if (GameMaster.Instance != null)
             {
@@ -457,6 +476,7 @@ public class Card : InteractableObject
         if (isInRoulette)
         {
             visual?.DisableInteraction();
+            visual?.HideUnavailableOverlay();
             return;
         }
 
@@ -468,7 +488,9 @@ public class Card : InteractableObject
     {
         interaction?.ResetState();
         movement?.ResetState();
-        visual?.DisableInteraction();
+
+        visual?.SetColliderEnabled(false);
+        visual?.HideUnavailableOverlay();
     }
 
     private void ResetLocalState()
@@ -478,28 +500,76 @@ public class Card : InteractableObject
         visual?.ResetState();
     }
 
-    public void OnAttachmentToRoulette()
+    private void ApplyVisualState()
     {
-        ResetLocalState();
+        if (visual == null)
+            return;
+
+        if (isInRoulette)
+        {
+            visual.HideUnavailableOverlay();
+            visual.SetColliderEnabled(false);
+            return;
+        }
+
+        if (!IsOwnedByLocalPlayer())
+        {
+            visual.HideUnavailableOverlay();
+            visual.SetColliderEnabled(false);
+            return;
+        }
+
+        visual.ApplyAvailability(
+            isAvailable);
+
+        visual.SetColliderEnabled(true);
     }
 
-    public void OnActionPerformed()
+    public void OnAttachmentToRoulette()
+    {
+        movement?.Detach();
+        ResetLocalState();
+
+        visual?.HideUnavailableOverlay();
+        visual?.SetColliderEnabled(false);
+    }
+
+    public void RequestMoveToZoomSocket()
     {
         if (!IsOwnedByLocalPlayer())
             return;
 
-        if (cardData == null)
+        CmdMoveToZoomSocket();
+    }
+
+    [Command]
+    private void CmdMoveToZoomSocket(
+        NetworkConnectionToClient sender = null)
+    {
+        if (!IsOwnedByLocalConnection(sender))
             return;
 
-        if (cardData.CardClass ==
-            CardClass.AttackSteal)
+        if (isInRoulette)
+            return;
+
+        if (!NetworkServer.spawned.TryGetValue(
+                ownerNetId,
+                out NetworkIdentity identity))
         {
-            if (GameMaster.Instance != null)
-            {
-                GameMaster.Instance.SetGamePhase(
-                    GameMaster.GamePhase.Steal);
-            }
+            return;
         }
+
+        Player player =
+            identity.GetComponent<Player>();
+
+        if (player == null)
+            return;
+
+        if (player.cardZoomSocket == null)
+            return;
+
+        movement?.MoveToZoomSocket(
+            player.cardZoomSocket);
     }
 
     public void ReturnToOwner()
@@ -563,9 +633,38 @@ public class Card : InteractableObject
 
     private bool CanInteract()
     {
-        return IsOwnedByLocalPlayer() &&
-               isAvailable &&
-               !isInRoulette;
+        if (!IsOwnedByLocalPlayer() ||
+            !isAvailable ||
+            isInRoulette)
+        {
+            return false;
+        }
+
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
+            return false;
+
+        if (!TryGetOwner(
+                out Player player))
+        {
+            return false;
+        }
+
+        switch (gameMaster.CurrentPhase)
+        {
+            case GameMaster.GamePhase.Attack:
+                return player.SeatIndex ==
+                       gameMaster.CurrentPlayerIndex;
+
+            case GameMaster.GamePhase.Defense:
+                return gameMaster.SelectedTarget ==
+                       player;
+
+            default:
+                return false;
+        }
     }
 
     public bool TryGetOwner(

@@ -88,17 +88,15 @@
     <Compile Include="Assets\C#\Gameplay\Interaction\DealerToken.cs" />
     <Compile Include="Assets\C#\Data\CardData.cs" />
     <Compile Include="Assets\C#\Gameplay\Splines\SplineRotator.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\BasicCamera.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\PlayerAnimator.cs" />
     <Compile Include="Assets\C#\Animation\animBehaviours\Cancelation.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\LoadedDice.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\IInteractable.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\Card\CardDataController.cs" />
     <Compile Include="Assets\C#\UI\HUD\HudController.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\HitReaction.cs" />
+    <Compile Include="Assets\C#\Gameplay\Interaction\Card\CardEffects\CE_Glue.cs" />
+    <Compile Include="Assets\C#\Gameplay\Interaction\Card\CardEffects\CE_Knife.cs" />
     <Compile Include="Assets\C#\Gameplay\Splines\NinjaMover.cs" />
     <Compile Include="Assets\C#\UI\WorldSpace\WSCanvasHandler.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\WobbleImpulse.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\InteractableObject.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\Card\CardVisual.cs" />
     <Compile Include="Assets\C#\UI\LobbyMenu.cs" />
@@ -116,12 +114,9 @@
     <Compile Include="Assets\C#\Gameplay\AttackSequence.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\Interactor.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\CameraLook.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\MovementOrderController.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\BasicMovementOrders.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\PlayerInteractable.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\BankInteractable.cs" />
     <Compile Include="Assets\C#\Core\NetManager.cs" />
-    <Compile Include="Assets\Scenes\Sandbox\PotosVFX\Scripts\TorchDemo.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\Player.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\PlayerCosmetics.cs" />
   </ItemGroup>

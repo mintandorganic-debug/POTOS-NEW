@@ -2814,8 +2814,6 @@ GameObject:
   - component: {fileID: 739257633306452031}
   - component: {fileID: 66559985010720536}
   - component: {fileID: 4538608399603995762}
-  - component: {fileID: 5906989912399171611}
-  - component: {fileID: 6742171109945104201}
   m_Layer: 0
   m_Name: dealer_coin
   m_TagString: Untagged
@@ -2927,40 +2925,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.02, z: 0.1}
   m_Center: {x: 0.17, y: 0.02, z: 0.604}
---- !u!114 &5906989912399171611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4702536315869296044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkAnimator
-  syncDirection: 1
-  syncMode: 0
-  syncInterval: 0
-  clientAuthority: 0
-  animator: {fileID: 8407179924724695842}
---- !u!114 &6742171109945104201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4702536315869296044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkAnimator
-  syncDirection: 1
-  syncMode: 0
-  syncInterval: 0
-  clientAuthority: 0
-  animator: {fileID: 801208312813702606}
 --- !u!1 &4891382820656642207
 GameObject:
   m_ObjectHideFlags: 0
@@ -3550,6 +3514,60 @@ Transform:
   - {fileID: 3951367224219416474}
   m_Father: {fileID: 7787007552487368808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6326843386202411792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 359535267948118970}
+  - component: {fileID: 7350049714606266310}
+  m_Layer: 5
+  m_Name: Custom Pass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &359535267948118970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6326843386202411792}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0.895, z: 0}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4778602678250145291}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7350049714606266310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6326843386202411792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d6499a6bd256e47b859377446493a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.CustomPassVolume
+  m_IsGlobal: 1
+  fadeRadius: 0
+  priority: 0
+  customPasses: []
+  injectionPoint: 1
+  m_TargetCamera: {fileID: 0}
+  useTargetCamera: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &6432974725825133965
 GameObject:
   m_ObjectHideFlags: 0
@@ -5028,6 +5046,7 @@ Transform:
   - {fileID: 3447824530746195152}
   - {fileID: 6419735195961453489}
   - {fileID: 8069562883066576536}
+  - {fileID: 359535267948118970}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6443720212667015256

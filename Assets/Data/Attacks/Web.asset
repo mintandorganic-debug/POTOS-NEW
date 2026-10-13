@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a9fd563a953d54cb21c3d5ed54db70, type: 3}
   m_Name: Web
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardName: "\u041A\u043E\u043B\u044C\u0442"
+  cardName: "\u041F\u0430\u0443\u0442\u0438\u043D\u0430"
   CardClass: 1
   description: This is your warning. Every trap begins with a single step.
   cardEffect: {fileID: 11400000, guid: 223bc37935a905041bfb55bc75b0c235, type: 2}

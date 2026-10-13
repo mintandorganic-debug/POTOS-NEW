@@ -20,7 +20,9 @@ public class PlayerActions : NetworkBehaviour
         base.OnStopLocalPlayer();
     }
 
-    public void TryStealAccessory(Player target, int index)
+    public void TryStealAccessory(
+        Player target,
+        int index)
     {
         if (!isLocalPlayer)
             return;
@@ -28,15 +30,22 @@ public class PlayerActions : NetworkBehaviour
         if (target == null)
             return;
 
-        CmdTryStealAccessory(target.netIdentity, index);
+        CmdTryStealAccessory(
+            target.netIdentity,
+            index);
     }
 
     [Command]
     private void CmdTryStealAccessory(
-        NetworkIdentity targetIdentity, int index)
+        NetworkIdentity targetIdentity,
+        int index,
+        NetworkConnectionToClient sender = null)
     {
-        if (targetIdentity == null)
+        if (targetIdentity == null ||
+            sender == null)
+        {
             return;
+        }
 
         if (!targetIdentity.TryGetComponent<Player>(
                 out Player target))
@@ -44,6 +53,15 @@ public class PlayerActions : NetworkBehaviour
             return;
         }
 
-        GameMaster.Instance.TryStealAccesory(target, index);
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
+            return;
+
+        gameMaster.TryStealAccesory(
+            target,
+            index,
+            sender);
     }
 }

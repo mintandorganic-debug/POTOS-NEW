@@ -397,6 +397,8 @@ MonoBehaviour:
   syncInterval: 0
   owner: {fileID: 0}
   avalaibleCardTypes:
+  - {fileID: 11400000, guid: 4c573f14c6132ff458e58cba5a1a76a3, type: 2}
+  - {fileID: 11400000, guid: e6ff26d3aabb0364ca00c1d181a9286a, type: 2}
   - {fileID: 11400000, guid: 920815d973dd480478b7107840cdc0e1, type: 2}
   - {fileID: 11400000, guid: a8891243144f7c649b6778fca6ee2cad, type: 2}
   - {fileID: 11400000, guid: 19b900309b007ff479d5087cc2ac7834, type: 2}

@@ -23,30 +23,39 @@ public class GameMaster : NetworkBehaviour
     public static GameMaster Instance;
 
     public event Action<GamePhase> GamePhaseChanged;
+    public event Action<int> CurrentPlayerChanged;
 
     [SyncVar(hook = nameof(OnGamePhaseChanged))]
-    [SerializeField] private GamePhase currentPhase = GamePhase.Attack;
+    [SerializeField] private GamePhase currentPhase = GamePhase.Wait;
 
     public GamePhase CurrentPhase =>
         currentPhase;
+
+    [SyncVar(hook = nameof(OnCurrentPlayerChanged))]
+    [SerializeField] private int currentPlayerIn = -1;
+
+    public int CurrentPlayerIndex =>
+        currentPlayerIn;
+
+    public Player SelectedTarget =>
+        selectedTarget;
 
     private readonly HashSet<int> expectedConnections = new();
     private readonly HashSet<int> loadedConnections = new();
 
     private readonly List<Player> _players = new();
-    public IReadOnlyList<Player> Players => _players;
 
-    private int currentPlayerIn = -1;
+    public IReadOnlyList<Player> Players =>
+        _players;
+
+    private Card selectedAttack;
+    private Player selectedTarget;
 
     private bool gameStarted;
     private bool startupCancelled;
 
     private Coroutine timeoutRoutine;
     private Coroutine startupRoutine;
-
-    // =========================================================
-    // LIFECYCLE
-    // =========================================================
 
     private void Awake()
     {
@@ -60,13 +69,12 @@ public class GameMaster : NetworkBehaviour
         Instance = this;
     }
 
-    // =========================================================
-    // PHASE
-    // =========================================================
-
-    [Server]
-    public void SetGamePhase(GamePhase phase)
+    private void SetGamePhase(
+        GamePhase phase)
     {
+        if (!isServer)
+            return;
+
         if (currentPhase == phase)
             return;
 
@@ -77,12 +85,17 @@ public class GameMaster : NetworkBehaviour
         GamePhase oldPhase,
         GamePhase newPhase)
     {
-        GamePhaseChanged?.Invoke(newPhase);
+        GamePhaseChanged?.Invoke(
+            newPhase);
     }
 
-    // =========================================================
-    // SERVER START
-    // =========================================================
+    private void OnCurrentPlayerChanged(
+        int oldPlayerIndex,
+        int newPlayerIndex)
+    {
+        CurrentPlayerChanged?.Invoke(
+            newPlayerIndex);
+    }
 
     public override void OnStartServer()
     {
@@ -96,15 +109,14 @@ public class GameMaster : NetworkBehaviour
         startupCancelled = false;
         currentPlayerIn = -1;
 
-        currentPhase = GamePhase.Attack;
+        selectedAttack = null;
+        selectedTarget = null;
+
+        currentPhase = GamePhase.Wait;
 
         StartCoroutine(
             InitializeLobbyConnections());
     }
-
-    // =========================================================
-    // CAPTURE LOBBY
-    // =========================================================
 
     [Server]
     private IEnumerator InitializeLobbyConnections()
@@ -143,14 +155,7 @@ public class GameMaster : NetworkBehaviour
             expectedConnections.Add(
                 conn.connectionId);
         }
-
-        Debug.Log(
-            $"GameMaster: captured {expectedConnections.Count} lobby connections.");
     }
-
-    // =========================================================
-    // PLAYER LOADED
-    // =========================================================
 
     [Server]
     public void PlayerLoaded(
@@ -185,16 +190,8 @@ public class GameMaster : NetworkBehaviour
         loadedConnections.Add(
             connectionId);
 
-        Debug.Log(
-            $"GameMaster: player loaded. Connection={connectionId}, " +
-            $"loaded={loadedConnections.Count}/{expectedConnections.Count}");
-
         TryStartGame();
     }
-
-    // =========================================================
-    // START CHECK
-    // =========================================================
 
     [Server]
     private void TryStartGame()
@@ -254,10 +251,6 @@ public class GameMaster : NetworkBehaviour
                 StartGameRoutine());
     }
 
-    // =========================================================
-    // START GAME ROUTINE
-    // =========================================================
-
     [Server]
     private IEnumerator StartGameRoutine()
     {
@@ -299,10 +292,6 @@ public class GameMaster : NetworkBehaviour
             players);
     }
 
-    // =========================================================
-    // BUILD PLAYER LIST
-    // =========================================================
-
     [Server]
     private List<Player> BuildPlayerList()
     {
@@ -340,10 +329,6 @@ public class GameMaster : NetworkBehaviour
 
         return players;
     }
-
-    // =========================================================
-    // VALIDATION
-    // =========================================================
 
     [Server]
     private bool AreAllExpectedPlayersPresent(
@@ -391,10 +376,6 @@ public class GameMaster : NetworkBehaviour
         return playerConnections.SetEquals(
             expectedConnections);
     }
-
-    // =========================================================
-    // START GAME
-    // =========================================================
 
     [Server]
     private void StartGame(
@@ -500,12 +481,15 @@ public class GameMaster : NetworkBehaviour
                     0,
                     accessoryPool.Count);
 
-            for(int j = 0; j < 5; j++)
+            for (int j = 0;
+                 j < 5;
+                 j++)
             {
                 player.SetAccesory(
                     j,
                     false);
             }
+
             player.SetAccesory(
                 accessoryIndex,
                 true);
@@ -523,10 +507,6 @@ public class GameMaster : NetworkBehaviour
                 0,
                 _players.Count));
     }
-
-    // =========================================================
-    // TURN
-    // =========================================================
 
     [Server]
     private void BeginTurn(
@@ -546,6 +526,9 @@ public class GameMaster : NetworkBehaviour
 
         currentPlayerIn =
             playerIndex;
+
+        selectedAttack = null;
+        selectedTarget = null;
 
         SetGamePhase(
             GamePhase.Attack);
@@ -571,6 +554,9 @@ public class GameMaster : NetworkBehaviour
             return;
         }
 
+        selectedAttack = null;
+        selectedTarget = null;
+
         _players[currentPlayerIn].OnTurnEnd();
 
         BeginTurn(
@@ -578,9 +564,298 @@ public class GameMaster : NetworkBehaviour
             _players.Count);
     }
 
-    // =========================================================
-    // TIMEOUT
-    // =========================================================
+    [Server]
+    public bool SelectAttack(
+        Card card,
+        Player player)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.Attack)
+        {
+            return false;
+        }
+
+        if (card == null ||
+            player == null)
+        {
+            return false;
+        }
+
+        if (!IsCurrentPlayer(player))
+            return false;
+
+        if (!card.IsAvailable ||
+            card.IsInRoulette)
+        {
+            return false;
+        }
+
+        if (card.OwnerNetId !=
+            player.netId)
+        {
+            return false;
+        }
+
+        if (card.Data == null)
+            return false;
+
+        if (card.Data.CardClass !=
+                Card.CardClass.AttackLight &&
+            card.Data.CardClass !=
+                Card.CardClass.AttackSteal)
+        {
+            return false;
+        }
+
+        selectedAttack = card;
+
+        SetGamePhase(
+            GamePhase.SelectTarget);
+
+        return true;
+    }
+
+    [Server]
+    public bool SelectTarget(
+        Player player)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.SelectTarget)
+        {
+            return false;
+        }
+
+        if (selectedAttack == null ||
+            player == null)
+        {
+            return false;
+        }
+
+        if (currentPlayerIn < 0 ||
+            currentPlayerIn >= _players.Count)
+        {
+            return false;
+        }
+
+        Player attacker =
+            _players[currentPlayerIn];
+
+        if (player == attacker)
+            return false;
+
+        if (!_players.Contains(player))
+            return false;
+
+        selectedTarget = player;
+
+        SetGamePhase(
+            GamePhase.Defense);
+
+        return true;
+    }
+
+    [Server]
+    public bool SelectDefense(
+        Card card,
+        Player player)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.Defense)
+        {
+            return false;
+        }
+
+        if (selectedAttack == null ||
+            selectedTarget == null)
+        {
+            return false;
+        }
+
+        if (player == null ||
+            player != selectedTarget)
+        {
+            return false;
+        }
+
+        if (card == null)
+            return false;
+
+        if (card.OwnerNetId !=
+            player.netId)
+        {
+            return false;
+        }
+
+        if (card.IsInRoulette ||
+            !card.IsAvailable)
+        {
+            return false;
+        }
+
+        if (card.Data == null ||
+            card.Data.CardClass !=
+                Card.CardClass.Defence)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    [Server]
+    public bool SkipDefense(
+        Player player)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.Defense)
+        {
+            return false;
+        }
+
+        if (selectedTarget == null ||
+            player == null)
+        {
+            return false;
+        }
+
+        if (player != selectedTarget)
+            return false;
+
+        return true;
+    }
+
+    [Server]
+    public bool BeginStealPhase()
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.Defense)
+        {
+            return false;
+        }
+
+        if (selectedAttack == null ||
+            selectedTarget == null)
+        {
+            return false;
+        }
+
+        if (selectedAttack.Data == null ||
+            selectedAttack.Data.CardClass !=
+                Card.CardClass.AttackSteal)
+        {
+            return false;
+        }
+
+        SetGamePhase(
+            GamePhase.Steal);
+
+        return true;
+    }
+
+    [Server]
+    public bool TryStealAccesory(
+        Player target,
+        int index,
+        NetworkConnectionToClient sender)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase !=
+            GamePhase.Steal)
+        {
+            return false;
+        }
+
+        if (sender == null)
+            return false;
+
+        if (selectedTarget == null ||
+            target == null ||
+            target != selectedTarget)
+        {
+            return false;
+        }
+
+        if (currentPlayerIn < 0 ||
+            currentPlayerIn >= _players.Count)
+        {
+            return false;
+        }
+
+        Player thief =
+            _players[currentPlayerIn];
+
+        if (thief == null ||
+            thief == target)
+        {
+            return false;
+        }
+
+        if (thief.netIdentity == null ||
+            thief.netIdentity.connectionToClient !=
+                sender)
+        {
+            return false;
+        }
+
+        if (!target.HasAccessory(index))
+            return false;
+
+        if (!target.SetAccesory(
+                index,
+                false))
+        {
+            return false;
+        }
+
+        if (!thief.SetAccesory(
+                index,
+                true))
+        {
+            target.SetAccesory(
+                index,
+                true);
+
+            return false;
+        }
+
+        EndTurn();
+
+        return true;
+    }
+
+    [Server]
+    private bool IsCurrentPlayer(
+        Player player)
+    {
+        if (player == null)
+            return false;
+
+        if (currentPlayerIn < 0 ||
+            currentPlayerIn >= _players.Count)
+        {
+            return false;
+        }
+
+        return _players[currentPlayerIn] ==
+               player;
+    }
 
     [Server]
     private IEnumerator LoadTimeoutRoutine()
@@ -621,10 +896,6 @@ public class GameMaster : NetworkBehaviour
                 "All players reported loaded, but their Player objects were not ready.");
         }
     }
-
-    // =========================================================
-    // CANCEL
-    // =========================================================
 
     [Server]
     private void CancelStartup(
@@ -668,56 +939,10 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
-    // =========================================================
-    // ACCESSORY
-    // =========================================================
-
     [Server]
-    public bool TryStealAccesory(Player target, int index)
+    private void ClearTurnState()
     {
-        if (currentPhase != GamePhase.Steal)
-            return false;
-        if (target == null)
-            return false;
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            Debug.LogWarning(
-                $"Invalid currentPlayerIn: {currentPlayerIn}");
-
-            return false;
-        }
-
-        Player thief =
-            _players[currentPlayerIn];
-
-        if (thief == null)
-            return false;
-
-        if (thief == target)
-            return false;
-
-        if (!target.SetAccesory(
-                index,
-                false))
-        {
-            return false;
-        }
-
-        if (!thief.SetAccesory(
-                index,
-                true))
-        {
-            target.SetAccesory(
-                index,
-                true);
-
-            return false;
-        }
-
-        EndTurn(); // TEMPORAL
-
-        return true;
+        selectedAttack = null;
+        selectedTarget = null;
     }
 }

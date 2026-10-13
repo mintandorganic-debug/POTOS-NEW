@@ -80,6 +80,9 @@ public class Player : NetworkBehaviour
 
         if (DamagePass != null)
             DamagePass.gameObject.SetActive(false);
+
+        if (dealerToken != null)
+            dealerToken.SetActive(false);
     }
 
     public override void OnStartServer()
@@ -97,6 +100,33 @@ public class Player : NetworkBehaviour
 
         ApplyAccessoryMask(
             accessoryMask);
+
+        if (GameMaster.Instance != null)
+        {
+            GameMaster.Instance.CurrentPlayerChanged -=
+                OnCurrentPlayerChanged;
+
+            GameMaster.Instance.CurrentPlayerChanged +=
+                OnCurrentPlayerChanged;
+
+            ApplyDealerToken(
+                GameMaster.Instance.CurrentPlayerIndex);
+        }
+        else
+        {
+            ApplyDealerToken(-1);
+        }
+    }
+
+    public override void OnStopClient()
+    {
+        if (GameMaster.Instance != null)
+        {
+            GameMaster.Instance.CurrentPlayerChanged -=
+                OnCurrentPlayerChanged;
+        }
+
+        base.OnStopClient();
     }
 
     public override void OnStartLocalPlayer()
@@ -127,6 +157,28 @@ public class Player : NetworkBehaviour
         dealerTokenText.text = "NEXT";
 
         CmdNotifyLoaded();
+    }
+
+    // =========================================================
+    // TURN TOKEN
+    // =========================================================
+
+    private void OnCurrentPlayerChanged(
+        int currentPlayerIndex)
+    {
+        ApplyDealerToken(
+            currentPlayerIndex);
+    }
+
+    private void ApplyDealerToken(
+        int currentPlayerIndex)
+    {
+        if (dealerToken == null)
+            return;
+
+        dealerToken.SetActive(
+            seatIndex >= 0 &&
+            seatIndex == currentPlayerIndex);
     }
 
     // =========================================================
@@ -196,6 +248,12 @@ public class Player : NetworkBehaviour
         int index)
     {
         seatIndex = index;
+
+        if (GameMaster.Instance != null)
+        {
+            ApplyDealerToken(
+                GameMaster.Instance.CurrentPlayerIndex);
+        }
     }
 
     // =========================================================
@@ -236,7 +294,6 @@ public class Player : NetworkBehaviour
         RpcPlayAccessoryVfx(
             index,
             value);
-
 
         return true;
     }
@@ -367,12 +424,21 @@ public class Player : NetworkBehaviour
 
     public void OnTurnStart()
     {
-        if (dealerToken != null)
-            dealerToken.SetActive(true);
+        if (!isServer)
+            return;
+
+        if (GameMaster.Instance == null)
+            return;
+
+        ApplyDealerToken(
+            GameMaster.Instance.CurrentPlayerIndex);
     }
 
     public void OnTurnEnd()
     {
+        if (!isServer)
+            return;
+
         if (dealerToken != null)
             dealerToken.SetActive(false);
     }

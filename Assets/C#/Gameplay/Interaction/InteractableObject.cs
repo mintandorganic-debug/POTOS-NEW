@@ -6,11 +6,11 @@ public abstract class InteractableObject : NetworkBehaviour, IInteractable
 {
     public virtual float LookZoomFov => -1f;
 
-    public static event Action<float> LookZoomEntered;
-    public static event Action LookZoomExited;
+    public static event Action<uint, float> LookZoomEntered;
+    public static event Action<uint> LookZoomExited;
 
-    public static event Action<Transform> CameraLockEntered;
-    public static event Action CameraLockExited;
+    public static event Action<uint, Transform> CameraLockEntered;
+    public static event Action<uint> CameraLockExited;
 
     public virtual void OnLookEnter()
     {
@@ -20,26 +20,42 @@ public abstract class InteractableObject : NetworkBehaviour, IInteractable
     {
     }
 
-    public void EnableLookZoom(float fov)
+    public void EnableLookZoom(
+        uint playerNetId,
+        float fov)
     {
         if (fov > 0f)
-            LookZoomEntered?.Invoke(fov);
+        {
+            LookZoomEntered?.Invoke(
+                playerNetId,
+                fov);
+        }
     }
 
-    public void DisableLookZoom()
+    public void DisableLookZoom(
+        uint playerNetId)
     {
-        LookZoomExited?.Invoke();
+        LookZoomExited?.Invoke(
+            playerNetId);
     }
 
-    public void LockCameraAt(Transform target)
+    public void LockCameraAt(
+        uint playerNetId,
+        Transform target)
     {
         if (target != null)
-            CameraLockEntered?.Invoke(target);
+        {
+            CameraLockEntered?.Invoke(
+                playerNetId,
+                target);
+        }
     }
 
-    public void UnlockCamera()
+    public void UnlockCamera(
+        uint playerNetId)
     {
-        CameraLockExited?.Invoke();
+        CameraLockExited?.Invoke(
+            playerNetId);
     }
 
     public abstract void Interact();

@@ -95,6 +95,12 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
+            return;
+
         // -----------------------------------------------------
         // DEFENSE CARD
         // -----------------------------------------------------
@@ -118,6 +124,13 @@ public class AttackSequence : NetworkBehaviour
                 return;
             }
 
+            if (!gameMaster.SelectDefense(
+                    card,
+                    targetPlayer))
+            {
+                return;
+            }
+
             StartDefenseSequence(
                 card,
                 targetPlayer);
@@ -126,8 +139,15 @@ public class AttackSequence : NetworkBehaviour
         }
 
         // -----------------------------------------------------
-        // NORMAL ATTACK CARD
+        // ATTACK CARD
         // -----------------------------------------------------
+
+        if (!gameMaster.SelectAttack(
+                card,
+                cardOwner))
+        {
+            return;
+        }
 
         StartSequence(
             card,
@@ -171,6 +191,12 @@ public class AttackSequence : NetworkBehaviour
             return;
 
         if (attacker.netIdentity.connectionToClient != sender)
+            return;
+
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
             return;
 
         SetTarget(
@@ -248,43 +274,6 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        // -----------------------------------------------------
-        // DEFENSE CARD
-        //
-        // Safety fallback. Normally handled by
-        // StartDefenseSequence().
-        // -----------------------------------------------------
-
-        if (card.Data != null &&
-            card.Data.CardClass == Card.CardClass.Defence)
-        {
-            card.SetInRoulette(true);
-
-            roulette.AttachDefenseCard(
-                card.transform);
-
-            roulette.StartRoulette(
-                attacker.transform,
-                RouletteRotator.Pattern.Vortex,
-                () => OnDefenseVortexCompleted(card));
-
-            if (GameMaster.Instance != null)
-            {
-                GameMaster.Instance.SetGamePhase(
-                    GameMaster.GamePhase.Wait);
-            }
-
-            RpcStartAttackPreparation(
-                attacker.netIdentity,
-                card.Data.ActionId);
-
-            return;
-        }
-
-        // -----------------------------------------------------
-        // NORMAL ATTACK CARD
-        // -----------------------------------------------------
-
         card.SetInRoulette(true);
 
         roulette.AttachCard(
@@ -293,12 +282,6 @@ public class AttackSequence : NetworkBehaviour
         roulette.StartRoulette(
             attacker.transform,
             RouletteRotator.Pattern.Direct);
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.SelectTarget);
-        }
 
         RpcStartAttackPreparation(
             attacker.netIdentity,
@@ -394,7 +377,8 @@ public class AttackSequence : NetworkBehaviour
         }
 
         if (defenseCard.Data == null ||
-            defenseCard.Data.CardClass != Card.CardClass.Defence)
+            defenseCard.Data.CardClass !=
+                Card.CardClass.Defence)
         {
             return;
         }
@@ -442,12 +426,6 @@ public class AttackSequence : NetworkBehaviour
             attacker.transform,
             RouletteRotator.Pattern.Vortex,
             () => OnDefenseVortexCompleted(defenseCard));
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Wait);
-        }
 
         if (attacker != null)
         {
@@ -502,7 +480,8 @@ public class AttackSequence : NetworkBehaviour
         }
 
         if (selectedCard.Data != null &&
-            selectedCard.Data.CardClass == Card.CardClass.Defence)
+            selectedCard.Data.CardClass ==
+                Card.CardClass.Defence)
         {
             return;
         }
@@ -531,10 +510,31 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (GameMaster.Instance != null)
+        Player victim =
+            target.GetComponentInParent<Player>();
+
+        if (victim == null)
         {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Defense);
+            CancelSequence();
+            return;
+        }
+
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
+        {
+            CancelSequence();
+            return;
+        }
+
+        // The target becomes the actual game target only after
+        // the roulette has reached and stopped at the target.
+        if (!gameMaster.SelectTarget(
+                victim))
+        {
+            CancelSequence();
+            return;
         }
 
         if (attackRoutine != null)
@@ -595,18 +595,6 @@ public class AttackSequence : NetworkBehaviour
                 yield break;
             }
 
-            if (selectedCard.Data != null &&
-                selectedCard.Data.CardClass == Card.CardClass.Defence)
-            {
-                if (victimConnection != null)
-                {
-                    TargetHideDefenseTimer(
-                        victimConnection);
-                }
-
-                yield break;
-            }
-
             remainingTime -=
                 Time.deltaTime;
 
@@ -652,6 +640,22 @@ public class AttackSequence : NetworkBehaviour
             yield break;
         }
 
+        GameMaster gameMaster =
+            GameMaster.Instance;
+
+        if (gameMaster == null)
+        {
+            CancelSequence();
+            yield break;
+        }
+
+        if (!gameMaster.SkipDefense(
+                targetPlayer))
+        {
+            CancelSequence();
+            yield break;
+        }
+
         RpcTriggerAttackAnimation(
             attackPlayer.netIdentity);
 
@@ -660,17 +664,19 @@ public class AttackSequence : NetworkBehaviour
             attackPlayer);
 
         if (card.Data != null &&
+            card.Data.CardClass !=
+                Card.CardClass.AttackSteal &&
             card.Data.cardEffect != null)
         {
             card.Data.cardEffect.ApplyEffectToTarget(
                 targetPlayer);
         }
 
-        card.OnActionPerformed();
-
         StartAttackVortex(
             card,
             attackPlayer);
+
+        attackRoutine = null;
 
         yield break;
     }
@@ -699,6 +705,11 @@ public class AttackSequence : NetworkBehaviour
             DestroyCard(
                 card);
 
+            if (GameMaster.Instance != null)
+            {
+                GameMaster.Instance.EndTurn();
+            }
+
             return;
         }
 
@@ -713,16 +724,6 @@ public class AttackSequence : NetworkBehaviour
             attackPlayer.transform,
             RouletteRotator.Pattern.Vortex,
             () => OnAttackVortexCompleted(card));
-
-        if (card.Data == null ||
-            card.Data.CardClass != Card.CardClass.AttackSteal)
-        {
-            if (GameMaster.Instance != null)
-            {
-                GameMaster.Instance.SetGamePhase(
-                    GameMaster.GamePhase.Wait);
-            }
-        }
     }
 
     [Server]
@@ -733,15 +734,30 @@ public class AttackSequence : NetworkBehaviour
             card != null &&
             card.Data != null &&
             card.Data.CardClass ==
-            Card.CardClass.AttackSteal;
+                Card.CardClass.AttackSteal;
 
         DestroyCard(
             card);
 
         if (isStealCard)
         {
+            if (GameMaster.Instance == null ||
+                !GameMaster.Instance.BeginStealPhase())
+            {
+                FinishSequence();
+                return;
+            }
+
             StartStealPhase();
+            return;
         }
+
+        if (GameMaster.Instance != null)
+        {
+            GameMaster.Instance.EndTurn();
+        }
+
+        FinishSequence();
     }
 
     // =========================================================
@@ -751,16 +767,18 @@ public class AttackSequence : NetworkBehaviour
     [Server]
     private void StartStealPhase()
     {
+        if (GameMaster.Instance == null ||
+            GameMaster.Instance.CurrentPhase !=
+                GameMaster.GamePhase.Steal)
+        {
+            FinishSequence();
+            return;
+        }
+
         if (stealRoutine != null)
         {
             StopCoroutine(
                 stealRoutine);
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Steal);
         }
 
         stealRoutine =
@@ -776,6 +794,21 @@ public class AttackSequence : NetworkBehaviour
 
         while (remainingTime > 0f)
         {
+            if (!isActive)
+            {
+                stealRoutine = null;
+                yield break;
+            }
+
+            if (GameMaster.Instance == null ||
+                GameMaster.Instance.CurrentPhase !=
+                    GameMaster.GamePhase.Steal)
+            {
+                stealRoutine = null;
+                FinishSequence();
+                yield break;
+            }
+
             remainingTime -=
                 Time.deltaTime;
 
@@ -784,10 +817,14 @@ public class AttackSequence : NetworkBehaviour
 
         stealRoutine = null;
 
-        if (GameMaster.Instance != null)
+        if (GameMaster.Instance != null &&
+            GameMaster.Instance.CurrentPhase ==
+                GameMaster.GamePhase.Steal)
         {
             GameMaster.Instance.EndTurn();
         }
+
+        FinishSequence();
     }
 
     // =========================================================
@@ -821,14 +858,12 @@ public class AttackSequence : NetworkBehaviour
                 card.gameObject);
         }
 
-        selectedCard = null;
-
         if (GameMaster.Instance != null)
         {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Attack);
+            GameMaster.Instance.EndTurn();
         }
 
+        selectedCard = null;
         attacker = null;
         target = null;
 
@@ -850,8 +885,7 @@ public class AttackSequence : NetworkBehaviour
 
         if (GameMaster.Instance != null)
         {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Attack);
+            GameMaster.Instance.EndTurn();
         }
 
         selectedCard = null;
@@ -872,10 +906,7 @@ public class AttackSequence : NetworkBehaviour
         Card card)
     {
         if (card == null)
-        {
-            FinishSequence();
             return;
-        }
 
         card.SetInRoulette(false);
 
@@ -888,31 +919,11 @@ public class AttackSequence : NetworkBehaviour
                 card.transform);
         }
 
-        bool isStealCard =
-            card.Data != null &&
-            card.Data.CardClass ==
-            Card.CardClass.AttackSteal;
-
-        if (!isStealCard &&
-            GameMaster.Instance != null)
-        {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Attack);
-        }
-
         if (card.gameObject != null)
         {
             NetworkServer.Destroy(
                 card.gameObject);
         }
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-        attackRoutine = null;
-        targetSelectionRoutine = null;
     }
 
     // =========================================================
@@ -1052,19 +1063,16 @@ public class AttackSequence : NetworkBehaviour
                 previousAttacker.netIdentity);
         }
 
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Attack);
-        }
-
         selectedCard = null;
         attacker = null;
         target = null;
 
         isActive = false;
+
+        if (GameMaster.Instance != null)
+        {
+            GameMaster.Instance.EndTurn();
+        }
     }
 
     [ClientRpc]
@@ -1121,12 +1129,6 @@ public class AttackSequence : NetworkBehaviour
                 roulette.DetachCard(
                     selectedCard.transform);
             }
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.SetGamePhase(
-                GameMaster.GamePhase.Attack);
         }
 
         selectedCard = null;

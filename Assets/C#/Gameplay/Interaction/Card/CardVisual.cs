@@ -54,15 +54,23 @@ public class CardVisual : MonoBehaviour
             unavailableOverlay.SetActive(
                 !available);
         }
+    }
 
-        SetColliderEnabled(true);
+    public void HideUnavailableOverlay()
+    {
+        if (unavailableOverlay != null)
+        {
+            unavailableOverlay.SetActive(false);
+        }
     }
 
     public void SetHover(
         bool value)
     {
         if (highlight != null)
+        {
             highlight.enabled = value;
+        }
     }
 
     public void StartDescriptionSwap()
@@ -70,10 +78,14 @@ public class CardVisual : MonoBehaviour
         StopDescriptionSwap();
 
         if (cardMesh != null)
+        {
             cardMesh.enabled = true;
+        }
 
         if (descriptionMesh != null)
+        {
             descriptionMesh.SetActive(false);
+        }
 
         descriptionRoutine =
             StartCoroutine(
@@ -86,10 +98,14 @@ public class CardVisual : MonoBehaviour
             descriptionDelay);
 
         if (cardMesh != null)
+        {
             cardMesh.enabled = false;
+        }
 
         if (descriptionMesh != null)
+        {
             descriptionMesh.SetActive(true);
+        }
 
         descriptionRoutine = null;
     }
@@ -97,7 +113,9 @@ public class CardVisual : MonoBehaviour
     public void StopDescriptionSwap()
     {
         if (descriptionRoutine == null)
+        {
             return;
+        }
 
         StopCoroutine(
             descriptionRoutine);
@@ -110,23 +128,31 @@ public class CardVisual : MonoBehaviour
         StopDescriptionSwap();
 
         if (descriptionMesh != null)
+        {
             descriptionMesh.SetActive(false);
+        }
 
         if (cardMesh != null)
+        {
             cardMesh.enabled = true;
+        }
     }
 
     public void DisableHighlight()
     {
         if (highlight != null)
+        {
             highlight.enabled = false;
+        }
     }
 
     public void SetColliderEnabled(
         bool value)
     {
         if (cardCollider != null)
+        {
             cardCollider.enabled = value;
+        }
     }
 
     public void DisableInteraction()
@@ -136,9 +162,6 @@ public class CardVisual : MonoBehaviour
 
         DisableHighlight();
 
-        if (unavailableOverlay != null)
-            unavailableOverlay.SetActive(false);
-
         SetColliderEnabled(false);
     }
 
@@ -147,8 +170,5 @@ public class CardVisual : MonoBehaviour
         StopDescriptionSwap();
         ShowCardMesh();
         DisableHighlight();
-
-        if (unavailableOverlay != null)
-            unavailableOverlay.SetActive(false);
     }
 }

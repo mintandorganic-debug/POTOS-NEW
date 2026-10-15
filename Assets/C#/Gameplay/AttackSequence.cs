@@ -672,6 +672,7 @@ public class AttackSequence : NetworkBehaviour
                 targetPlayer);
         }
 
+        targetPlayer.StartDamagePass();
         StartAttackVortex(
             card,
             attackPlayer);

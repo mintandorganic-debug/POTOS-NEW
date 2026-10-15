@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "G:\\Projects\\Unity\\POTOS-NEW\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AttackSequence.cs",
+              "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\AttackSequence.cs",
+              "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\AttackSequence.cs",
+              "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\AttackSequence.cs",
+              "RelativeToolTip": "Assets\\C#\\Gameplay\\AttackSequence.cs",
+              "ViewState": "AgIAAJICAAAAAAAAAAAAAKICAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:25:35.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Player.cs",
+              "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\Player.cs",
+              "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\Player\\Player.cs",
+              "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\Player.cs",
+              "RelativeToolTip": "Assets\\C#\\Gameplay\\Player\\Player.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAACMAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T14:22:25.955Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

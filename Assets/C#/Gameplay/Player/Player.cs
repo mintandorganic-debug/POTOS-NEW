@@ -33,6 +33,7 @@ public class Player : NetworkBehaviour
 
     [Header("Passes")]
     [SerializeField] public CustomPassVolume DamagePass;
+    [SerializeField] float damageDuration;
 
     [SyncVar]
     private int seatIndex = -1;
@@ -383,7 +384,6 @@ public class Player : NetworkBehaviour
         }
         else
         {
-            StartDamagePass();
 
             if (index >= accesoryVfxes.Count)
                 return;
@@ -395,7 +395,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    private void StartDamagePass()
+    public void StartDamagePass()
     {
         if (DamagePass == null)
             return;
@@ -411,7 +411,7 @@ public class Player : NetworkBehaviour
     {
         DamagePass.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(damageDuration);
 
         DamagePass.gameObject.SetActive(false);
 

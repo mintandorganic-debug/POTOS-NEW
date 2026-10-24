@@ -835,6 +835,21 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
+        // SOUND: steal succeeded.
+        if (thief.TryGetComponent(
+                out PlayerSounds thiefSounds))
+        {
+            thiefSounds.React(
+                PlayerSounds.Outcome.Success);
+        }
+
+        if (target.TryGetComponent(
+                out PlayerSounds robbedSounds))
+        {
+            robbedSounds.React(
+                PlayerSounds.Outcome.Failure);
+        }
+
         EndTurn();
 
         return true;

@@ -21,3 +21,8 @@ MonoBehaviour:
   emissiveColor: {r: 0.70980394, g: 0.1764706, b: 0.19607843, a: 0}
   sprite: {fileID: 21300000, guid: 9d9ef95cb3d3deb44b62862e538a8447, type: 3}
   texture: {fileID: 2800000, guid: 9e93045d812f1b349bbbcaa316446c5d, type: 3}
+  attackHitSound: {fileID: 8300000, guid: 484c41c157566444798a6dd0845405a8, type: 3}
+  attackHitVolume: 1
+  aftermathSound: {fileID: 8300000, guid: 257e50419baaa5d4490a2e93bf0b7d5d, type: 3}
+  aftermathVolume: 1
+  aftermathDelay: 0.6

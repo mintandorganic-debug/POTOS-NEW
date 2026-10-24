@@ -30,6 +30,9 @@ public class AttackSequence : NetworkBehaviour
     public PlayerInteractable Target =>
         target;
 
+    public Player Attacker =>
+        attacker;
+
     // =========================================================
     // LIFECYCLE
     // =========================================================
@@ -436,6 +439,25 @@ public class AttackSequence : NetworkBehaviour
         RpcStartAttackPreparation(
             defensePlayer.netIdentity,
             defenseCard.Data.ActionId);
+
+        // SOUND: the attack was blocked.
+        PlayerSounds defenderSounds =
+            GetSounds(defensePlayer);
+
+        if (defenderSounds != null)
+        {
+            defenderSounds.React(
+                PlayerSounds.Outcome.Success);
+        }
+
+        PlayerSounds blockedSounds =
+            GetSounds(attacker);
+
+        if (blockedSounds != null)
+        {
+            blockedSounds.React(
+                PlayerSounds.Outcome.Failure);
+        }
     }
 
     // =========================================================
@@ -662,6 +684,29 @@ public class AttackSequence : NetworkBehaviour
         attackTarget.Attack(
             card,
             attackPlayer);
+
+        // SOUND: ATK_*_VIC_HIT on the victim, then success / failure reactions.
+        PlayerSounds victimSounds =
+            GetSounds(targetPlayer);
+
+        if (victimSounds != null)
+        {
+            victimSounds.PlayAttackHit(card);
+
+            victimSounds.React(
+                PlayerSounds.Outcome.Failure,
+                PlayerSounds.ReactionContext.AfterAttackHit);
+        }
+
+        PlayerSounds attackerSounds =
+            GetSounds(attackPlayer);
+
+        if (attackerSounds != null)
+        {
+            attackerSounds.React(
+                PlayerSounds.Outcome.Success,
+                PlayerSounds.ReactionContext.AfterAttackHit);
+        }
 
         if (card.Data != null &&
             card.Data.CardClass !=
@@ -1064,6 +1109,31 @@ public class AttackSequence : NetworkBehaviour
                 previousAttacker.netIdentity);
         }
 
+        // SOUND: the item flies into the audience (AFTERMATH_*),
+        // the attacker reacts after it has landed.
+        if (previousAttacker != null &&
+            previousCard != null)
+        {
+            PlayerSounds cancelSounds =
+                GetSounds(previousAttacker);
+
+            if (cancelSounds != null)
+            {
+                cancelSounds.PlayAftermath(
+                    previousCard);
+
+                float aftermathDelay =
+                    previousCard.Data != null
+                        ? previousCard.Data.AftermathDelay
+                        : 0f;
+
+                cancelSounds.React(
+                    PlayerSounds.Outcome.Failure,
+                    PlayerSounds.ReactionContext.AfterAftermath,
+                    aftermathDelay);
+            }
+        }
+
         selectedCard = null;
         attacker = null;
         target = null;
@@ -1138,6 +1208,22 @@ public class AttackSequence : NetworkBehaviour
 
         isActive = false;
         attackRoutine = null;
+    }
+
+    // =========================================================
+    // SOUND
+    // =========================================================
+
+    private static PlayerSounds GetSounds(
+        Player player)
+    {
+        if (player == null)
+            return null;
+
+        return player.TryGetComponent(
+            out PlayerSounds sounds)
+            ? sounds
+            : null;
     }
 
     // =========================================================

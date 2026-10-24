@@ -5026,6 +5026,7 @@ GameObject:
   - component: {fileID: 1647398392681384447}
   - component: {fileID: -1270801292762916619}
   - component: {fileID: 5229704603169717433}
+  - component: {fileID: 3844055711173344734}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5281,6 +5282,68 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.51, y: 1.57, z: 0.04}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3844055711173344734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8452177970199924251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b92724e362064794d9cbba09b9b1a370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSounds
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  voiceSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  mixerGroup: {fileID: 24300002, guid: 69165c12871f7c447873743a89c9d4e9, type: 2}
+  minDistance: 3
+  maxDistance: 30
+  idleSounds:
+  - name: EXHALE_SOUND
+    clip: {fileID: 8300000, guid: 0e258b6c90c860f4d98554e4a54755cd, type: 3}
+    volume: 0.6
+  - name: BURP_SOUND
+    clip: {fileID: 8300000, guid: 981335d91164e3d4a9d705f03bc6cc41, type: 3}
+    volume: 0.5
+  - name: CAUGH_SOUND
+    clip: {fileID: 8300000, guid: d1d2ceb2d74d242408bfb51fc1d7057b, type: 3}
+    volume: 0.4
+  - name: CREAKING_CHAIR_SOUND
+    clip: {fileID: 8300000, guid: c946e48c148714443baba95effe25983, type: 3}
+    volume: 0.5
+  idleInterval: {x: 8, y: 20}
+  idleGap: 1.5
+  quietAfterVoice: 3
+  remoteIdleVolume: 0.35
+  remoteLowPassHz: 2500
+  successSounds:
+  - name: JOYFUL_SOUND
+    clip: {fileID: 8300000, guid: 9ee01c4cdacac2347a1ac1ffce3db50a, type: 3}
+    volume: 0.6
+  - name: WHISTLE_SOUND
+    clip: {fileID: 8300000, guid: 8d73786ac0c93a74db44cf300421aef6, type: 3}
+    volume: 0.8
+  - name: WONDERMENT_SOUND
+    clip: {fileID: 8300000, guid: 01dca1b64c033b14c8113dfe2cbb5235, type: 3}
+    volume: 0.7
+  failureSounds:
+  - name: disappointment_sound
+    clip: {fileID: 8300000, guid: 928c8c7d8135f1a46bd019b83ac85164, type: 3}
+    volume: 0.7
+  - name: SCOFF_SOUND
+    clip: {fileID: 8300000, guid: 453a5522764a2364f8e643be471c3d5d, type: 3}
+    volume: 0.6
+  reactionDelay: 1.2
+  chanceAfterAttackHit: 0.5
+  chanceAfterAftermath: 0.5
+  voiceVolume: 0.1
+  hitVolume: 1
+  aftermathVolume: 1
+  debugLog: 1
 --- !u!1 &8808704842820940683
 GameObject:
   m_ObjectHideFlags: 0

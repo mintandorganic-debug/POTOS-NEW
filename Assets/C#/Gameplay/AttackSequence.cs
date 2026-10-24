@@ -1,5 +1,5 @@
-using System.Collections;
 using Mirror;
+using System.Collections;
 using UnityEngine;
 
 public class AttackSequence : NetworkBehaviour
@@ -10,6 +10,10 @@ public class AttackSequence : NetworkBehaviour
     [SerializeField] private float targetSelectionTime = 10f;
     [SerializeField] private float targetActionTime = 5f;
     [SerializeField] private float stealActionTime = 5f;
+
+    [Header("Steal")]
+    [SerializeField] private int stealCoinsAmount = 5;
+    [SerializeField] private float stealCoinsRainDuration = 5f;
 
     private Card selectedCard;
     private Player attacker;
@@ -672,7 +676,13 @@ public class AttackSequence : NetworkBehaviour
                 targetPlayer);
         }
 
-        targetPlayer.StartDamagePass();
+        if (victimConnection != null)
+        {
+            TargetStartDamagePass(
+                victimConnection,
+                targetPlayer.netIdentity);
+        }
+
         StartAttackVortex(
             card,
             attackPlayer);
@@ -680,6 +690,49 @@ public class AttackSequence : NetworkBehaviour
         attackRoutine = null;
 
         yield break;
+    }
+
+    [Server]
+    private void StealCoins(
+        Player attackPlayer,
+        Player victim)
+    {
+        if (attackPlayer == null ||
+            victim == null ||
+            attackPlayer == victim ||
+            stealCoinsAmount <= 0)
+        {
+            return;
+        }
+
+        PlayerBank attackerBank =
+            attackPlayer.GetComponentInChildren<PlayerBank>(true);
+
+        PlayerBank victimBank =
+            victim.GetComponentInChildren<PlayerBank>(true);
+
+        if (attackerBank == null ||
+            victimBank == null)
+        {
+            Debug.LogWarning(
+                "AttackSequence: PlayerBank is missing on attacker or victim.",
+                this);
+
+            return;
+        }
+
+        int amount =
+            Mathf.Min(
+                stealCoinsAmount,
+                victimBank.Coins);
+
+        if (amount <= 0)
+            return;
+
+        victimBank.TryStealCoinsTo(
+            attackerBank,
+            amount,
+            stealCoinsRainDuration);
     }
 
     // =========================================================
@@ -720,6 +773,23 @@ public class AttackSequence : NetworkBehaviour
 
         roulette.AttachCard(
             card.transform);
+
+        bool isStealCard =
+            card.Data != null &&
+            card.Data.CardClass ==
+                Card.CardClass.AttackSteal;
+
+        if (isStealCard)
+        {
+            Player victim =
+                target != null
+                    ? target.GetComponentInParent<Player>()
+                    : null;
+
+            StealCoins(
+                attackPlayer,
+                victim);
+        }
 
         roulette.StartRoulette(
             attackPlayer.transform,
@@ -998,6 +1068,23 @@ public class AttackSequence : NetworkBehaviour
         NetworkConnectionToClient connection)
     {
         HudController.Instance?.HideDefenseTimer();
+    }
+
+    [TargetRpc]
+    private void TargetStartDamagePass(
+        NetworkConnectionToClient connection,
+        NetworkIdentity victimIdentity)
+    {
+        if (victimIdentity == null)
+            return;
+
+        Player victim =
+            victimIdentity.GetComponent<Player>();
+
+        if (victim == null)
+            return;
+
+        victim.StartDamagePass();
     }
 
     // =========================================================

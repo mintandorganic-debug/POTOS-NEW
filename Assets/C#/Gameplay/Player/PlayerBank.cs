@@ -149,6 +149,49 @@ public class PlayerBank : NetworkBehaviour
     }
 
     [Server]
+    public bool TryTransferCoinsTo(
+        PlayerBank recipient,
+        int amount)
+    {
+        if (recipient == null ||
+            recipient == this ||
+            amount <= 0 ||
+            coins < amount ||
+            recipient.coins > MaxCoins - amount)
+        {
+            return false;
+        }
+
+        coins -= amount;
+        recipient.coins += amount;
+
+        return true;
+    }
+
+    [Server]
+    public bool TryStealCoinsTo(
+        PlayerBank recipient,
+        int amount,
+        float duration)
+    {
+        if (recipient == null ||
+            recipient == this ||
+            amount <= 0 ||
+            coins < amount ||
+            recipient.coins > MaxCoins - amount)
+        {
+            return false;
+        }
+
+        coins -= amount;
+        recipient.StartCoinsRain(
+            amount,
+            duration);
+
+        return true;
+    }
+
+    [Server]
     public bool TrySpendCoins(int amount)
     {
         return RemoveCoins(amount);
@@ -163,15 +206,18 @@ public class PlayerBank : NetworkBehaviour
     [Server]
     public void StartCoinsRain(
         int amount,
-        float duration)
+        float duration,
+        bool addCoins = true)
     {
         if (amount <= 0)
             return;
 
         int actualAmount =
-            Mathf.Min(
-                amount,
-                MaxCoins - coins);
+            addCoins
+                ? Mathf.Min(
+                    amount,
+                    MaxCoins - coins)
+                : amount;
 
         if (actualAmount <= 0)
             return;
@@ -187,9 +233,12 @@ public class PlayerBank : NetworkBehaviour
         RpcPlayCoinsRain(
             actualAmount);
 
-        if (duration <= 0f)
+        if (!addCoins ||
+            duration <= 0f)
         {
-            AddCoins(actualAmount);
+            if (addCoins)
+                AddCoins(actualAmount);
+
             return;
         }
 

@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - environment
   - Water
   - UI
-  - 
-  - 
+  - hitboxes
+  - DiceSimulation
   - IgnoreClient
   - 
   - 

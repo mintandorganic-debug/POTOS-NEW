@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knife
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardName: "\u041D\u043E\u0436"
-  CardClass: 1
+  CardClass: 0
   description: 
   cardEffect: {fileID: 11400000, guid: a440b960b783fe64e9c3add6ac0b6924, type: 2}
   interactableCards: []

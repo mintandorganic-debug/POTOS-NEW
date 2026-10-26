@@ -1,6 +1,6 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
 
 public class PlayerEffects : NetworkBehaviour
@@ -13,22 +13,35 @@ public class PlayerEffects : NetworkBehaviour
     private readonly Dictionary<Card, Coroutine> cardBlockCoroutines =
         new Dictionary<Card, Coroutine>();
 
+    [Server]
     public void ApplyCameraMultiplier(
         float multiplier,
         float duration)
     {
-        if (!isServer)
+        if (multiplier <= 0f ||
+            duration < 0f)
+        {
             return;
+        }
 
-        if (connectionToClient == null)
+        Player player =
+            GetComponentInParent<Player>();
+
+        NetworkConnectionToClient targetConnection =
+            player != null &&
+            player.netIdentity != null
+                ? player.netIdentity.connectionToClient
+                : connectionToClient;
+
+        if (targetConnection == null)
             return;
 
         TargetApplyCameraMultiplier(
-            connectionToClient,
+            targetConnection,
             multiplier,
             duration);
     }
-
+     
     [Server]
     public void BlockAllCards(
         float duration)
@@ -172,6 +185,30 @@ public class PlayerEffects : NetworkBehaviour
         float multiplier,
         float duration)
     {
+        if (cameraController == null)
+        {
+            Player player =
+                GetComponentInParent<Player>();
+
+            if (player != null)
+            {
+                cameraController =
+                    player.cameraController;
+            }
+
+            if (cameraController == null)
+            {
+                cameraController =
+                    GetComponentInParent<CameraLook>();
+            }
+
+            if (cameraController == null)
+            {
+                cameraController =
+                    GetComponentInChildren<CameraLook>(true);
+            }
+        }
+
         if (cameraController == null)
             return;
 

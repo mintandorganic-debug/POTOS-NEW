@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b39fbbd1e5eafe498d00b8885fd47aa, type: 3}
   m_Name: CE_Web
   m_EditorClassIdentifier: Assembly-CSharp::CE_Web
-  multiplier: 0.1
+  multiplier: 0.01
   duration: 40

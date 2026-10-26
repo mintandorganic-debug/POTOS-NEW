@@ -15,10 +15,16 @@ public class CE_Web : CE_Base
             return;
 
         PlayerEffects effects =
-            player.GetComponent<PlayerEffects>();
+            player.GetComponentInChildren<PlayerEffects>(true);
 
         if (effects == null)
+        {
+            Debug.LogWarning(
+                "CE_Web: PlayerEffects is missing on target player.",
+                player);
+
             return;
+        }
 
         effects.ApplyCameraMultiplier(
             multiplier,

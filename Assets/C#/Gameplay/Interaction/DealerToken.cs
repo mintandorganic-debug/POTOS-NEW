@@ -5,20 +5,49 @@ public class DealerToken : InteractableObject
 {
     [SerializeField] private SkinnedMeshRenderer highlight;
 
-
     public override void Interact()
     {
-        Debug.Log("Interacted with token");
+        CmdEndTurn();
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdEndTurn(
+        NetworkConnectionToClient sender = null)
+    {
+        if (sender == null ||
+            GameMaster.Instance == null)
+        {
+            return;
+        }
+
+        Player tokenOwner =
+            GetComponentInParent<Player>();
+
+        if (tokenOwner == null ||
+            tokenOwner.netIdentity == null ||
+            tokenOwner.netIdentity.connectionToClient != sender)
+        {
+            return;
+        }
+
+        if (GameMaster.Instance.CurrentPlayerIndex !=
+            tokenOwner.SeatIndex)
+        {
+            return;
+        }
+
         GameMaster.Instance.EndTurn();
     }
 
     public override void OnLookEnter()
     {
-        highlight.enabled = true;
+        if (highlight != null)
+            highlight.enabled = true;
     }
 
     public override void OnLookExit()
     {
-        highlight.enabled = false;
+        if (highlight != null)
+            highlight.enabled = false;
     }
 }

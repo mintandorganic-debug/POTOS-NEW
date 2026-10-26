@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Glue
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardName: "\u043A\u043B\u0435\u0439"
-  CardClass: 1
+  CardClass: 0
   description: This is your warning. Every trap begins with a single step.
   cardEffect: {fileID: 11400000, guid: 69f7d078b8d6dd64c983c33898c3c321, type: 2}
   interactableCards: []

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Mirror;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCosmetics : NetworkBehaviour
@@ -98,7 +98,46 @@ public class PlayerCosmetics : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        torso.layer = LayerMask.NameToLayer("IgnoreClient");
+
+        int ignoreClientLayer =
+            LayerMask.NameToLayer("IgnoreClient");
+
+        if (ignoreClientLayer == -1)
+        {
+            Debug.LogWarning(
+                "PlayerCosmetics: Layer 'IgnoreClient' was not found.",
+                this);
+
+            return;
+        }
+
+        SetLayerRecursively(
+            torso,
+            ignoreClientLayer);
+
+        foreach (GameObject cosmetic in cosmetics)
+        {
+            SetLayerRecursively(
+                cosmetic,
+                ignoreClientLayer);
+        }
+    }
+
+    private static void SetLayerRecursively(
+        GameObject target,
+        int layer)
+    {
+        if (target == null)
+            return;
+
+        target.layer = layer;
+
+        foreach (Transform child in target.transform)
+        {
+            SetLayerRecursively(
+                child.gameObject,
+                layer);
+        }
     }
 
     private void OnColorChanged(
@@ -189,14 +228,15 @@ public class PlayerCosmetics : NetworkBehaviour
         }
     }
 
-    [Command]
-    private void CmdToggleCosmetic(int index)
+    [Server]
+    private void ToggleCosmeticOnServer(int index)
     {
         if (index < 0 ||
             index >= cosmeticStates.Count)
         {
             Debug.LogError(
-                $"Invalid cosmetic index: {index}");
+                $"Invalid cosmetic index: {index}",
+                this);
 
             return;
         }
@@ -205,8 +245,20 @@ public class PlayerCosmetics : NetworkBehaviour
             !cosmeticStates[index];
     }
 
+    [Command]
+    private void CmdToggleCosmetic(int index)
+    {
+        ToggleCosmeticOnServer(index);
+    }
+
     private void ToggleCosmetics(int index)
     {
+        if (isServer)
+        {
+            ToggleCosmeticOnServer(index);
+            return;
+        }
+
         if (!isLocalPlayer)
             return;
 
@@ -214,8 +266,14 @@ public class PlayerCosmetics : NetworkBehaviour
     }
 
     [ContextMenu("Toggle clown")]
-    public void ToggleCosmeticsEditor()
+    public void ToggleClown()
     {
         ToggleCosmetics(0);
+    }
+
+    [ContextMenu("Toggle cosmetic 0")]
+    public void ToggleCosmeticsEditor()
+    {
+        ToggleClown();
     }
 }

@@ -832,6 +832,8 @@ MonoBehaviour:
   targetSelectionTime: 10
   targetActionTime: 5
   stealActionTime: 5
+  stealCoinsAmount: 5
+  stealCoinsRainDuration: 5
 --- !u!114 &217578980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2979,6 +2981,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5008126421531210047, guid: 9760ab7705a93fd438e8642429c680be, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4c3ad674976e1ce46aef3c507519aed3, type: 2}
     - target: {fileID: 6890205503385421346, guid: 9760ab7705a93fd438e8642429c680be, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -6430,6 +6436,7 @@ MonoBehaviour:
   spawnpointCalculator: {fileID: 739403384}
   loadTimeout: 30
   currentPhase: 1
+  currentPlayerIn: -1
 --- !u!1 &1861746397
 GameObject:
   m_ObjectHideFlags: 0

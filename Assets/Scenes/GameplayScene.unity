@@ -7855,6 +7855,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2100000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100000002}
+  - component: {fileID: 2100000003}
+  m_Layer: 0
+  m_Name: Hand Carousel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2100000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b190275df9d3b84c9f63ccc7e9ed9ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardCarouselUI.HandCarouselInstaller
+  carouselPrefab: {fileID: 7395944431578262817, guid: 728fd3980c7e7e64eb448a3623a552f1, type: 3}
+  defaultCardTemplate: {fileID: 1750833286745146772, guid: 8e6a1a66308daf147868d78fb3894644, type: 3}
+  categoryTemplates:
+  - category: 0
+    template: {fileID: 1750833286745146772, guid: 41ddae2059a9f2a46adab59f1da918de, type: 3}
+  - category: 2
+    template: {fileID: 1750833286745146772, guid: a34c728889050564a8d904584bab5a4e, type: 3}
+  sortingOrder: 50
+  referenceResolution: {x: 1920, y: 1080}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7881,3 +7934,4 @@ SceneRoots:
   - {fileID: 1261720147}
   - {fileID: 1136861922}
   - {fileID: 102946196}
+  - {fileID: 2100000002}

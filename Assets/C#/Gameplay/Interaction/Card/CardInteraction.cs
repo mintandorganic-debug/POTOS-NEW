@@ -36,8 +36,6 @@ public class CardInteraction : MonoBehaviour
         if (card == null)
             return;
 
-        ownerAnimator?.EnableCardLift();
-
         if (card.IsInRoulette ||
             !card.IsAvailable ||
             isZoomed)
@@ -48,7 +46,6 @@ public class CardInteraction : MonoBehaviour
         CacheOwnerAnimator();
 
         visual?.SetHover(true);
-        movement?.StartHover();
     }
 
     public void OnLookExit()
@@ -63,7 +60,6 @@ public class CardInteraction : MonoBehaviour
         }
 
         visual?.SetHover(false);
-        movement?.ResetHover();
     }
 
     public bool Interact()

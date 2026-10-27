@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,8 @@ namespace CardCarouselUI
         public RectTransform Create(
             HandCardInfo info,
             RectTransform parent,
-            CardCarouselController carousel)
+            CardCarouselController carousel,
+            Action afterActivation)
         {
             RectTransform card =
                 UnityEngine.Object.Instantiate(ResolveTemplate(info.Category), parent);
@@ -35,6 +37,12 @@ namespace CardCarouselUI
 
                 if (info.HoverChanged != null)
                     hover.HoverChanged += info.HoverChanged;
+
+                hover.Clicked += () =>
+                {
+                    afterActivation();
+                    info.Activated?.Invoke();
+                };
             }
 
             return card;

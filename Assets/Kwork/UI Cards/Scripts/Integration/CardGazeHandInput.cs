@@ -45,7 +45,7 @@ namespace CardCarouselUI
                 return;
             }
 
-            if (isAiming && !isSuppressed)
+            if (isAiming && !isSuppressed && !LocalHandCardFilter.IsAnyCardSelected())
                 Show();
         }
 

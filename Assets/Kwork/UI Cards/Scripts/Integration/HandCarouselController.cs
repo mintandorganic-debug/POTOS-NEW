@@ -50,7 +50,7 @@ namespace CardCarouselUI
             List<RectTransform> cards = new List<RectTransform>(hand.Count);
 
             foreach (HandCardInfo info in hand)
-                cards.Add(factory.Create(info, cardParent, carousel));
+                cards.Add(factory.Create(info, cardParent, carousel, Close));
 
             return cards;
         }

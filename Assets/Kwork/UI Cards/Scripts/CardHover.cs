@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace CardCarouselUI
 {
 
-    public class CardHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CardHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [Header("References")]
         [SerializeField] private CardCarouselController carousel;
@@ -130,12 +130,19 @@ namespace CardCarouselUI
             SetHover(true);
         }
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                Clicked?.Invoke();
+        }
+
         public void OnPointerExit(PointerEventData eventData)
         {
             SetHover(false);
         }
 
         public event Action<bool> HoverChanged;
+        public event Action Clicked;
 
         public void UseIllustration(RectTransform root, Image image)
         {

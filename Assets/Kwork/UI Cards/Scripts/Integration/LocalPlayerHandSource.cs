@@ -39,7 +39,8 @@ namespace CardCarouselUI
                 data.Sprite,
                 data.Description,
                 ToCategory(data.CardClass),
-                isHovered => HandCardHighlight.Set(card, isHovered));
+                isHovered => HandCardHighlight.Set(card, isHovered),
+                () => card.Interact());
         }
 
         private static HandCardCategory ToCategory(global::Card.CardClass cardClass)

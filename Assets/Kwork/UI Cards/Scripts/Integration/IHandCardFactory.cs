@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CardCarouselUI
@@ -7,6 +8,7 @@ namespace CardCarouselUI
         RectTransform Create(
             HandCardInfo info,
             RectTransform parent,
-            CardCarouselController carousel);
+            CardCarouselController carousel,
+            Action afterActivation);
     }
 }

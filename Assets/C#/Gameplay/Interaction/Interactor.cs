@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -16,8 +15,10 @@ public class Interactor : NetworkBehaviour
     [SerializeField] private float maxDistance = 3f;
     [SerializeField] private LayerMask interactionMask = ~0;
 
-    [Header("Card Info")]
-    [SerializeField] private float cardInfoDelay = 0.5f;
+    [Header("Hand")]
+    [SerializeField] private HandCarousel handCarousel;
+    [SerializeField] private float handHideDelay = 0.3f;
+    [SerializeField] private Vector3 handZonePadding = new Vector3(0.06f, 0.09f, 0.04f);
 
     private InteractableObject currentTarget;
 
@@ -25,11 +26,15 @@ public class Interactor : NetworkBehaviour
 
     private EventSystem eventSystem;
     private HudController hudController;
+    private PoisonSwapWindow swapWindow;
 
-    private Card hoveredCard;
-    private Card selectedCard;
+    private float handHideTimer;
+    private bool handSuppressed;
+    private bool handPinned;
+    private bool lookingAtHand;
 
-    private Coroutine cardInfoRoutine;
+    private HandZone handZone;
+    private Card highlightedCard;
 
     private void Awake()
     {
@@ -45,6 +50,47 @@ public class Interactor : NetworkBehaviour
 
         hudController =
             FindFirstObjectByType<HudController>();
+
+        swapWindow =
+            FindFirstObjectByType<PoisonSwapWindow>(
+                FindObjectsInactive.Include);
+
+        if (swapWindow != null)
+            swapWindow.Initialize(owner);
+
+        if (handCarousel != null)
+        {
+            handCarousel.Initialize(
+                owner != null
+                    ? owner.Hand
+                    : null);
+
+            handCarousel.CenterChanged -=
+                OnHandCenterChanged;
+
+            handCarousel.CenterChanged +=
+                OnHandCenterChanged;
+
+            if (owner != null)
+            {
+                handCarousel.SetAnchors(
+                    playerCamera,
+                    owner.cardSockets);
+            }
+        }
+
+        CreateHandZone();
+    }
+
+    public override void OnStopLocalPlayer()
+    {
+        if (handCarousel != null)
+        {
+            handCarousel.CenterChanged -=
+                OnHandCenterChanged;
+        }
+
+        base.OnStopLocalPlayer();
     }
 
     private void Update()
@@ -52,8 +98,28 @@ public class Interactor : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
+        if (swapWindow != null &&
+            swapWindow.IsOpen)
+        {
+            if (handCarousel != null &&
+                handCarousel.IsOpen)
+            {
+                HideHand();
+            }
+
+            return;
+        }
+
         DetectTarget();
         DetectButton();
+
+        UpdateHand();
+
+        if (IsHandTogglePressed())
+        {
+            ToggleHand();
+            return;
+        }
 
         if (IsCancelPressed())
         {
@@ -80,15 +146,15 @@ public class Interactor : NetworkBehaviour
     private bool IsInteractPressed()
     {
         return
-            (
-                Mouse.current != null &&
-                Mouse.current.leftButton.wasPressedThisFrame
-            )
-            ||
-            (
-                Keyboard.current != null &&
-                Keyboard.current.spaceKey.wasPressedThisFrame
-            );
+            Mouse.current != null &&
+            Mouse.current.leftButton.wasPressedThisFrame;
+    }
+
+    private bool IsHandTogglePressed()
+    {
+        return
+            Keyboard.current != null &&
+            Keyboard.current.spaceKey.wasPressedThisFrame;
     }
 
     private bool IsCancelPressed()
@@ -101,8 +167,37 @@ public class Interactor : NetworkBehaviour
             ||
             (
                 Keyboard.current != null &&
-                Keyboard.current.qKey.wasPressedThisFrame
+                (
+                    Keyboard.current.qKey.wasPressedThisFrame ||
+                    Keyboard.current.escapeKey.wasPressedThisFrame
+                )
             );
+    }
+
+    private int GetScrollDirection()
+    {
+        if (Mouse.current != null)
+        {
+            float scroll =
+                Mouse.current.scroll.ReadValue().y;
+
+            if (scroll > 0f)
+                return -1;
+
+            if (scroll < 0f)
+                return 1;
+        }
+
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.wasPressedThisFrame)
+                return -1;
+
+            if (Keyboard.current.dKey.wasPressedThisFrame)
+                return 1;
+        }
+
+        return 0;
     }
 
     // =========================================================
@@ -118,6 +213,8 @@ public class Interactor : NetworkBehaviour
                 playerCamera.transform.position,
                 playerCamera.transform.forward);
 
+        bool hand = false;
+
         if (Physics.Raycast(
                 ray,
                 out RaycastHit hit,
@@ -127,6 +224,24 @@ public class Interactor : NetworkBehaviour
             newTarget =
                 hit.collider
                     .GetComponentInParent<InteractableObject>();
+
+            hand =
+                (handZone != null &&
+                 hit.collider.gameObject == handZone.gameObject) ||
+                TryGetOwnCard(
+                    newTarget,
+                    out _);
+        }
+
+        if (hand)
+            newTarget = null;
+
+        if (hand != lookingAtHand)
+        {
+            lookingAtHand = hand;
+
+            if (lookingAtHand)
+                OnHandLooked();
         }
 
         if (newTarget == currentTarget)
@@ -134,64 +249,185 @@ public class Interactor : NetworkBehaviour
 
         currentTarget?.OnLookExit();
 
-        StopCardInfoRoutine();
-
-        hoveredCard = null;
-
         currentTarget = newTarget;
 
         currentTarget?.OnLookEnter();
 
         UpdateHint();
+    }
 
-        if (currentTarget is Card card &&
-            card.IsAvailable)
-        {
-            hoveredCard = card;
+    private bool TryGetOwnCard(
+        InteractableObject target,
+        out Card card)
+    {
+        card = target as Card;
 
-            cardInfoRoutine =
-                StartCoroutine(
-                    ShowCardInfoAfterDelay(card));
-        }
-        else
+        if (card == null ||
+            card.IsInRoulette)
         {
-            hudController?.HideCardInfo();
+            card = null;
+            return false;
         }
+
+        if (!card.TryGetOwner(
+                out Player cardOwner) ||
+            cardOwner != owner)
+        {
+            card = null;
+            return false;
+        }
+
+        return true;
     }
 
     // =========================================================
-    // CARD INFO
+    // HAND
     // =========================================================
 
-    private IEnumerator ShowCardInfoAfterDelay(
-        Card card)
+    private void CreateHandZone()
     {
-        yield return new WaitForSeconds(
-            cardInfoDelay);
-
-        if (currentTarget != card ||
-            hoveredCard != card ||
-            !card.IsAvailable ||
-            card.Data == null)
+        if (owner == null ||
+            owner.cardSockets == null ||
+            owner.cardSockets.Count == 0 ||
+            owner.cardSockets[0] == null)
         {
-            yield break;
+            return;
         }
 
-        hudController?.ShowCardInfo(
-            card.Data);
+        GameObject zoneObject =
+            new GameObject("Hand Zone");
 
-        cardInfoRoutine = null;
+        zoneObject.transform.SetParent(
+            owner.cardSockets[0].transform.parent,
+            false);
+
+        handZone =
+            zoneObject.AddComponent<HandZone>();
+
+        handZone.Initialize(
+            owner,
+            owner.cardSockets,
+            handZonePadding);
     }
 
-    private void StopCardInfoRoutine()
+    private void OnHandLooked()
     {
-        if (cardInfoRoutine == null)
+        handHideTimer = 0f;
+
+        if (handCarousel == null ||
+            handSuppressed ||
+            handCarousel.IsOpen)
+        {
+            return;
+        }
+
+        handCarousel.Show(null);
+
+        UpdateHighlight();
+        UpdateHint();
+    }
+
+    private void UpdateHand()
+    {
+        if (handCarousel == null)
             return;
 
-        StopCoroutine(
-            cardInfoRoutine);
+        if (handCarousel.IsOpen)
+        {
+            int scroll =
+                GetScrollDirection();
 
-        cardInfoRoutine = null;
+            if (scroll != 0)
+                handCarousel.Scroll(scroll);
+        }
+
+        if (lookingAtHand)
+        {
+            handHideTimer = 0f;
+            return;
+        }
+
+        handSuppressed = false;
+
+        if (!handCarousel.IsOpen ||
+            handPinned)
+        {
+            return;
+        }
+
+        handHideTimer += Time.deltaTime;
+
+        if (handHideTimer < handHideDelay)
+            return;
+
+        handHideTimer = 0f;
+
+        HideHand();
+    }
+
+    private void ToggleHand()
+    {
+        if (handCarousel == null)
+            return;
+
+        if (handCarousel.IsOpen)
+        {
+            handSuppressed = lookingAtHand;
+
+            HideHand();
+
+            return;
+        }
+
+        handPinned = true;
+        handSuppressed = false;
+        handHideTimer = 0f;
+
+        handCarousel.Show(null);
+
+        UpdateHighlight();
+        UpdateHint();
+    }
+
+    private void HideHand()
+    {
+        if (handCarousel == null)
+            return;
+
+        handPinned = false;
+
+        handCarousel.Hide();
+
+        UpdateHighlight();
+
+        UpdateHint();
+    }
+
+    private void OnHandCenterChanged(
+        Card card)
+    {
+        UpdateHighlight();
+        UpdateHint();
+    }
+
+    private void UpdateHighlight()
+    {
+        Card card =
+            handCarousel != null &&
+            handCarousel.IsOpen
+                ? handCarousel.CenterCard
+                : null;
+
+        if (card == highlightedCard)
+            return;
+
+        if (highlightedCard != null)
+            highlightedCard.SetHighlight(false);
+
+        highlightedCard = card;
+
+        if (highlightedCard != null)
+            highlightedCard.SetHighlight(true);
     }
 
     // =========================================================
@@ -203,7 +439,13 @@ public class Interactor : NetworkBehaviour
         if (hudController == null)
             return;
 
-        if (currentTarget is Card card &&
+        Card card =
+            handCarousel != null &&
+            handCarousel.IsOpen
+                ? handCarousel.CenterCard
+                : currentTarget as Card;
+
+        if (card != null &&
             !card.IsAvailable)
         {
             hudController.SetHint(
@@ -238,39 +480,29 @@ public class Interactor : NetworkBehaviour
 
     private void HandleInteraction()
     {
-        if (currentTarget is Card currentCard)
+        if (handCarousel != null &&
+            handCarousel.IsOpen)
         {
-            if (!currentCard.IsAvailable)
+            Card card =
+                handCarousel.CenterCard;
+
+            if (card == null ||
+                !card.IsPlayable)
+            {
                 return;
-
-            if (selectedCard != null &&
-                selectedCard != currentCard &&
-                selectedCard.IsZoomed)
-            {
-                selectedCard.ReturnToOwner();
-                selectedCard = null;
             }
 
-            currentCard.Interact();
+            card.Interact();
 
-            if (currentCard.IsZoomed)
-            {
-                selectedCard = currentCard;
-            }
-            else if (selectedCard == currentCard)
-            {
-                selectedCard = null;
-            }
+            handSuppressed = true;
+
+            HideHand();
 
             return;
         }
 
-        if (selectedCard != null &&
-            selectedCard.IsZoomed)
-        {
-            selectedCard.ReturnToOwner();
-            selectedCard = null;
-        }
+        if (currentTarget is Card)
+            return;
 
         if (currentTarget != null)
         {
@@ -284,18 +516,13 @@ public class Interactor : NetworkBehaviour
 
     private void CancelSelection()
     {
-        if (selectedCard != null &&
-            selectedCard.IsZoomed)
+        if (handCarousel != null &&
+            handCarousel.IsOpen)
         {
-            selectedCard.ReturnToOwner();
-            selectedCard = null;
-            return;
-        }
+            handSuppressed = true;
 
-        if (currentTarget is Card card &&
-            card.IsZoomed)
-        {
-            card.ReturnToOwner();
+            HideHand();
+
             return;
         }
 

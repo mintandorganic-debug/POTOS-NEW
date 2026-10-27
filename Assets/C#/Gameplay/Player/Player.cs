@@ -26,6 +26,7 @@ public class Player : NetworkBehaviour
     [SerializeField] public List<GameObject> cardSockets;
     [SerializeField] public Transform cardZoomSocket;
     [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private PlayerHand hand;
 
     [Header("Accessories")]
     [SerializeField] public List<GameObject> accesories;
@@ -58,12 +59,18 @@ public class Player : NetworkBehaviour
     public string SteamNickname =>
         steamNickname;
 
+    public PlayerHand Hand =>
+        hand;
+
     // =========================================================
     // LIFECYCLE
     // =========================================================
 
     private void Awake()
     {
+        if (hand == null)
+            hand = GetComponent<PlayerHand>();
+
         if (camera != null)
         {
             Camera cam =
@@ -450,6 +457,15 @@ public class Player : NetworkBehaviour
     [Server]
     public void SummonCards()
     {
+        if (hand == null)
+        {
+            Debug.LogError(
+                "Player.SummonCards: PlayerHand is missing.",
+                this);
+
+            return;
+        }
+
         for (int i = 0;
              i < cardSockets.Count;
              i++)
@@ -474,11 +490,8 @@ public class Player : NetworkBehaviour
             }
 
             card.RandomData();
-            card.owner = this;
 
-            card.SetOwner(
-                netId,
-                i);
+            hand.AddCard(card);
         }
     }
 }

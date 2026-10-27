@@ -605,7 +605,9 @@ public class GameMaster : NetworkBehaviour
         if (card.Data.CardClass !=
                 Card.CardClass.AttackLight &&
             card.Data.CardClass !=
-                Card.CardClass.AttackSteal)
+                Card.CardClass.AttackSteal &&
+            card.Data.CardClass !=
+                Card.CardClass.Poison)
         {
             return false;
         }

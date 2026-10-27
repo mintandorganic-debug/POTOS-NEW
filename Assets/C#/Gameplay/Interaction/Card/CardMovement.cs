@@ -10,7 +10,6 @@ public class CardMovement : MonoBehaviour
     [SerializeField] private float hoverSpeed = 8f;
 
     [Header("Socket Movement")]
-    [SerializeField] private float zoomMoveSpeed = 5f;
     [SerializeField] private float returnMoveSpeed = 5f;
 
     private Vector3 targetLocalPosition;
@@ -91,14 +90,6 @@ public class CardMovement : MonoBehaviour
 
         targetLocalPosition =
             Vector3.zero;
-    }
-
-    public void MoveToZoomSocket(
-        Transform socket)
-    {
-        MoveTo(
-            socket,
-            zoomMoveSpeed);
     }
 
     public void MoveTo(

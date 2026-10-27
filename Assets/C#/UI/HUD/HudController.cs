@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,12 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text hintText;
     [SerializeField] private CardInfoPanel cardInfoPanel;
     [SerializeField] private TMP_Text defenseTimerText;
+
+    [Header("Blind")]
+    [SerializeField] private CanvasGroup blindOverlay;
+    [SerializeField] private float blindFadeDuration = 0.3f;
+
+    private Coroutine blindRoutine;
 
     private void Awake()
     {
@@ -21,6 +28,13 @@ public class HudController : MonoBehaviour
         Instance = this;
 
         HideDefenseTimer();
+
+        if (blindOverlay != null)
+        {
+            blindOverlay.alpha = 0f;
+            blindOverlay.blocksRaycasts = false;
+            blindOverlay.gameObject.SetActive(false);
+        }
     }
 
     private void OnDestroy()
@@ -120,5 +134,69 @@ public class HudController : MonoBehaviour
 
         defenseTimerText.gameObject.SetActive(
             false);
+    }
+
+    // =========================================================
+    // BLIND
+    // =========================================================
+
+    public void ShowBlind(
+        float duration)
+    {
+        if (blindOverlay == null)
+            return;
+
+        if (blindRoutine != null)
+            StopCoroutine(blindRoutine);
+
+        blindRoutine =
+            StartCoroutine(
+                BlindRoutine(duration));
+    }
+
+    private IEnumerator BlindRoutine(
+        float duration)
+    {
+        blindOverlay.gameObject.SetActive(true);
+
+        yield return FadeBlind(
+            blindOverlay.alpha,
+            1f);
+
+        yield return new WaitForSeconds(
+            Mathf.Max(
+                0f,
+                duration -
+                blindFadeDuration * 2f));
+
+        yield return FadeBlind(
+            blindOverlay.alpha,
+            0f);
+
+        blindOverlay.gameObject.SetActive(false);
+
+        blindRoutine = null;
+    }
+
+    private IEnumerator FadeBlind(
+        float from,
+        float to)
+    {
+        float time = 0f;
+
+        while (time < blindFadeDuration)
+        {
+            time += Time.deltaTime;
+
+            blindOverlay.alpha =
+                Mathf.Lerp(
+                    from,
+                    to,
+                    time / blindFadeDuration);
+
+            yield return null;
+        }
+
+        blindOverlay.alpha = to;
     }
 }

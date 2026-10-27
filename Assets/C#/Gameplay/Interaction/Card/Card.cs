@@ -19,7 +19,10 @@ public class Card : InteractableObject
         AttackSteal,
         Defence,
         Util,
-        Sin
+        Sin,
+        Poison,
+        Luck,
+        Craft
     }
 
     [Header("Setup")]
@@ -54,11 +57,6 @@ public class Card : InteractableObject
     [SyncVar(hook = nameof(OnSocketChanged))]
     private int socketIndex;
 
-    public override float LookZoomFov =>
-        interaction != null
-            ? interaction.LookZoomFov
-            : -1f;
-
     public CardData Data =>
         cardData;
 
@@ -71,9 +69,8 @@ public class Card : InteractableObject
     public bool IsInRoulette =>
         isInRoulette;
 
-    public bool IsZoomed =>
-        interaction != null &&
-        interaction.IsZoomed;
+    public bool IsPlayable =>
+        CanInteract();
 
     public uint OwnerNetId =>
         ownerNetId;
@@ -87,6 +84,20 @@ public class Card : InteractableObject
     {
         ResetLocalState();
         UnsubscribeFromGamePhase();
+    }
+
+    public override void OnStopServer()
+    {
+        if (NetworkServer.spawned.TryGetValue(
+                ownerNetId,
+                out NetworkIdentity identity) &&
+            identity.TryGetComponent(
+                out PlayerHand hand))
+        {
+            hand.RemoveCard(this);
+        }
+
+        base.OnStopServer();
     }
 
     private void Start()
@@ -534,44 +545,6 @@ public class Card : InteractableObject
         visual?.SetColliderEnabled(false);
     }
 
-    public void RequestMoveToZoomSocket()
-    {
-        if (!IsOwnedByLocalPlayer())
-            return;
-
-        CmdMoveToZoomSocket();
-    }
-
-    [Command]
-    private void CmdMoveToZoomSocket(
-        NetworkConnectionToClient sender = null)
-    {
-        if (!IsOwnedByLocalConnection(sender))
-            return;
-
-        if (isInRoulette)
-            return;
-
-        if (!NetworkServer.spawned.TryGetValue(
-                ownerNetId,
-                out NetworkIdentity identity))
-        {
-            return;
-        }
-
-        Player player =
-            identity.GetComponent<Player>();
-
-        if (player == null)
-            return;
-
-        if (player.cardZoomSocket == null)
-            return;
-
-        movement?.MoveToZoomSocket(
-            player.cardZoomSocket);
-    }
-
     public void ReturnToOwner()
     {
         if (ownerNetId == 0)
@@ -607,20 +580,13 @@ public class Card : InteractableObject
             movement.ReturnMoveSpeed);
     }
 
-    public override void OnLookEnter()
+    public void SetHighlight(
+        bool value)
     {
-        if (!CanInteract())
-            return;
+        if (isInRoulette)
+            value = false;
 
-        interaction?.OnLookEnter();
-    }
-
-    public override void OnLookExit()
-    {
-        if (!IsOwnedByLocalPlayer())
-            return;
-
-        interaction?.OnLookExit();
+        visual?.SetHover(value);
     }
 
     public override void Interact()

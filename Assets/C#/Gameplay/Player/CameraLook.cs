@@ -120,6 +120,8 @@ public class CameraLook : NetworkBehaviour
     private bool cameraLocked;
     private Transform cameraLockTarget;
 
+    private bool lookEnabled = true;
+
     private float cameraSensitivityMultiplier = 1f;
     private Coroutine cameraMultiplierCoroutine;
 
@@ -217,7 +219,7 @@ public class CameraLook : NetworkBehaviour
         {
             UpdateCameraLock();
         }
-        else
+        else if (lookEnabled)
         {
             UpdateCameraRotation();
         }
@@ -403,6 +405,21 @@ public class CameraLook : NetworkBehaviour
 
         cameraLocked = false;
         cameraLockTarget = null;
+    }
+
+    public void SetLookEnabled(
+        bool value)
+    {
+        lookEnabled = value;
+
+        if (!isLocalPlayer)
+            return;
+
+        Cursor.visible = !value;
+        Cursor.lockState =
+            value
+                ? CursorLockMode.Locked
+                : CursorLockMode.None;
     }
 
     [Command(channel = Channels.Unreliable)]

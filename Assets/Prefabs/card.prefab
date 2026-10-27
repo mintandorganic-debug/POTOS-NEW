@@ -398,6 +398,7 @@ MonoBehaviour:
   owner: {fileID: 0}
   avalaibleCardTypes:
   - {fileID: 11400000, guid: 920815d973dd480478b7107840cdc0e1, type: 2}
+  - {fileID: 11400000, guid: ac1b83c50b502c6469143e33e289e8e0, type: 2}
   cardData: {fileID: 11400000, guid: 920815d973dd480478b7107840cdc0e1, type: 2}
   visual: {fileID: 934837919382272734}
   movement: {fileID: 105988538730105155}
@@ -418,10 +419,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardMovement
   hoverY: 0.015
-  hoverZ: 0.02
+  hoverZ: 0
   hoverDelay: 0.15
   hoverSpeed: 1
-  zoomMoveSpeed: 5
   returnMoveSpeed: 5
 --- !u!114 &934837919382272734
 MonoBehaviour:
@@ -453,7 +453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a3638f645345c4491fd46f41d7b3b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardInteraction
-  lookZoomFov: 45
 --- !u!114 &4459793095574899807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 2050089975
+  _assetId: 1373063951
   serverOnly: 0
   visibility: 0
   hasSpawned: 0

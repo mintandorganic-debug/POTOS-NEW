@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a9fd563a953d54cb21c3d5ed54db70, type: 3}
+  m_Name: Swap
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardName: "\u041F\u043E\u0434\u043C\u0435\u043D\u0430"
+  CardClass: 5
+  description: "Ослепляет цель на 10 секунд. Можно обменять до двух своих карт на её карты."
+  cardEffect: {fileID: 11400000, guid: 39421ff27dbfec04dbd4bbe75b62bc50, type: 2}
+  interactableCards: []
+  actionId: COLT
+  emissiveColor: {r: 0.84313726, g: 0.47843137, b: 0.15294118, a: 1}
+  sprite: {fileID: 0}
+  texture: {fileID: 2800000, guid: 42e53a860eca1f74497a65bb0beee189, type: 3}

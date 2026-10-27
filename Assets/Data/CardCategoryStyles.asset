@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59e2206d9bcfdee4baf500ab8439be5b, type: 3}
+  m_Name: CardCategoryStyles
+  m_EditorClassIdentifier: Assembly-CSharp::CardCategoryStyles
+  styles:
+  - cardClass: 0
+    color: {r: 0.70980394, g: 0.1764706, b: 0.19607843, a: 1}
+    background: {fileID: 21300000, guid: 7561bab5418132740b30b6d763e2b52f, type: 3}
+    frame: {fileID: 21300000, guid: 5c94f6888a5d9ff4a8667be792d632db, type: 3}
+    icon: {fileID: 21300000, guid: eaab9589b18db1f4ab0cd82219e748e9, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: c7531250f2382ae408bf0b5801d9b8b2, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: 6b0a9a1aa459ee14096aad850895425c, type: 3}
+  - cardClass: 1
+    color: {r: 0.70980394, g: 0.1764706, b: 0.19607843, a: 1}
+    background: {fileID: 21300000, guid: 7561bab5418132740b30b6d763e2b52f, type: 3}
+    frame: {fileID: 21300000, guid: 5c94f6888a5d9ff4a8667be792d632db, type: 3}
+    icon: {fileID: 21300000, guid: eaab9589b18db1f4ab0cd82219e748e9, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: c7531250f2382ae408bf0b5801d9b8b2, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: 6b0a9a1aa459ee14096aad850895425c, type: 3}
+  - cardClass: 2
+    color: {r: 0.2, g: 0.4, b: 0.8, a: 1}
+    background: {fileID: 21300000, guid: 101c1f6895d16b945a3d684a322d5925, type: 3}
+    frame: {fileID: 21300000, guid: c49be2d573af89346b580da8e1d0c994, type: 3}
+    icon: {fileID: 21300000, guid: b65de335cb09b5d4ab3c45d5b6f813f6, type: 3}
+    sweepMaterial: {fileID: 0}
+    hoverVfx: {fileID: 3702621902215750549, guid: 174a29f4562d0f04e89ffa47aaae9af7, type: 3}
+  - cardClass: 3
+    color: {r: 0.84313726, g: 0.47843137, b: 0.15294118, a: 1}
+    background: {fileID: 21300000, guid: 93fa9487542f229439839c93361e25d2, type: 3}
+    frame: {fileID: 21300000, guid: fd88449113191434a9ffc3ff2f18183d, type: 3}
+    icon: {fileID: 21300000, guid: 18bffe061958f4d40877bd80902d954b, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: a11140e5f3ac0384aa5a740ac2037140, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: 6650564cac72d874f8b285b68ddf243c, type: 3}
+  - cardClass: 4
+    color: {r: 0.5058824, g: 0.2901961, b: 0.61960787, a: 1}
+    background: {fileID: 21300000, guid: 38da05d0a11393042adae58b35af2ecc, type: 3}
+    frame: {fileID: 21300000, guid: 56d4fead52003a446a89938853336930, type: 3}
+    icon: {fileID: 21300000, guid: 3b4c1c7c75b0e494492fa54906ef93d2, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: 2dc61ac571f388f4f84bed354783373e, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: bf918cd9c4cdb9749a10ff6022461606, type: 3}
+  - cardClass: 5
+    color: {r: 0.84313726, g: 0.47843137, b: 0.15294118, a: 1}
+    background: {fileID: 21300000, guid: 93fa9487542f229439839c93361e25d2, type: 3}
+    frame: {fileID: 21300000, guid: fd88449113191434a9ffc3ff2f18183d, type: 3}
+    icon: {fileID: 21300000, guid: 18bffe061958f4d40877bd80902d954b, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: a11140e5f3ac0384aa5a740ac2037140, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: 6650564cac72d874f8b285b68ddf243c, type: 3}
+  - cardClass: 6
+    color: {r: 0.30980393, g: 0.60784316, b: 0.38431373, a: 1}
+    background: {fileID: 21300000, guid: 9585386ade1c68546be212234e452775, type: 3}
+    frame: {fileID: 21300000, guid: cdb9c975e60282f49b4a757a28a19c85, type: 3}
+    icon: {fileID: 21300000, guid: 7b6d54190835a614a8d06c03031cb5cd, type: 3}
+    sweepMaterial: {fileID: 0}
+    hoverVfx: {fileID: 3702621902215750549, guid: 3629c7a13ae6fbe4f9887cf235084971, type: 3}
+  - cardClass: 7
+    color: {r: 0.46666667, g: 0.48235294, b: 0.49019608, a: 1}
+    background: {fileID: 0}
+    frame: {fileID: 21300000, guid: 628e70a27b433db4e9bc5366104ba64e, type: 3}
+    icon: {fileID: 21300000, guid: 11099bbec89903e4eab98ac1e7dbca97, type: 3}
+    sweepMaterial: {fileID: 2100000, guid: acbc3e85bae00d544a03ff00493d6e67, type: 2}
+    hoverVfx: {fileID: 3702621902215750549, guid: dc885b256a6bcaf4aaf1c2c22e6203f2, type: 3}

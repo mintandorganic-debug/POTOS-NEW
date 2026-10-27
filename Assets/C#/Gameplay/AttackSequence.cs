@@ -672,7 +672,8 @@ public class AttackSequence : NetworkBehaviour
                 Card.CardClass.AttackSteal &&
             card.Data.cardEffect != null)
         {
-            card.Data.cardEffect.ApplyEffectToTarget(
+            card.Data.cardEffect.ApplyEffect(
+                attackPlayer,
                 targetPlayer);
         }
 

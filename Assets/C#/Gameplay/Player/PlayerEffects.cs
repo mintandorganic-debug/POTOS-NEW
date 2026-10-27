@@ -43,6 +43,42 @@ public class PlayerEffects : NetworkBehaviour
     }
      
     [Server]
+    public void ApplyBlind(
+        float duration)
+    {
+        if (duration <= 0f)
+            return;
+
+        Player player =
+            GetComponentInParent<Player>();
+
+        NetworkConnectionToClient targetConnection =
+            player != null &&
+            player.netIdentity != null
+                ? player.netIdentity.connectionToClient
+                : connectionToClient;
+
+        if (targetConnection == null)
+            return;
+
+        TargetApplyBlind(
+            targetConnection,
+            duration);
+    }
+
+    [TargetRpc]
+    private void TargetApplyBlind(
+        NetworkConnectionToClient connection,
+        float duration)
+    {
+        if (HudController.Instance == null)
+            return;
+
+        HudController.Instance.ShowBlind(
+            duration);
+    }
+
+    [Server]
     public void BlockAllCards(
         float duration)
     {

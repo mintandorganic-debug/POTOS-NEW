@@ -1,6 +1,7 @@
-/Library
-/Temp
-/Logs
+/[Ll]ibrary/
+/[Ll]ogs/
+/[Tt]emp/
+/[Oo]bj/
 <<<<<<< HEAD
 /.vs
 =======

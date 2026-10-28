@@ -152,6 +152,7 @@
     <Compile Include="Assets\Kwork\UI Cards\Scripts\Integration\HandCarouselController.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\Player.cs" />
     <Compile Include="Assets\C#\Gameplay\Player\PlayerCosmetics.cs" />
+    <Compile Include="Assets\Kwork\Energy Smoke Trail\Scripts\TrailFade.cs" />
     <Compile Include="Assets\Kwork\UI Cards\Scripts\Integration\CardFaceArt.cs" />
   </ItemGroup>
   <ItemGroup>

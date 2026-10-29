@@ -3511,8 +3511,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
   ipInput: {fileID: 806075188}
-  steamTransport: {fileID: 1861175659}
-  ipTransport: {fileID: 900143955}
 --- !u!224 &2002507244
 RectTransform:
   m_ObjectHideFlags: 0

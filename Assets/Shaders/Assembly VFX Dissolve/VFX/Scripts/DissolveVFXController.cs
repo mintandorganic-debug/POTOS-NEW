@@ -338,7 +338,7 @@ public class DissolveVFXController : MonoBehaviour
         if (visualEffect == null)
             return;
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxParticleDirectionProperty,
             particleDirection);
 
@@ -348,41 +348,57 @@ public class DissolveVFXController : MonoBehaviour
         bool isReverse =
             particleDirection < 0f;
 
-        visualEffect.SetBool(
+        SetVfxBool(
             vfxForwardDirectionProperty,
             isForward);
 
-        visualEffect.SetBool(
+        SetVfxBool(
             vfxReverseDirectionProperty,
             isReverse);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxCenterParticleProgressProperty,
             centerParticleProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxLeftParticleProgressProperty,
             leftParticleProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxRightParticleProgressProperty,
             rightParticleProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxCenterVelocityProperty,
             centerVelocityProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxLeftVelocityProperty,
             leftVelocityProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxRightVelocityProperty,
             rightVelocityProgress);
 
-        visualEffect.SetFloat(
+        SetVfxFloat(
             vfxSpawnRateProperty,
             spawnRate);
+    }
+
+    private void SetVfxFloat(
+        string propertyName,
+        float value)
+    {
+        if (visualEffect.HasFloat(propertyName))
+            visualEffect.SetFloat(propertyName, value);
+    }
+
+    private void SetVfxBool(
+        string propertyName,
+        bool value)
+    {
+        if (visualEffect.HasBool(propertyName))
+            visualEffect.SetBool(propertyName, value);
     }
 
     private float GetParticleProgress(

@@ -23,7 +23,8 @@ public class AttackSequence : NetworkBehaviour
 
     private Coroutine attackRoutine;
     private Coroutine targetSelectionRoutine;
-    private Coroutine stealRoutine;
+
+    private StealPhase steal;
 
     public bool IsActive =>
         isActive;
@@ -48,6 +49,15 @@ public class AttackSequence : NetworkBehaviour
         }
 
         Instance = this;
+
+        steal =
+            new StealPhase(
+                this,
+                stealActionTime,
+                stealCoinsAmount,
+                stealCoinsRainDuration,
+                () => isActive,
+                FinishSequence);
     }
 
     private void OnDestroy()
@@ -692,49 +702,6 @@ public class AttackSequence : NetworkBehaviour
         yield break;
     }
 
-    [Server]
-    private void StealCoins(
-        Player attackPlayer,
-        Player victim)
-    {
-        if (attackPlayer == null ||
-            victim == null ||
-            attackPlayer == victim ||
-            stealCoinsAmount <= 0)
-        {
-            return;
-        }
-
-        PlayerBank attackerBank =
-            attackPlayer.GetComponentInChildren<PlayerBank>(true);
-
-        PlayerBank victimBank =
-            victim.GetComponentInChildren<PlayerBank>(true);
-
-        if (attackerBank == null ||
-            victimBank == null)
-        {
-            Debug.LogWarning(
-                "AttackSequence: PlayerBank is missing on attacker or victim.",
-                this);
-
-            return;
-        }
-
-        int amount =
-            Mathf.Min(
-                stealCoinsAmount,
-                victimBank.Coins);
-
-        if (amount <= 0)
-            return;
-
-        victimBank.TryStealCoinsTo(
-            attackerBank,
-            amount,
-            stealCoinsRainDuration);
-    }
-
     // =========================================================
     // ATTACK VORTEX
     // =========================================================
@@ -786,7 +753,7 @@ public class AttackSequence : NetworkBehaviour
                     ? target.GetComponentInParent<Player>()
                     : null;
 
-            StealCoins(
+            steal.TakeCoins(
                 attackPlayer,
                 victim);
         }
@@ -819,78 +786,11 @@ public class AttackSequence : NetworkBehaviour
                 return;
             }
 
-            StartStealPhase();
+            steal.Begin();
             return;
         }
 
         if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-        }
-
-        FinishSequence();
-    }
-
-    // =========================================================
-    // STEAL PHASE
-    // =========================================================
-
-    [Server]
-    private void StartStealPhase()
-    {
-        if (GameMaster.Instance == null ||
-            GameMaster.Instance.CurrentPhase !=
-                GameMaster.GamePhase.Steal)
-        {
-            FinishSequence();
-            return;
-        }
-
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-        }
-
-        stealRoutine =
-            StartCoroutine(
-                StealRoutine());
-    }
-
-    [Server]
-    private IEnumerator StealRoutine()
-    {
-        float remainingTime =
-            stealActionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!isActive)
-            {
-                stealRoutine = null;
-                yield break;
-            }
-
-            if (GameMaster.Instance == null ||
-                GameMaster.Instance.CurrentPhase !=
-                    GameMaster.GamePhase.Steal)
-            {
-                stealRoutine = null;
-                FinishSequence();
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            yield return null;
-        }
-
-        stealRoutine = null;
-
-        if (GameMaster.Instance != null &&
-            GameMaster.Instance.CurrentPhase ==
-                GameMaster.GamePhase.Steal)
         {
             GameMaster.Instance.EndTurn();
         }
@@ -1099,13 +999,7 @@ public class AttackSequence : NetworkBehaviour
 
         StopTargetSelectionTimer();
 
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-
-            stealRoutine = null;
-        }
+        steal.Stop();
 
         if (attackRoutine != null)
         {
@@ -1192,13 +1086,7 @@ public class AttackSequence : NetworkBehaviour
     {
         StopTargetSelectionTimer();
 
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-
-            stealRoutine = null;
-        }
+        steal.Stop();
 
         RouletteRotator roulette =
             RouletteRotator.Instance;

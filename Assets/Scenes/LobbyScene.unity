@@ -1886,6 +1886,155 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &2100000010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100000011}
+  - component: {fileID: 2100000012}
+  m_Layer: 0
+  m_Name: GameAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2100000011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000010}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100000012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f4c8b12e3d47659b01c2d3e4f5a6b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioManager
+  ambientSource: {fileID: 0}
+  tensionSource: {fileID: 0}
+  heartbeatSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  uiSource: {fileID: 0}
+  platformSource: {fileID: 0}
+  voiceSource: {fileID: 0}
+  potosAmbient: {fileID: 8300000, guid: 09eb988951ce1419e80e83f928c23b0d, type: 3}
+  potosDanger: {fileID: 8300000, guid: 609f2bd15112a4729bde6ed179f7b0e5, type: 3}
+  potosHeartbeat: {fileID: 8300000, guid: aa6781e81640f403a87951b271aed823, type: 3}
+  potosPressure: {fileID: 8300000, guid: c98dc8a3488c24d9388c82f19b028f66, type: 3}
+  potosRisk: {fileID: 8300000, guid: cdaeae9aed9f8484db63d28c8b95b4ac, type: 3}
+  handsPick: {fileID: 8300000, guid: d2b0ec12217c11549a3458b08d4055a5, type: 3}
+  handsRoll: {fileID: 8300000, guid: b6e31b05f3f3fda438ee16d68569eefd, type: 3}
+  coinToss: {fileID: 8300000, guid: d940658c4ff0ca6409892011dc57395a, type: 3}
+  accessoryDisappearSound: {fileID: 8300000, guid: 984921e08d25aee4685307d1c8e7fadc, type: 3}
+  cardBurnSound: {fileID: 8300000, guid: decb2702aa1b9ac4cb2a101a41f05b49, type: 3}
+  lostSound: {fileID: 8300000, guid: 797de070cebc73843b87d16d050ba05d, type: 3}
+  nextStageSound: {fileID: 8300000, guid: da3d5b79dff315a4b9b765d902b69128, type: 3}
+  winSound: {fileID: 8300000, guid: 534aabb6fb847f74dbd2ce44529c354c, type: 3}
+  tenLeft: {fileID: 8300000, guid: 0ac8c2ee9b6e06645ab99b0ab7c7fa86, type: 3}
+  accessoryAdd: {fileID: 8300000, guid: fce618d8fd6045a46892d8c72d34cc0a, type: 3}
+  attackSuccessful: {fileID: 8300000, guid: 5bcf1fb16254d434fba4c4209bf9712b, type: 3}
+  attackUnsuccessful: {fileID: 8300000, guid: b85740445ba37654c818ebfe806d836d, type: 3}
+  cardsGivingHole1: {fileID: 8300000, guid: a77077abf0e0829478d3a874857973f3, type: 3}
+  cardsGivingHole2: {fileID: 8300000, guid: 0beb9439e6d9fe54393925959c01a85a, type: 3}
+  cardsGivingHole3: {fileID: 8300000, guid: 0a3b7e7693d85a942bb7d459448ccafc, type: 3}
+  cardsShuffle: {fileID: 8300000, guid: cd4a714943992714b9336237b1aaf7c4, type: 3}
+  cardDestroy: {fileID: 8300000, guid: 515e4880b58bfd24286a44d7f22b24eb, type: 3}
+  nextSound: {fileID: 8300000, guid: 53e75d1a1e326914e8669020c0d9f2be, type: 3}
+  pointsAdd: {fileID: 8300000, guid: 7c0afd3e539d8e84588e9d99c602da2b, type: 3}
+  platformBase: {fileID: 8300000, guid: a27cadd025001e749a0c7d0f9f1e621e, type: 3}
+  platformPlateDown: {fileID: 8300000, guid: 2d0846ce9bac0f74b859495196ec0a7b, type: 3}
+  platformPlateUp: {fileID: 8300000, guid: fd3d4635a72ecd849b358a56aa71d579, type: 3}
+  platformSmDown: {fileID: 8300000, guid: 51cf449276378e94386be844f0df572a, type: 3}
+  platformSmUp: {fileID: 8300000, guid: 4c8d4d973276249409d54017e9cad07c, type: 3}
+  slotMachineCardGive: {fileID: 8300000, guid: 27b1b3cc1431b3c45bdc1ee493f1b48d, type: 3}
+  slotMachinePick1: {fileID: 8300000, guid: e1d525c0b437de546aa4abf26e9a80f0, type: 3}
+  slotMachinePick2: {fileID: 8300000, guid: af688b6f8deb7164ca6d5fd94584e8e9, type: 3}
+  slotMachinePick3: {fileID: 8300000, guid: 9535c0ab46115fe40883e738e8f005d0, type: 3}
+  slotMachineSpin: {fileID: 8300000, guid: 9341f1155d72d8246b41ba53269d64c7, type: 3}
+  slotMachineStop: {fileID: 8300000, guid: 446ad096423475a438a96bb00609d031, type: 3}
+  slotMachineWindup: {fileID: 8300000, guid: fbad5f00f48530648a35583ab4be1cd1, type: 3}
+  uiAccept: {fileID: 8300000, guid: 218fc4829b215a445913f0d43ffb7dc4, type: 3}
+  uiCancel: {fileID: 8300000, guid: 5db00aa9bea97754e8e738a05f6f079c, type: 3}
+  uiHover1: {fileID: 8300000, guid: a0604a070d883fe4499d14ac36e32f9b, type: 3}
+  uiHover2: {fileID: 8300000, guid: 31e4c334679f84a4389d9cc2fb2b3f8a, type: 3}
+  uiHover3: {fileID: 8300000, guid: c113f7b0675aa774b985679dc450c092, type: 3}
+  uiHover4: {fileID: 8300000, guid: d3cdd16182f6e5e43aec5d5ee43b3933, type: 3}
+  uiHover5: {fileID: 8300000, guid: f62870a21a51ad148ab641b6e0d8e345, type: 3}
+  uiMenuClose: {fileID: 8300000, guid: 3164a1630ce2e5043a1dfd07a0f77ffd, type: 3}
+  uiMenuOpen: {fileID: 8300000, guid: fed3be56839021c4fbef6a9efb0b54c9, type: 3}
+  uiMenuPress: {fileID: 8300000, guid: b3468862b3d0c974685d12e3508cf2cc, type: 3}
+  uiUnavailable: {fileID: 8300000, guid: c5944753e2b0dcd4199e2b24f9a6e93c, type: 3}
+  burpSound: {fileID: 8300000, guid: 981335d91164e3d4a9d705f03bc6cc41, type: 3}
+  caughSound: {fileID: 8300000, guid: d1d2ceb2d74d242408bfb51fc1d7057b, type: 3}
+  creakingChairSound: {fileID: 8300000, guid: c946e48c148714443baba95effe25983, type: 3}
+  disappointmentSound: {fileID: 8300000, guid: 928c8c7d8135f1a46bd019b83ac85164, type: 3}
+  exhaleSound: {fileID: 8300000, guid: 0e258b6c90c860f4d98554e4a54755cd, type: 3}
+  joyfulSound: {fileID: 8300000, guid: 9ee01c4cdacac2347a1ac1ffce3db50a, type: 3}
+  scoffSound: {fileID: 8300000, guid: 453a5522764a2364f8e643be471c3d5d, type: 3}
+  whistleSound: {fileID: 8300000, guid: 8d73786ac0c93a74db44cf300421aef6, type: 3}
+  wondermentSound: {fileID: 8300000, guid: 01dca1b64c033b14c8113dfe2cbb5235, type: 3}
+  pistolReady: {fileID: 8300000, guid: f1e7f6a0d9905d740b6f36780e80a3d6, type: 3}
+  pistolAction: {fileID: 8300000, guid: 4681b625137d813449a03749705cb011, type: 3}
+  pistolCancel: {fileID: 8300000, guid: fc45a644462df0b4aa0896547552461a, type: 3}
+  aftermathRevolverSound: {fileID: 8300000, guid: a83139c7b8d0bf94da5441bf496ef9d7, type: 3}
+  knifeReady: {fileID: 8300000, guid: aab4e110b3e432c41a0fa2a74f54a793, type: 3}
+  knifeAction: {fileID: 8300000, guid: 54fcfdcaf07bac64289bb49b74df9d01, type: 3}
+  knifeCancel: {fileID: 8300000, guid: ca5e733aa4d38a1409e1d71c49f36895, type: 3}
+  knifeHitsHand: {fileID: 8300000, guid: d8cfe41602d6be24ba1f449a2fa24821, type: 3}
+  atkKnifeVicHitSound: {fileID: 8300000, guid: 484c41c157566444798a6dd0845405a8, type: 3}
+  aftermathKnifeSound: {fileID: 8300000, guid: 257e50419baaa5d4490a2e93bf0b7d5d, type: 3}
+  shearsReady: {fileID: 8300000, guid: 6f208eca01156f641aaaec38f0f323a1, type: 3}
+  shearsAction: {fileID: 8300000, guid: 71f6b5ae29d927d4880a955d9b491d0f, type: 3}
+  shearsCancel: {fileID: 8300000, guid: bf80fada12295ed40a0bf4924ea592f0, type: 3}
+  atkShearsVicHitSound: {fileID: 8300000, guid: 7184f96934781ee44b0fb87e9d17067b, type: 3}
+  aftermathShearsSound: {fileID: 8300000, guid: 195b30e513db4af44ac84f8ef7d146bc, type: 3}
+  bucketReady: {fileID: 8300000, guid: a2136e23d62d941428b31f6a9fe877fe, type: 3}
+  bucketAction: {fileID: 8300000, guid: fd437899ba2d8b446b78f1f53ae254e0, type: 3}
+  bucketCancel: {fileID: 8300000, guid: c5fa3f60d84ee024c81892299edf7319, type: 3}
+  atkBucketVicHitSound: {fileID: 8300000, guid: 4f92ccd1d028f9a4888e19ed7abbc1ee, type: 3}
+  aftermathBucketSound: {fileID: 8300000, guid: 9ec2d736a02c4c24e9086fad7a9ccd3f, type: 3}
+  forkReady: {fileID: 8300000, guid: 9538666c3ec955149a4de28290ea3d39, type: 3}
+  forkAction: {fileID: 8300000, guid: 680af1ebb21d16f4887d11014d533eec, type: 3}
+  forkCancel: {fileID: 8300000, guid: 79d84354934392a4097f95aa3d29766d, type: 3}
+  atkForkVicHitSound: {fileID: 8300000, guid: 9225e4146f2bacb44b39e31853ac7b4f, type: 3}
+  aftermathForkSound: {fileID: 8300000, guid: cd69fe95ceabc1a4e9e4eb0795064578, type: 3}
+  grenadeReady: {fileID: 8300000, guid: 1e348c97697ef8d40a2483a2a4d27fd6, type: 3}
+  grenadeAction: {fileID: 8300000, guid: 878cbafc46f416e4282bba3163bfeb04, type: 3}
+  grenadeCancel: {fileID: 8300000, guid: b32606305ac41e3459cb7eea944eda1b, type: 3}
+  grenadeBoom: {fileID: 8300000, guid: 4f0e365a11057ee49bf14985ee693f8a, type: 3}
+  aftermathGrenadeSound: {fileID: 8300000, guid: 8ad1fdfe1bba15346b8ad7fed3c6699d, type: 3}
+  shotgunReady: {fileID: 8300000, guid: 785723d697fa5f44199872d8033e0d93, type: 3}
+  shotgunAction: {fileID: 8300000, guid: c0a3a36cac19dd64d862351e6bd058a2, type: 3}
+  shotgunCancel: {fileID: 8300000, guid: 20b3ea6ae2e320748a558ca36acc4213, type: 3}
+  aftermathShotgunSound: {fileID: 8300000, guid: 50d9d588e64943e47b5a08eff9b2b6e0, type: 3}
+  whiskeyReady: {fileID: 8300000, guid: 4d2795c1eebb78847bff7cf1f6d9d55d, type: 3}
+  whiskeyAction: {fileID: 8300000, guid: 038edb2d8bd68d24eae288a715744a38, type: 3}
+  whiskeyCancel: {fileID: 8300000, guid: d985ea9d5e348e148b84b1ef75fa72e8, type: 3}
+  atkWhiskyVicHitSound: {fileID: 8300000, guid: f2b3c821e8c8ec14a9c8c751ab68bf1c, type: 3}
+  aftermathWhiskeySound: {fileID: 8300000, guid: 92458621ba0ef96459299543b2674a12, type: 3}
+  atkFlamePrepSound: {fileID: 8300000, guid: 2a94c8cca27affd47bca72ca25791d4b, type: 3}
+  atkFlameActionSound: {fileID: 8300000, guid: 1441bcd6d296a4140ad93fbc28cb3c3a, type: 3}
+  atkFlameEndSound: {fileID: 8300000, guid: efb581c83fcdf8e4ab09d13223242d40, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1896,3 +2045,4 @@ SceneRoots:
   - {fileID: 2013410475}
   - {fileID: 86566295}
   - {fileID: 2045429251}
+  - {fileID: 2100000011}

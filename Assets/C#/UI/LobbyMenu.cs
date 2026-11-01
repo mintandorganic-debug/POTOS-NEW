@@ -18,7 +18,7 @@ public class LobbyMenu : MonoBehaviour
     {
         instance = this;
 
-        if (!NetworkServer.active);
+        if (!NetworkServer.active)
             startButton.GetComponentInChildren<TMP_Text>().text = "READY";
     }
 
@@ -58,6 +58,7 @@ public class LobbyMenu : MonoBehaviour
         {
             UIplayer_Data.kickBtn.GetComponent<Button>().onClick.AddListener(() =>
             {
+                GameAudioManager.Instance?.PlayCancel();
                 if (NetworkServer.active)
                     lobbyPlayer.Kick();
             });
@@ -73,6 +74,7 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartSession()
     {
+        GameAudioManager.Instance?.PlayAccept();
         NetworkClient.localPlayer.GetComponent<LobbyPlayer>().ToggleReady();
 
         if (NetworkServer.active)

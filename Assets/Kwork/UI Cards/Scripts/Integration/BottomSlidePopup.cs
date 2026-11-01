@@ -19,6 +19,7 @@ namespace CardCarouselUI
             this.content = content;
 
             group.alpha = 0f;
+            group.blocksRaycasts = false;
             group.gameObject.SetActive(false);
         }
 
@@ -31,6 +32,7 @@ namespace CardCarouselUI
         public void Hide()
         {
             IsVisible = false;
+            if (group != null) group.blocksRaycasts = false;
             Play(HiddenY);
         }
 
@@ -40,6 +42,9 @@ namespace CardCarouselUI
         {
             if (animation != null)
                 StopCoroutine(animation);
+
+            if (group != null)
+                group.blocksRaycasts = false;
 
             float startY = group.gameObject.activeSelf
                 ? content.anchoredPosition.y
@@ -68,7 +73,14 @@ namespace CardCarouselUI
             Apply(targetY);
 
             if (!IsVisible)
+            {
+                if (group != null) group.blocksRaycasts = false;
                 group.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (group != null) group.blocksRaycasts = true;
+            }
         }
 
         private void Apply(float y)

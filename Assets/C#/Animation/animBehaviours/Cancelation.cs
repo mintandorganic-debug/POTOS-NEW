@@ -11,6 +11,10 @@ public class Cancelation : StateMachineBehaviour
     {
         PlayerAnimator playerAnimator =
             animator.GetComponentInParent<PlayerAnimator>();
-        playerAnimator.AttackStartedOrCanceled(index);
+        if (playerAnimator != null)
+        {
+            playerAnimator.AttackStartedOrCanceled(index);
+            playerAnimator.DiscardAnimationStarted();
+        }
     }
 }

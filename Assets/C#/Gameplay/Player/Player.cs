@@ -47,6 +47,9 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnAccessoryMaskChanged))]
     private int accessoryMask;
 
+    public int AccessoryMask => accessoryMask;
+    public bool HasAnyAccessory => accessoryMask != 0;
+
     private Coroutine damagePassCoroutine;
 
     public int SeatIndex =>
@@ -392,6 +395,7 @@ public class Player : NetworkBehaviour
                 return;
 
             accesoryVfxes[index].PlayDissolve();
+            GameAudioManager.Instance?.PlayAccessoryDisappear();
         }
     }
 

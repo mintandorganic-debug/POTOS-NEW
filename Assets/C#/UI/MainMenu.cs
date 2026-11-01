@@ -109,16 +109,24 @@ public class MainMenu : MonoBehaviour
     public void HostSteam()
     {
         if (!TrySetTransport(GetSteamTransport()))
+        {
+            GameAudioManager.Instance?.PlayUnavailable();
             return;
+        }
 
+        GameAudioManager.Instance?.PlayAccept();
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 5);
     }
 
     public void HostIp()
     {
         if (!TrySetTransport(GetIpTransport()))
+        {
+            GameAudioManager.Instance?.PlayUnavailable();
             return;
+        }
 
+        GameAudioManager.Instance?.PlayAccept();
         NetworkManager.singleton.StartHost();
     }
 
@@ -173,19 +181,26 @@ public class MainMenu : MonoBehaviour
     public void Client()
     {
         if (!TrySetTransport(GetIpTransport()))
+        {
+            GameAudioManager.Instance?.PlayUnavailable();
             return;
+        }
 
+        GameAudioManager.Instance?.PlayAccept();
         NetworkManager.singleton.networkAddress = ipInput.text;
         NetworkManager.singleton.StartClient();
     }
 
     public void Server()
     {
+        GameAudioManager.Instance?.PlayAccept();
         NetworkManager.singleton.StartServer();
     }
 
     public void Stop()
     {
+        GameAudioManager.Instance?.PlayCancel();
+
         if (NetworkServer.active && NetworkClient.isConnected)
             NetworkManager.singleton.StopHost();
         else if (NetworkClient.isConnected)
@@ -196,6 +211,7 @@ public class MainMenu : MonoBehaviour
 
     public void CloseApp()
     {
+        GameAudioManager.Instance?.PlayCancel();
         Application.Quit();
     }
 }

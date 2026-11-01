@@ -44,7 +44,7 @@ public class Interactor : NetworkBehaviour
         base.OnStartLocalPlayer();
 
         hudController =
-            FindFirstObjectByType<HudController>();
+            FindAnyObjectByType<HudController>();
     }
 
     private void Update()
@@ -241,7 +241,10 @@ public class Interactor : NetworkBehaviour
         if (currentTarget is Card currentCard)
         {
             if (!currentCard.IsAvailable)
+            {
+                GameAudioManager.Instance?.PlayUnavailable();
                 return;
+            }
 
             if (selectedCard != null &&
                 selectedCard != currentCard &&
@@ -302,6 +305,7 @@ public class Interactor : NetworkBehaviour
         if (AttackSequence.Instance == null)
             return;
 
+        GameAudioManager.Instance?.SuppressHoverFor(0.4f);
         AttackSequence.Instance.CmdCancelSequence();
     }
 
@@ -354,6 +358,7 @@ public class Interactor : NetworkBehaviour
         if (button == null)
             return;
 
+        GameAudioManager.Instance?.PlayMenuPress();
         button.onClick.Invoke();
     }
 }

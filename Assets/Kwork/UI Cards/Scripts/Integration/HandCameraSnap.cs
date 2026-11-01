@@ -49,7 +49,7 @@ namespace CardCarouselUI
 
         private static global::Card FindLocalHandCard()
         {
-            foreach (global::Card card in Object.FindObjectsByType<global::Card>(FindObjectsSortMode.None))
+            foreach (global::Card card in Object.FindObjectsByType<global::Card>())
             {
                 if (LocalHandCardFilter.IsInLocalHand(card))
                     return card;

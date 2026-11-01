@@ -46,6 +46,7 @@ public class CardInteraction : MonoBehaviour
         CacheOwnerAnimator();
 
         visual?.SetHover(true);
+        GameAudioManager.Instance?.PlayHover();
     }
 
     public void OnLookExit()
@@ -92,6 +93,7 @@ public class CardInteraction : MonoBehaviour
 
         ResetState();
 
+        GameAudioManager.Instance?.PlayAccept();
         AttackSequence.Instance.CmdStartSequence(
             card.netIdentity);
 

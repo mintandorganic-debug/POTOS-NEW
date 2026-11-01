@@ -18,6 +18,8 @@ public class LobbyHandler : NetworkBehaviour
 
     public void Disconnect()
     {
+        GameAudioManager.Instance?.PlayCancel();
+
         if (NetworkServer.active && NetworkClient.isConnected)
         {
             NetworkManager.singleton.StopHost();

@@ -9,8 +9,7 @@ namespace CardCarouselUI
         public IReadOnlyList<HandCardInfo> GetCards()
         {
             global::Card[] cards =
-                UnityEngine.Object.FindObjectsByType<global::Card>(
-                    FindObjectsSortMode.None);
+                UnityEngine.Object.FindObjectsByType<global::Card>();
 
             Array.Sort(cards, CompareByNetId);
 

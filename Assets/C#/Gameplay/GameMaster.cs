@@ -50,12 +50,35 @@ public class GameMaster : NetworkBehaviour
 
     private Card selectedAttack;
     private Player selectedTarget;
+    [SyncVar] private NetworkIdentity selectedTargetIdentity;
+
+    private float turnStartTime;
+    private bool lastTurnPressure;
+    [SerializeField] private float turnPressureThreshold = 20f;
 
     private bool gameStarted;
     private bool startupCancelled;
 
+    // ---- test harness support (TestScene) ----
+
+    /// <summary>
+    /// While true the match is NOT started automatically when all
+    /// connections have loaded. The test scene starts it by hand.
+    /// </summary>
+    public bool HoldStart { get; set; }
+
+    public bool IsMatchRunning =>
+        gameStarted;
+
+    /// <summary>Increments on every BeginTurn. 0 = no turn yet.</summary>
+    public int TurnNumber { get; private set; }
+
+    public Card SelectedAttack =>
+        selectedAttack;
+
     private Coroutine timeoutRoutine;
     private Coroutine startupRoutine;
+    private Coroutine idleAudioRoutine;
 
     private void Awake()
     {
@@ -78,7 +101,53 @@ public class GameMaster : NetworkBehaviour
         if (currentPhase == phase)
             return;
 
+        GameLog.Event(
+            LogCat.Phase,
+            $"{currentPhase} -> {phase}");
+
         currentPhase = phase;
+    }
+
+    private void Update()
+    {
+        UpdateMusicTension();
+    }
+
+    private void UpdateMusicTension()
+    {
+        if (!gameStarted || GameAudioManager.Instance == null)
+            return;
+
+        if (currentPhase == GamePhase.Attack)
+        {
+            bool isLowHp = IsAnyPlayerLowHealth();
+            bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
+            bool shouldPressure = isLowHp || isThinkingTooLong;
+
+            if (shouldPressure != lastTurnPressure)
+            {
+                lastTurnPressure = shouldPressure;
+                GameAudioManager.Instance.SetGameStateAudio(currentPhase, false, shouldPressure);
+            }
+        }
+        else
+        {
+            lastTurnPressure = false;
+        }
+    }
+
+    public bool IsAnyPlayerLowHealth()
+    {
+        if (_players == null || _players.Count == 0)
+            return false;
+
+        for (int i = 0; i < _players.Count; i++)
+        {
+            Player p = _players[i];
+            if (p != null && !p.HasAnyAccessory)
+                return true;
+        }
+        return false;
     }
 
     private void OnGamePhaseChanged(
@@ -87,6 +156,12 @@ public class GameMaster : NetworkBehaviour
     {
         GamePhaseChanged?.Invoke(
             newPhase);
+
+        bool isLowHp = IsAnyPlayerLowHealth();
+        bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
+        bool shouldPressure = isLowHp || isThinkingTooLong;
+
+        GameAudioManager.Instance?.SetGameStateAudio(newPhase, IsLocalPlayerTargeted(), shouldPressure);
     }
 
     private void OnCurrentPlayerChanged(
@@ -95,6 +170,159 @@ public class GameMaster : NetworkBehaviour
     {
         CurrentPlayerChanged?.Invoke(
             newPlayerIndex);
+        // next_sound & coin_toss disabled (misc / coin)
+        // coin_toss disabled
+    }
+
+    public bool IsLocalPlayerTargeted()
+    {
+        if (NetworkClient.localPlayer == null)
+            return false;
+
+        if (selectedTargetIdentity != null)
+            return selectedTargetIdentity == NetworkClient.localPlayer;
+
+        if (selectedTarget != null && selectedTarget.netIdentity != null)
+            return selectedTarget.netIdentity == NetworkClient.localPlayer;
+
+        return false;
+    }
+
+    [ClientRpc]
+    private void RpcOnGameStarted()
+    {
+        bool isLowHp = IsAnyPlayerLowHealth();
+        bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
+        bool shouldPressure = isLowHp || isThinkingTooLong;
+
+        GameAudioManager.Instance?.SetGameStateAudio(currentPhase, IsLocalPlayerTargeted(), shouldPressure);
+        // cards_shuffle disabled (misc)
+        // next_stage disabled until stage transitions exist in scene
+    }
+
+    [ClientRpc]
+    private void RpcPlayPlayerReaction(
+        NetworkIdentity speakerIdentity,
+        int reactionType,
+        float delay)
+    {
+        GameAudioManager.Instance?.PlayPlayerReactionClip(
+            speakerIdentity,
+            (GameAudioManager.ReactionClipType)reactionType,
+            delay);
+    }
+
+    [Server]
+    private IEnumerator IdleAudioRoutine()
+    {
+        GameAudioManager.ReactionClipType[] idleClips =
+        {
+            GameAudioManager.ReactionClipType.Burp,
+            GameAudioManager.ReactionClipType.Caugh,
+            GameAudioManager.ReactionClipType.CreakingChair,
+            GameAudioManager.ReactionClipType.Exhale
+        };
+
+        while (gameStarted && !startupCancelled)
+        {
+            yield return new WaitForSeconds(30f);
+
+            if (!gameStarted || startupCancelled || _players.Count == 0)
+                continue;
+
+            if (Random.value > 0.33f)
+                continue;
+
+            List<Player> validPlayers = _players.Where(p => p != null && p.netIdentity != null).ToList();
+            if (validPlayers.Count == 0)
+                continue;
+
+            Player speaker = validPlayers[Random.Range(0, validPlayers.Count)];
+            GameAudioManager.ReactionClipType chosenClip = idleClips[Random.Range(0, idleClips.Length)];
+            RpcPlayPlayerReaction(speaker.netIdentity, (int)chosenClip, 0f);
+        }
+
+        idleAudioRoutine = null;
+    }
+
+    [Server]
+    public void TryTriggerGoodReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null)
+            return;
+
+        if (Random.value > 0.30f)
+            return;
+
+        GameAudioManager.ReactionClipType[] goodClips =
+        {
+            GameAudioManager.ReactionClipType.Joyful,
+            GameAudioManager.ReactionClipType.Whistle,
+            GameAudioManager.ReactionClipType.Wonderment
+        };
+
+        GameAudioManager.ReactionClipType chosen = goodClips[Random.Range(0, goodClips.Length)];
+        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
+        RpcPlayPlayerReaction(player.netIdentity, (int)chosen, actualDelay);
+    }
+
+    [Server]
+    public void TryTriggerBadReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null)
+            return;
+
+        if (Random.value > 0.33f)
+            return;
+
+        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
+        RpcPlayPlayerReaction(
+            player.netIdentity,
+            (int)GameAudioManager.ReactionClipType.Disappointment,
+            actualDelay);
+    }
+
+    [Server]
+    public void TryTriggerOtherPlayerScoff(Player failedPlayer, float delay = 0.5f)
+    {
+        if (failedPlayer == null || _players.Count <= 1)
+            return;
+
+        if (Random.value > 0.33f)
+            return;
+
+        List<Player> otherPlayers = _players
+            .Where(p => p != null && p != failedPlayer && p.netIdentity != null)
+            .ToList();
+
+        if (otherPlayers.Count == 0)
+            return;
+
+        Player scoffer = otherPlayers[Random.Range(0, otherPlayers.Count)];
+        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
+        RpcPlayPlayerReaction(
+            scoffer.netIdentity,
+            (int)GameAudioManager.ReactionClipType.Scoff,
+            actualDelay);
+    }
+
+    private void UnusedMarker()
+    {
+    }
+
+    public override void OnStopClient()
+    {
+        GameAudioManager.Instance?.StopAllMusic();
+        base.OnStopClient();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            GameAudioManager.Instance?.StopAllMusic();
+            Instance = null;
+        }
     }
 
     public override void OnStartServer()
@@ -111,6 +339,9 @@ public class GameMaster : NetworkBehaviour
 
         selectedAttack = null;
         selectedTarget = null;
+        selectedTargetIdentity = null;
+        turnStartTime = Time.time;
+        lastTurnPressure = false;
 
         currentPhase = GamePhase.Wait;
 
@@ -430,6 +661,14 @@ public class GameMaster : NetworkBehaviour
             return;
         }
 
+        InitializeMatch(
+            players);
+    }
+
+    [Server]
+    private void InitializeMatch(
+        List<Player> players)
+    {
         List<int> accessoryPool =
             new List<int>
             {
@@ -527,20 +766,40 @@ public class GameMaster : NetworkBehaviour
         currentPlayerIn =
             playerIndex;
 
+        TurnNumber++;
+        GameLog.Turn = TurnNumber;
+
+        GameLog.Event(
+            LogCat.Turn,
+            $"TURN {TurnNumber} BEGIN: current = " +
+            GameLog.P(_players[playerIndex]));
+
         selectedAttack = null;
         selectedTarget = null;
+        selectedTargetIdentity = null;
+        turnStartTime = Time.time;
+        lastTurnPressure = false;
 
         SetGamePhase(
             GamePhase.Attack);
 
         _players[currentPlayerIn].OnTurnStart();
+        RpcOnGameStarted();
+        if (idleAudioRoutine == null)
+            idleAudioRoutine = StartCoroutine(IdleAudioRoutine());
     }
 
     [Server]
-    public void EndTurn()
+    public void EndTurn(
+        [System.Runtime.CompilerServices.CallerMemberName] string caller = "",
+        [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
     {
         if (!gameStarted)
             return;
+
+        GameLog.Event(
+            LogCat.Turn,
+            $"TURN {TurnNumber} END requested by {caller}:{line}");
 
         if (_players.Count == 0)
             return;
@@ -556,6 +815,9 @@ public class GameMaster : NetworkBehaviour
 
         selectedAttack = null;
         selectedTarget = null;
+        selectedTargetIdentity = null;
+        turnStartTime = Time.time;
+        lastTurnPressure = false;
 
         _players[currentPlayerIn].OnTurnEnd();
 
@@ -653,6 +915,7 @@ public class GameMaster : NetworkBehaviour
             return false;
 
         selectedTarget = player;
+        selectedTargetIdentity = player != null ? player.netIdentity : null;
 
         SetGamePhase(
             GamePhase.Defense);
@@ -773,6 +1036,19 @@ public class GameMaster : NetworkBehaviour
         int index,
         NetworkConnectionToClient sender)
     {
+        if (sender == null || sender.identity == null)
+            return false;
+
+        Player requester = sender.identity.GetComponent<Player>();
+        return TryStealAccesory(target, index, requester);
+    }
+
+    [Server]
+    public bool TryStealAccesory(
+        Player target,
+        int index,
+        Player requester)
+    {
         if (!gameStarted)
             return false;
 
@@ -782,7 +1058,7 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
-        if (sender == null)
+        if (requester == null)
             return false;
 
         if (selectedTarget == null ||
@@ -807,9 +1083,7 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
-        if (thief.netIdentity == null ||
-            thief.netIdentity.connectionToClient !=
-                sender)
+        if (thief != requester)
         {
             return false;
         }
@@ -835,9 +1109,140 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
+        GameLog.Event(
+            LogCat.Steal,
+            $"STEAL OK: accessory {index} " +
+            $"{GameLog.P(target)} -> {GameLog.P(thief)}");
+
+        TryTriggerGoodReaction(thief, 0.5f);
+        TryTriggerBadReaction(target, 0.65f);
         EndTurn();
 
         return true;
+    }
+
+    // =========================================================
+    // TEST SCENE API
+    // =========================================================
+
+    /// <summary>
+    /// Starts a match with exactly these players (humans and bots),
+    /// ignoring network connections. Used by the test scene.
+    /// </summary>
+    [Server]
+    public bool StartTestGame(
+        IList<Player> players)
+    {
+        if (gameStarted)
+        {
+            GameLog.Warn(
+                LogCat.Match,
+                "StartTestGame: a match is already running.");
+
+            return false;
+        }
+
+        if (players == null ||
+            players.Count == 0 ||
+            players.Count > 5 ||
+            players.Any(p => p == null))
+        {
+            GameLog.Warn(
+                LogCat.Match,
+                "StartTestGame: need 1..5 valid players.");
+
+            return false;
+        }
+
+        if (spawnpointCalculator == null)
+        {
+            GameLog.Error(
+                LogCat.Match,
+                "StartTestGame: SpawnpointCalculator missing.");
+
+            return false;
+        }
+
+        spawnpointCalculator.CalculateSpawnPoints(
+            players.Count);
+
+        if (spawnpointCalculator.SpawnPoints.Count <
+            players.Count)
+        {
+            GameLog.Error(
+                LogCat.Match,
+                "StartTestGame: not enough spawn points.");
+
+            return false;
+        }
+
+        startupCancelled = false;
+
+        InitializeMatch(
+            new List<Player>(players));
+
+        return gameStarted;
+    }
+
+    /// <summary>Stops the match and destroys all cards.</summary>
+    [Server]
+    public void ResetMatch()
+    {
+        GameLog.Event(
+            LogCat.Match,
+            "RESET MATCH");
+
+        if (idleAudioRoutine != null)
+        {
+            StopCoroutine(idleAudioRoutine);
+            idleAudioRoutine = null;
+        }
+
+        if (AttackSequence.Instance != null)
+            AttackSequence.Instance.ServerForceReset();
+
+        foreach (Card card
+                 in FindObjectsByType<Card>())
+        {
+            if (card != null)
+                NetworkServer.Destroy(card.gameObject);
+        }
+
+        foreach (Player player in _players)
+        {
+            if (player != null)
+                player.OnTurnEnd();
+        }
+
+        _players.Clear();
+
+        gameStarted = false;
+        currentPlayerIn = -1;
+
+        selectedAttack = null;
+        selectedTarget = null;
+        selectedTargetIdentity = null;
+        turnStartTime = Time.time;
+        lastTurnPressure = false;
+
+        TurnNumber = 0;
+        GameLog.Turn = 0;
+
+        SetGamePhase(
+            GamePhase.Wait);
+    }
+
+    /// <summary>Test only: jump to any phase.</summary>
+    [Server]
+    public void DebugForcePhase(
+        GamePhase phase)
+    {
+        GameLog.Warn(
+            LogCat.Test,
+            $"DebugForcePhase -> {phase}");
+
+        SetGamePhase(
+            phase);
     }
 
     [Server]
@@ -864,6 +1269,9 @@ public class GameMaster : NetworkBehaviour
             loadTimeout);
 
         timeoutRoutine = null;
+
+        if (HoldStart)
+            yield break;
 
         if (gameStarted ||
             startupCancelled)
@@ -944,5 +1352,8 @@ public class GameMaster : NetworkBehaviour
     {
         selectedAttack = null;
         selectedTarget = null;
+        selectedTargetIdentity = null;
+        turnStartTime = Time.time;
+        lastTurnPressure = false;
     }
 }

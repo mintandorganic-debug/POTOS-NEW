@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour, IAttackSelectionContext
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext
 {
     public enum GamePhase
     {
@@ -46,6 +46,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext
         _players;
 
     private AttackSelection selection;
+    private AccessoryTheft theft;
 
     private bool gameStarted;
 
@@ -148,6 +149,11 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext
         selection =
             new AttackSelection(
                 this);
+
+        theft =
+            new AccessoryTheft(
+                this,
+                selection);
 
         currentPhase = GamePhase.Wait;
 
@@ -418,58 +424,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext
     [Server]
     public bool BeginStealPhase()
     {
-        GameLog.Write(
-            "GameMaster",
-            $"BeginStealPhase phase={currentPhase} selectedAttack={(selection.Attack != null && selection.Attack.Data != null ? selection.Attack.Data.name : "NULL")} selectedTarget={(selection.Target != null ? selection.Target.netId.ToString() : "NULL")}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "BeginStealPhase rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"BeginStealPhase rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (selection.Attack == null ||
-            selection.Target == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"BeginStealPhase rejected: selectedAttack or selectedTarget is null selectedAttackNull={selection.Attack == null} selectedTargetNull={selection.Target == null}");
-
-            return false;
-        }
-
-        if (selection.Attack.Data == null ||
-            selection.Attack.Data.CardClass !=
-                Card.CardClass.AttackSteal)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"BeginStealPhase rejected: selected attack is not a steal card dataNull={selection.Attack.Data == null}");
-
-            return false;
-        }
-
-        SetGamePhase(
-            GamePhase.Steal);
-
-        GameLog.Write(
-            "GameMaster",
-            "BeginStealPhase accepted");
-
-        return true;
+        return theft.BeginStealPhase();
     }
 
     [Server]
@@ -478,125 +433,10 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext
         int index,
         NetworkConnectionToClient sender)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"StealAccesory target={(target != null ? target.netId.ToString() : "NULL")} index={index} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} phase={currentPhase}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "StealAccesory rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.Steal)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (sender == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "StealAccesory rejected: sender is null");
-
-            return false;
-        }
-
-        if (selection.Target == null ||
-            target == null ||
-            target != selection.Target)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: target is not the selected target selectedTarget={(selection.Target != null ? selection.Target.netId.ToString() : "NULL")} target={(target != null ? target.netId.ToString() : "NULL")}");
-
-            return false;
-        }
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: invalid currentPlayerIn {currentPlayerIn} players={_players.Count}");
-
-            return false;
-        }
-
-        Player thief =
-            _players[currentPlayerIn];
-
-        if (thief == null ||
-            thief == target)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: invalid thief thiefNull={thief == null} thiefIsTarget={thief == target}");
-
-            return false;
-        }
-
-        if (thief.netIdentity == null ||
-            thief.netIdentity.connectionToClient !=
-                sender)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: sender is not the thief thief={thief.netId} senderConn={sender.connectionId}");
-
-            return false;
-        }
-
-        if (!target.HasAccessory(index))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: target has no accessory index={index} target={target.netId}");
-
-            return false;
-        }
-
-        if (!target.SetAccesory(
-                index,
-                false))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: could not remove accessory from target index={index} target={target.netId}");
-
-            return false;
-        }
-
-        if (!thief.SetAccesory(
-                index,
-                true))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StealAccesory rejected: could not give accessory to thief index={index} thief={thief.netId}, restoring target accessory");
-
-            target.SetAccesory(
-                index,
-                true);
-
-            return false;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"StealAccesory accessory stolen index={index} from={target.netId} to={thief.netId}, ending turn");
-
-        EndTurn();
-
-        return true;
+        return theft.StealAccesory(
+            target,
+            index,
+            sender);
     }
 
     [Server]

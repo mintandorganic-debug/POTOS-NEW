@@ -39,6 +39,34 @@ public static class DebugDeal
         return result;
     }
 
+    public static int HostFirstIndex(
+        IReadOnlyList<Player> players)
+    {
+        if (!Enabled ||
+            players == null ||
+            NetworkServer.localConnection == null)
+        {
+            return -1;
+        }
+
+        for (int i = 0;
+             i < players.Count;
+             i++)
+        {
+            if (players[i] != null &&
+                players[i].connectionToClient == NetworkServer.localConnection)
+            {
+                GameLog.Write(
+                    "DebugDeal",
+                    $"HostFirstIndex host player index={i} player={players[i].netId}");
+
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public static void StyleAccessories(
         IReadOnlyList<GameObject> accessories)
     {

@@ -32,6 +32,9 @@ public class StealableObject : InteractableObject
 
     public override void Interact()
     {
+        DebugOverlay.LastAction =
+            $"Interact {name} owner={(owner != null ? owner.netId.ToString() : "NULL")} idx={accesoryIndex} phase={(GameMaster.Instance != null ? GameMaster.Instance.CurrentPhase.ToString() : "-")}";
+
         GameLog.Write(
             "StealableObject",
             $"Interact object={name} owner={(owner != null ? owner.name : "NULL")} accessoryIndex={accesoryIndex} phase={(GameMaster.Instance != null ? GameMaster.Instance.CurrentPhase.ToString() : "NULL")}");
@@ -58,6 +61,9 @@ public class StealableObject : InteractableObject
 
     public override void OnLookEnter()
     {
+        DebugOverlay.LookTarget =
+            $"{name} owner={(owner != null ? owner.netId.ToString() : "NULL")} idx={accesoryIndex}";
+
         GameLog.Write(
             "StealableObject",
             $"OnLookEnter object={name} phase={(GameMaster.Instance != null ? GameMaster.Instance.CurrentPhase.ToString() : "NULL")}");
@@ -94,6 +100,8 @@ public class StealableObject : InteractableObject
 
     public override void OnLookExit()
     {
+        DebugOverlay.LookTarget = "-";
+
         GameLog.Write(
             "StealableObject",
             $"OnLookExit object={name}");

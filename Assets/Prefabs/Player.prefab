@@ -1095,8 +1095,8 @@ MonoBehaviour:
   cameraLockSpeed: 10
   sensitivity: 0.2
   maxYaw: 43
-  minPitch: 10
-  maxPitch: 50
+  minPitch: 2
+  maxPitch: 58
   neckSettings:
     yawAxis: 1
     pitchAxis: 0

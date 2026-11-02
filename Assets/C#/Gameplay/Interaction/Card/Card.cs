@@ -299,7 +299,39 @@ public class Card : InteractableObject
     }
 
     [Server]
-    public void RandomData()
+    public void SetData(
+        int index)
+    {
+        GameLog.Write(
+            "Card",
+            $"SetData netId={netId} index={index} types={(avalaibleCardTypes == null ? -1 : avalaibleCardTypes.Count)}");
+
+        if (avalaibleCardTypes == null ||
+            index < 0 ||
+            index >= avalaibleCardTypes.Count ||
+            avalaibleCardTypes[index] == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"SetData failed netId={netId}: invalid index {index}");
+
+            return;
+        }
+
+        cardDataIndex = index;
+
+        ApplyCardData();
+
+        if (GameMaster.Instance != null)
+        {
+            OnGamePhaseChanged(
+                GameMaster.Instance.CurrentPhase);
+        }
+    }
+
+    [Server]
+    public void RandomData(
+        int excludedIndex = -1)
     {
         GameLog.Write(
             "Card",
@@ -319,10 +351,22 @@ public class Card : InteractableObject
             return;
         }
 
+        bool exclude =
+            excludedIndex >= 0 &&
+            avalaibleCardTypes.Count > 1;
+
         int index =
             Random.Range(
                 0,
-                avalaibleCardTypes.Count);
+                exclude
+                    ? avalaibleCardTypes.Count - 1
+                    : avalaibleCardTypes.Count);
+
+        if (exclude &&
+            index >= excludedIndex)
+        {
+            index++;
+        }
 
         if (avalaibleCardTypes[index] == null)
         {

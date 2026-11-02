@@ -119,6 +119,9 @@ public class Player : NetworkBehaviour
 
         ApplyNickname();
 
+        DebugDeal.StyleAccessories(
+            accesories);
+
         ApplyAccessoryMask(
             accessoryMask);
 
@@ -739,7 +742,17 @@ public class Player : NetworkBehaviour
                 continue;
             }
 
-            card.RandomData();
+            if (DebugDeal.IsColtPlayer(this))
+            {
+                card.SetData(
+                    DebugDeal.ColtIndex);
+            }
+            else
+            {
+                card.RandomData(
+                    DebugDeal.ExcludedIndex);
+            }
+
             card.owner = this;
 
             GameLog.Write(

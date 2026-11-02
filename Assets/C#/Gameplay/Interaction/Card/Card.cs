@@ -1026,7 +1026,7 @@ public class Card : InteractableObject
             return false;
         }
 
-        if (!TryGetOwner(
+        if (!GetOwner(
                 out Player player))
         {
             GameLog.Write(
@@ -1063,7 +1063,7 @@ public class Card : InteractableObject
         }
     }
 
-    public bool TryGetOwner(
+    public bool GetOwner(
         out Player player)
     {
         player = null;
@@ -1072,7 +1072,7 @@ public class Card : InteractableObject
         {
             GameLog.Write(
                 "Card",
-                $"TryGetOwner=false netId={netId}: ownerNetId is 0");
+                $"GetOwner=false netId={netId}: ownerNetId is 0");
 
             return false;
         }
@@ -1083,7 +1083,7 @@ public class Card : InteractableObject
         {
             GameLog.Write(
                 "Card",
-                $"TryGetOwner=false netId={netId}: owner {ownerNetId} not spawned on client");
+                $"GetOwner=false netId={netId}: owner {ownerNetId} not spawned on client");
 
             return false;
         }
@@ -1093,7 +1093,7 @@ public class Card : InteractableObject
 
         GameLog.Write(
             "Card",
-            $"TryGetOwner netId={netId} owner={ownerNetId} player={(player != null ? player.name : "NULL")}");
+            $"GetOwner netId={netId} owner={ownerNetId} player={(player != null ? player.name : "NULL")}");
 
         return player != null;
     }

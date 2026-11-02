@@ -49,7 +49,7 @@ public class StealableObject : InteractableObject
             "StealableObject",
             $"Interact object={name}: stealing accessoryIndex={accesoryIndex} from owner={(owner != null ? owner.name : "NULL")}");
 
-        PlayerActions.Local.TryStealAccessory(owner, accesoryIndex);
+        PlayerActions.Local.StealAccessory(owner, accesoryIndex);
     }
 
     // =========================================================

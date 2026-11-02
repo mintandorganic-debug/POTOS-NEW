@@ -120,7 +120,7 @@ public class LobbyMenu : MonoBehaviour
         if (NetworkServer.active)
         {
             NetworkClient.localPlayer.GetComponent<LobbyPlayer>().ToggleReady(true);
-            if (((NetManager)NetworkManager.singleton).TryStartGame())
+            if (((NetManager)NetworkManager.singleton).StartGame())
             {
                 GameLog.Write(
                     "LobbyMenu",

@@ -172,7 +172,7 @@ public class CardInteraction : MonoBehaviour
             "CardInteraction",
             $"FocusCard card={card.netId}");
 
-        if (!card.TryGetOwner(
+        if (!card.GetOwner(
                 out Player player))
         {
             GameLog.Write(
@@ -260,7 +260,7 @@ public class CardInteraction : MonoBehaviour
             return;
         }
 
-        if (!card.TryGetOwner(
+        if (!card.GetOwner(
                 out Player player))
         {
             GameLog.Write(

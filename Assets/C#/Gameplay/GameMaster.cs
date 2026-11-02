@@ -40,9 +40,6 @@ public class GameMaster : NetworkBehaviour
     public Player SelectedTarget =>
         selectedTarget;
 
-    private readonly HashSet<int> expectedConnections = new();
-    private readonly HashSet<int> loadedConnections = new();
-
     private readonly List<Player> _players = new();
 
     public IReadOnlyList<Player> Players =>
@@ -52,10 +49,9 @@ public class GameMaster : NetworkBehaviour
     private Player selectedTarget;
 
     private bool gameStarted;
-    private bool startupCancelled;
 
-    private Coroutine timeoutRoutine;
-    private Coroutine startupRoutine;
+    private MatchStartup startup;
+    private MatchSetup setup;
 
     private void Awake()
     {
@@ -145,12 +141,9 @@ public class GameMaster : NetworkBehaviour
 
         base.OnStartServer();
 
-        expectedConnections.Clear();
-        loadedConnections.Clear();
         _players.Clear();
 
         gameStarted = false;
-        startupCancelled = false;
         currentPlayerIn = -1;
 
         selectedAttack = null;
@@ -158,74 +151,22 @@ public class GameMaster : NetworkBehaviour
 
         currentPhase = GamePhase.Wait;
 
-        GameLog.Write(
-            "GameMaster",
-            "OnStartServer state reset gameStarted=false startupCancelled=false currentPlayerIn=-1 phase=Wait, starting InitializeLobbyConnections");
+        startup =
+            new MatchStartup(
+                this,
+                loadTimeout,
+                () => gameStarted,
+                StartGame);
 
-        StartCoroutine(
-            InitializeLobbyConnections());
-    }
-
-    [Server]
-    private IEnumerator InitializeLobbyConnections()
-    {
-        GameLog.Write(
-            "GameMaster",
-            "InitializeLobbyConnections start");
-
-        yield return null;
-
-        while (!gameStarted &&
-               !startupCancelled)
-        {
-            CaptureLobbyConnections();
-
-            if (expectedConnections.Count > 0)
-                break;
-
-            yield return null;
-        }
+        setup =
+            new MatchSetup(
+                spawnpointCalculator);
 
         GameLog.Write(
             "GameMaster",
-            $"InitializeLobbyConnections lobby captured expected={expectedConnections.Count} gameStarted={gameStarted} startupCancelled={startupCancelled}");
+            "OnStartServer state reset gameStarted=false currentPlayerIn=-1 phase=Wait, MatchStartup created, starting it");
 
-        timeoutRoutine =
-            StartCoroutine(
-                LoadTimeoutRoutine());
-
-        GameLog.Write(
-            "GameMaster",
-            $"InitializeLobbyConnections load timeout timer started loadTimeout={loadTimeout}");
-
-        TryStartGame();
-
-        GameLog.Write(
-            "GameMaster",
-            "InitializeLobbyConnections end");
-    }
-
-    [Server]
-    private void CaptureLobbyConnections()
-    {
-        expectedConnections.Clear();
-
-        foreach (NetworkConnectionToClient conn
-                 in NetworkServer.connections.Values)
-        {
-            if (conn == null)
-                continue;
-
-            expectedConnections.Add(
-                conn.connectionId);
-        }
-
-        if (expectedConnections.Count > 0)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"CaptureLobbyConnections expected={expectedConnections.Count} ids={string.Join(",", expectedConnections)}");
-        }
+        startup.Begin();
     }
 
     [Server]
@@ -234,381 +175,12 @@ public class GameMaster : NetworkBehaviour
     {
         GameLog.Write(
             "GameMaster",
-            $"PlayerLoaded conn={(conn != null ? conn.connectionId.ToString() : "NULL")} startupCancelled={startupCancelled} gameStarted={gameStarted} loaded={loadedConnections.Count} expected={expectedConnections.Count}");
+            $"PlayerLoaded forwarded to MatchStartup conn={(conn != null ? conn.connectionId.ToString() : "NULL")} startupExists={startup != null}");
 
-        if (startupCancelled ||
-            gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"PlayerLoaded ignored: startupCancelled={startupCancelled} gameStarted={gameStarted}");
-
-            return;
-        }
-
-        if (conn == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "PlayerLoaded rejected: connection is null");
-
-            Debug.LogError(
-                "GameMaster.PlayerLoaded: connection is null.");
-
-            return;
-        }
-
-        int connectionId =
-            conn.connectionId;
-
-        if (!expectedConnections.Contains(
-                connectionId))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"PlayerLoaded rejected: connection {connectionId} is not part of the captured lobby");
-
-            Debug.LogWarning(
-                $"GameMaster.PlayerLoaded: connection {connectionId} is not part of the captured lobby.");
-
-            return;
-        }
-
-        loadedConnections.Add(
-            connectionId);
-
-        GameLog.Write(
-            "GameMaster",
-            $"PlayerLoaded connection {connectionId} marked loaded loaded={loadedConnections.Count} expected={expectedConnections.Count}");
-
-        TryStartGame();
+        startup?.PlayerLoaded(
+            conn);
     }
 
-    [Server]
-    private void TryStartGame()
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"TryStartGame gameStarted={gameStarted} startupCancelled={startupCancelled} expected={expectedConnections.Count} loaded={loadedConnections.Count} startupRoutineRunning={startupRoutine != null}");
-
-        if (gameStarted ||
-            startupCancelled)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "TryStartGame skipped: game already started or startup cancelled");
-
-            return;
-        }
-
-        if (expectedConnections.Count == 0)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "TryStartGame skipped: no expected connections");
-
-            return;
-        }
-
-        if (loadedConnections.Count !=
-            expectedConnections.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"TryStartGame waiting: loaded={loadedConnections.Count} expected={expectedConnections.Count}");
-
-            return;
-        }
-
-        foreach (int connectionId
-                 in expectedConnections)
-        {
-            if (!loadedConnections.Contains(
-                    connectionId))
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"TryStartGame waiting: connection {connectionId} not loaded");
-
-                return;
-            }
-
-            if (!NetworkServer.connections.TryGetValue(
-                    connectionId,
-                    out NetworkConnectionToClient conn))
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"TryStartGame waiting: connection {connectionId} not found in NetworkServer.connections");
-
-                return;
-            }
-
-            if (conn == null ||
-                conn.identity == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"TryStartGame waiting: connection {connectionId} has no identity yet");
-
-                return;
-            }
-
-            if (!conn.identity.TryGetComponent<Player>(
-                    out Player player))
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"TryStartGame waiting: connection {connectionId} identity has no Player component");
-
-                return;
-            }
-
-            if (player == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"TryStartGame waiting: connection {connectionId} Player is null");
-
-                return;
-            }
-        }
-
-        if (startupRoutine != null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "TryStartGame skipped: startupRoutine already running");
-
-            return;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            "TryStartGame all players ready, starting StartGameRoutine");
-
-        startupRoutine =
-            StartCoroutine(
-                StartGameRoutine());
-    }
-
-    [Server]
-    private IEnumerator StartGameRoutine()
-    {
-        GameLog.Write(
-            "GameMaster",
-            "StartGameRoutine start");
-
-        startupRoutine = null;
-
-        yield return null;
-
-        if (gameStarted ||
-            startupCancelled)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StartGameRoutine end: aborted gameStarted={gameStarted} startupCancelled={startupCancelled}");
-
-            yield break;
-        }
-
-        List<Player> players =
-            BuildPlayerList();
-
-        if (players == null ||
-            players.Count == 0)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StartGameRoutine end: no players built playersNull={players == null}");
-
-            yield break;
-        }
-
-        if (players.Count !=
-            expectedConnections.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StartGameRoutine end: player count changed players={players.Count} expected={expectedConnections.Count}");
-
-            Debug.LogWarning(
-                "GameMaster: player count changed before startup.");
-
-            yield break;
-        }
-
-        if (!AreAllExpectedPlayersPresent(
-                players))
-        {
-            GameLog.Write(
-                "GameMaster",
-                "StartGameRoutine end: not all expected players present");
-
-            yield break;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"StartGameRoutine calling StartGame players={players.Count}");
-
-        StartGame(
-            players);
-
-        GameLog.Write(
-            "GameMaster",
-            "StartGameRoutine end");
-    }
-
-    [Server]
-    private List<Player> BuildPlayerList()
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"BuildPlayerList expected={expectedConnections.Count}");
-
-        List<Player> players =
-            new List<Player>();
-
-        foreach (int connectionId
-                 in expectedConnections.OrderBy(
-                     id => id))
-        {
-            if (!NetworkServer.connections.TryGetValue(
-                    connectionId,
-                    out NetworkConnectionToClient conn))
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"BuildPlayerList null: connection {connectionId} not found");
-
-                return null;
-            }
-
-            if (conn == null ||
-                conn.identity == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"BuildPlayerList null: connection {connectionId} has no identity");
-
-                return null;
-            }
-
-            if (!conn.identity.TryGetComponent<Player>(
-                    out Player player))
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"BuildPlayerList null: connection {connectionId} identity has no Player");
-
-                return null;
-            }
-
-            if (player == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"BuildPlayerList null: connection {connectionId} Player is null");
-
-                return null;
-            }
-
-            players.Add(player);
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"BuildPlayerList built players={players.Count}");
-
-        return players;
-    }
-
-    [Server]
-    private bool AreAllExpectedPlayersPresent(
-        List<Player> players)
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"AreAllExpectedPlayersPresent players={(players != null ? players.Count.ToString() : "NULL")} expected={expectedConnections.Count}");
-
-        if (players == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "AreAllExpectedPlayersPresent false: players is null");
-
-            return false;
-        }
-
-        if (players.Count !=
-            expectedConnections.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"AreAllExpectedPlayersPresent false: count mismatch players={players.Count} expected={expectedConnections.Count}");
-
-            return false;
-        }
-
-        if (players.Any(
-                player => player == null))
-        {
-            GameLog.Write(
-                "GameMaster",
-                "AreAllExpectedPlayersPresent false: list contains a null player");
-
-            return false;
-        }
-
-        if (players.Distinct().Count() !=
-            players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "AreAllExpectedPlayersPresent false: duplicate players in list");
-
-            return false;
-        }
-
-        HashSet<int> playerConnections =
-            new HashSet<int>();
-
-        foreach (Player player in players)
-        {
-            if (player.netIdentity == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"AreAllExpectedPlayersPresent false: player {player.name} has no netIdentity");
-
-                return false;
-            }
-
-            NetworkConnectionToClient conn =
-                player.netIdentity.connectionToClient;
-
-            if (conn == null)
-            {
-                GameLog.Write(
-                    "GameMaster",
-                    $"AreAllExpectedPlayersPresent false: player {player.netId} has no connectionToClient");
-
-                return false;
-            }
-
-            playerConnections.Add(
-                conn.connectionId);
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"AreAllExpectedPlayersPresent checking connection sets playerConnections={string.Join(",", playerConnections)} expected={string.Join(",", expectedConnections)}");
-
-        return playerConnections.SetEquals(
-            expectedConnections);
-    }
 
     [Server]
     private void StartGame(
@@ -616,10 +188,10 @@ public class GameMaster : NetworkBehaviour
     {
         GameLog.Write(
             "GameMaster",
-            $"StartGame players={(players != null ? players.Count.ToString() : "NULL")} gameStarted={gameStarted} startupCancelled={startupCancelled}");
+            $"StartGame players={(players != null ? players.Count.ToString() : "NULL")} gameStarted={gameStarted} startupCancelled={startup.IsCancelled}");
 
         if (gameStarted ||
-            startupCancelled)
+            startup.IsCancelled)
         {
             GameLog.Write(
                 "GameMaster",
@@ -635,7 +207,7 @@ public class GameMaster : NetworkBehaviour
                 "GameMaster",
                 "StartGame failed: no players found");
 
-            CancelStartup(
+            startup.Cancel(
                 "No players found.");
 
             return;
@@ -647,13 +219,13 @@ public class GameMaster : NetworkBehaviour
                 "GameMaster",
                 $"StartGame failed: too many players count={players.Count}");
 
-            CancelStartup(
+            startup.Cancel(
                 "More than 5 players were captured.");
 
             return;
         }
 
-        if (!AreAllExpectedPlayersPresent(
+        if (!startup.AreAllExpectedPlayersPresent(
                 players))
         {
             GameLog.Write(
@@ -663,57 +235,18 @@ public class GameMaster : NetworkBehaviour
             return;
         }
 
-        if (spawnpointCalculator == null)
+        string setupFailure =
+            setup.Prepare(
+                players.Count);
+
+        if (setupFailure != null)
         {
             GameLog.Write(
                 "GameMaster",
-                "StartGame failed: spawnpointCalculator is null");
+                $"StartGame failed: setup preparation reason={setupFailure}");
 
-            CancelStartup(
-                "SpawnpointCalculator missing.");
-
-            return;
-        }
-
-        spawnpointCalculator.CalculateSpawnPoints(
-            players.Count);
-
-        GameLog.Write(
-            "GameMaster",
-            $"StartGame spawn points calculated spawnPoints={spawnpointCalculator.SpawnPoints.Count} players={players.Count}");
-
-        if (spawnpointCalculator.SpawnPoints.Count <
-            players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "StartGame failed: not enough spawn points");
-
-            CancelStartup(
-                "Not enough spawn points.");
-
-            return;
-        }
-
-        List<int> accessoryPool =
-            new List<int>
-            {
-                0,
-                1,
-                2,
-                3,
-                4
-            };
-
-        if (accessoryPool.Count <
-            players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"StartGame failed: not enough accessories pool={accessoryPool.Count} players={players.Count}");
-
-            CancelStartup(
-                "Not enough accessories for all players.");
+            startup.Cancel(
+                setupFailure);
 
             return;
         }
@@ -727,65 +260,14 @@ public class GameMaster : NetworkBehaviour
             "GameMaster",
             $"StartGame gameStarted=true players={_players.Count}");
 
-        if (timeoutRoutine != null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "StartGame stopping load timeout timer");
+        GameLog.Write(
+            "GameMaster",
+            "StartGame stopping load timeout timer");
 
-            StopCoroutine(
-                timeoutRoutine);
+        startup.StopLoadTimeout();
 
-            timeoutRoutine = null;
-        }
-
-        for (int i = 0;
-             i < _players.Count;
-             i++)
-        {
-            Player player =
-                _players[i];
-
-            Pose pose =
-                spawnpointCalculator.SpawnPoints[i];
-
-            GameLog.Write(
-                "GameMaster",
-                $"StartGame setting up seat={i} player={(player != null ? player.netId.ToString() : "NULL")} position={pose.position}");
-
-            player.SetSeat(i);
-
-            player.SummonCards();
-
-            int accessoryIndex =
-                Random.Range(
-                    0,
-                    accessoryPool.Count);
-
-            GameLog.Write(
-                "GameMaster",
-                $"StartGame seat={i} accessoryIndex={accessoryIndex} poolCount={accessoryPool.Count}");
-
-            for (int j = 0;
-                 j < 5;
-                 j++)
-            {
-                player.SetAccesory(
-                    j,
-                    false);
-            }
-
-            player.SetAccesory(
-                accessoryIndex,
-                true);
-
-            accessoryPool.Remove(
-                accessoryIndex);
-
-            player.transform.SetPositionAndRotation(
-                pose.position,
-                pose.rotation);
-        }
+        setup.SeatPlayers(
+            _players);
 
         GameLog.Write(
             "GameMaster",
@@ -1285,20 +767,20 @@ public class GameMaster : NetworkBehaviour
     }
 
     [Server]
-    public bool TryStealAccesory(
+    public bool StealAccesory(
         Player target,
         int index,
         NetworkConnectionToClient sender)
     {
         GameLog.Write(
             "GameMaster",
-            $"TryStealAccesory target={(target != null ? target.netId.ToString() : "NULL")} index={index} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} phase={currentPhase}");
+            $"StealAccesory target={(target != null ? target.netId.ToString() : "NULL")} index={index} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} phase={currentPhase}");
 
         if (!gameStarted)
         {
             GameLog.Write(
                 "GameMaster",
-                "TryStealAccesory rejected: game not started");
+                "StealAccesory rejected: game not started");
 
             return false;
         }
@@ -1308,7 +790,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: wrong phase phase={currentPhase}");
+                $"StealAccesory rejected: wrong phase phase={currentPhase}");
 
             return false;
         }
@@ -1317,7 +799,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                "TryStealAccesory rejected: sender is null");
+                "StealAccesory rejected: sender is null");
 
             return false;
         }
@@ -1328,7 +810,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: target is not the selected target selectedTarget={(selectedTarget != null ? selectedTarget.netId.ToString() : "NULL")} target={(target != null ? target.netId.ToString() : "NULL")}");
+                $"StealAccesory rejected: target is not the selected target selectedTarget={(selectedTarget != null ? selectedTarget.netId.ToString() : "NULL")} target={(target != null ? target.netId.ToString() : "NULL")}");
 
             return false;
         }
@@ -1338,7 +820,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: invalid currentPlayerIn {currentPlayerIn} players={_players.Count}");
+                $"StealAccesory rejected: invalid currentPlayerIn {currentPlayerIn} players={_players.Count}");
 
             return false;
         }
@@ -1351,7 +833,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: invalid thief thiefNull={thief == null} thiefIsTarget={thief == target}");
+                $"StealAccesory rejected: invalid thief thiefNull={thief == null} thiefIsTarget={thief == target}");
 
             return false;
         }
@@ -1362,7 +844,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: sender is not the thief thief={thief.netId} senderConn={sender.connectionId}");
+                $"StealAccesory rejected: sender is not the thief thief={thief.netId} senderConn={sender.connectionId}");
 
             return false;
         }
@@ -1371,7 +853,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: target has no accessory index={index} target={target.netId}");
+                $"StealAccesory rejected: target has no accessory index={index} target={target.netId}");
 
             return false;
         }
@@ -1382,7 +864,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: could not remove accessory from target index={index} target={target.netId}");
+                $"StealAccesory rejected: could not remove accessory from target index={index} target={target.netId}");
 
             return false;
         }
@@ -1393,7 +875,7 @@ public class GameMaster : NetworkBehaviour
         {
             GameLog.Write(
                 "GameMaster",
-                $"TryStealAccesory rejected: could not give accessory to thief index={index} thief={thief.netId}, restoring target accessory");
+                $"StealAccesory rejected: could not give accessory to thief index={index} thief={thief.netId}, restoring target accessory");
 
             target.SetAccesory(
                 index,
@@ -1404,7 +886,7 @@ public class GameMaster : NetworkBehaviour
 
         GameLog.Write(
             "GameMaster",
-            $"TryStealAccesory accessory stolen index={index} from={target.netId} to={thief.netId}, ending turn");
+            $"StealAccesory accessory stolen index={index} from={target.netId} to={thief.netId}, ending turn");
 
         EndTurn();
 
@@ -1440,144 +922,6 @@ public class GameMaster : NetworkBehaviour
 
         return _players[currentPlayerIn] ==
                player;
-    }
-
-    [Server]
-    private IEnumerator LoadTimeoutRoutine()
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"LoadTimeoutRoutine start loadTimeout={loadTimeout}");
-
-        yield return new WaitForSeconds(
-            loadTimeout);
-
-        timeoutRoutine = null;
-
-        GameLog.Write(
-            "GameMaster",
-            $"LoadTimeoutRoutine timeout elapsed gameStarted={gameStarted} startupCancelled={startupCancelled} loaded={loadedConnections.Count} expected={expectedConnections.Count}");
-
-        if (gameStarted ||
-            startupCancelled)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "LoadTimeoutRoutine end: game already started or startup cancelled");
-
-            yield break;
-        }
-
-        List<int> missing =
-            expectedConnections
-                .Where(
-                    id => !loadedConnections.Contains(id))
-                .ToList();
-
-        if (missing.Count > 0)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"LoadTimeoutRoutine loading timeout, missing connections: {string.Join(", ", missing)}");
-
-            CancelStartup(
-                $"Loading timeout. Missing connections: {string.Join(", ", missing)}");
-
-            yield break;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            "LoadTimeoutRoutine all connections loaded, retrying TryStartGame");
-
-        TryStartGame();
-
-        yield return null;
-
-        if (!gameStarted &&
-            !startupCancelled)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "LoadTimeoutRoutine all players loaded but Player objects not ready");
-
-            CancelStartup(
-                "All players reported loaded, but their Player objects were not ready.");
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            "LoadTimeoutRoutine end");
-    }
-
-    [Server]
-    private void CancelStartup(
-        string reason)
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"CancelStartup reason={reason} alreadyCancelled={startupCancelled}");
-
-        if (startupCancelled)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "CancelStartup skipped: already cancelled");
-
-            return;
-        }
-
-        startupCancelled = true;
-
-        GameLog.Write(
-            "GameMaster",
-            "CancelStartup startupCancelled=true");
-
-        if (timeoutRoutine != null)
-        {
-            StopCoroutine(
-                timeoutRoutine);
-
-            timeoutRoutine = null;
-        }
-
-        if (startupRoutine != null)
-        {
-            StopCoroutine(
-                startupRoutine);
-
-            startupRoutine = null;
-        }
-
-        Debug.LogError(
-            $"Game startup cancelled: {reason}");
-
-        if (NetworkManager.singleton == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "CancelStartup: NetworkManager.singleton is null, nothing to stop");
-
-            return;
-        }
-
-        if (NetworkManager.singleton.mode ==
-            NetworkManagerMode.Host)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "CancelStartup stopping host");
-
-            NetworkManager.singleton.StopHost();
-        }
-        else
-        {
-            GameLog.Write(
-                "GameMaster",
-                "CancelStartup stopping server");
-
-            NetworkManager.singleton.StopServer();
-        }
     }
 
     [Server]

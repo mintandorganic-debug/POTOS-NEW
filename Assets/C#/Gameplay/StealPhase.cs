@@ -91,7 +91,7 @@ public class StealPhase
             "StealPhase",
             $"TakeCoins stealing amount={amount} victimCoins={victimBank.Coins} rainDuration={rainDuration}");
 
-        victimBank.TryStealCoinsTo(
+        victimBank.StealCoinsTo(
             attackerBank,
             amount,
             rainDuration);

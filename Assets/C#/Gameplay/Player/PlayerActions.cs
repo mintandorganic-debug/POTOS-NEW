@@ -32,19 +32,19 @@ public class PlayerActions : NetworkBehaviour
         base.OnStopLocalPlayer();
     }
 
-    public void TryStealAccessory(
+    public void StealAccessory(
         Player target,
         int index)
     {
         GameLog.Write(
             "PlayerActions",
-            $"TryStealAccessory netId={netId} target={(target != null ? target.name : "NULL")} index={index} isLocal={isLocalPlayer}");
+            $"StealAccessory netId={netId} target={(target != null ? target.name : "NULL")} index={index} isLocal={isLocalPlayer}");
 
         if (!isLocalPlayer)
         {
             GameLog.Write(
                 "PlayerActions",
-                $"TryStealAccessory skipped: not local player netId={netId}");
+                $"StealAccessory skipped: not local player netId={netId}");
 
             return;
         }
@@ -53,36 +53,36 @@ public class PlayerActions : NetworkBehaviour
         {
             GameLog.Write(
                 "PlayerActions",
-                $"TryStealAccessory skipped: target is NULL netId={netId} index={index}");
+                $"StealAccessory skipped: target is NULL netId={netId} index={index}");
 
             return;
         }
 
         GameLog.Write(
             "PlayerActions",
-            $"TryStealAccessory sending CmdTryStealAccessory netId={netId} targetPlayer={target.netId} index={index}");
+            $"StealAccessory sending CmdStealAccessory netId={netId} targetPlayer={target.netId} index={index}");
 
-        CmdTryStealAccessory(
+        CmdStealAccessory(
             target.netIdentity,
             index);
     }
 
     [Command]
-    private void CmdTryStealAccessory(
+    private void CmdStealAccessory(
         NetworkIdentity targetIdentity,
         int index,
         NetworkConnectionToClient sender = null)
     {
         GameLog.Write(
             "PlayerActions",
-            $"CmdTryStealAccessory netId={netId} targetIdentity={(targetIdentity != null ? targetIdentity.netId : 0)} index={index} sender={(sender != null ? sender.connectionId : -1)}");
+            $"CmdStealAccessory netId={netId} targetIdentity={(targetIdentity != null ? targetIdentity.netId : 0)} index={index} sender={(sender != null ? sender.connectionId : -1)}");
 
         if (targetIdentity == null ||
             sender == null)
         {
             GameLog.Write(
                 "PlayerActions",
-                $"CmdTryStealAccessory rejected: targetIdentity or sender is NULL netId={netId} index={index}");
+                $"CmdStealAccessory rejected: targetIdentity or sender is NULL netId={netId} index={index}");
 
             return;
         }
@@ -92,7 +92,7 @@ public class PlayerActions : NetworkBehaviour
         {
             GameLog.Write(
                 "PlayerActions",
-                $"CmdTryStealAccessory rejected: target has no Player component targetNetId={targetIdentity.netId} index={index}");
+                $"CmdStealAccessory rejected: target has no Player component targetNetId={targetIdentity.netId} index={index}");
 
             return;
         }
@@ -104,16 +104,16 @@ public class PlayerActions : NetworkBehaviour
         {
             GameLog.Write(
                 "PlayerActions",
-                $"CmdTryStealAccessory rejected: GameMaster is NULL netId={netId} index={index}");
+                $"CmdStealAccessory rejected: GameMaster is NULL netId={netId} index={index}");
 
             return;
         }
 
         GameLog.Write(
             "PlayerActions",
-            $"CmdTryStealAccessory forwarding to GameMaster.TryStealAccesory sender={sender.connectionId} targetPlayer={target.netId} index={index}");
+            $"CmdStealAccessory forwarding to GameMaster.StealAccesory sender={sender.connectionId} targetPlayer={target.netId} index={index}");
 
-        gameMaster.TryStealAccesory(
+        gameMaster.StealAccesory(
             target,
             index,
             sender);

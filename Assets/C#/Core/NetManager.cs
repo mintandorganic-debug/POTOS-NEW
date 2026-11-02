@@ -106,11 +106,11 @@ public class NetManager : NetworkRoomManager
     // =========================================================
 
     [Server]
-    public bool TryStartGame()
+    public bool StartGame()
     {
         GameLog.Write(
             "NetManager",
-            $"TryStartGame serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} connections={NetworkServer.connections.Count}");
+            $"StartGame serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} connections={NetworkServer.connections.Count}");
 
         var slots = roomSlots;
 
@@ -125,7 +125,7 @@ public class NetManager : NetworkRoomManager
         {
             GameLog.Write(
                 "NetManager",
-                $"TryStartGame refused serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} nullSlots={roomSlots.Count(p => p == null)} distinctSlots={roomSlots.Distinct().Count()} connections={NetworkServer.connections.Count} notReady={roomSlots.Count(p => p != null && !p.readyToBegin)}");
+                $"StartGame refused serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} nullSlots={roomSlots.Count(p => p == null)} distinctSlots={roomSlots.Distinct().Count()} connections={NetworkServer.connections.Count} notReady={roomSlots.Count(p => p != null && !p.readyToBegin)}");
 
             return false;
         }
@@ -135,7 +135,7 @@ public class NetManager : NetworkRoomManager
 
         GameLog.Write(
             "NetManager",
-            $"TryStartGame ServerChangeScene scene={GameplayScene} players={roomSlots.Count}");
+            $"StartGame ServerChangeScene scene={GameplayScene} players={roomSlots.Count}");
 
         ServerChangeScene(
             GameplayScene);

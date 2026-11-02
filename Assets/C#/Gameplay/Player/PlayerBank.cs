@@ -211,13 +211,13 @@ public class PlayerBank : NetworkBehaviour
     }
 
     [Server]
-    public bool TryTransferCoinsTo(
+    public bool TransferCoinsTo(
         PlayerBank recipient,
         int amount)
     {
         GameLog.Write(
             "PlayerBank",
-            $"TryTransferCoinsTo netId={netId} recipient={(recipient != null ? recipient.netId.ToString() : "NULL")} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")}");
+            $"TransferCoinsTo netId={netId} recipient={(recipient != null ? recipient.netId.ToString() : "NULL")} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")}");
 
         if (recipient == null ||
             recipient == this ||
@@ -227,13 +227,13 @@ public class PlayerBank : NetworkBehaviour
         {
             GameLog.Write(
                 "PlayerBank",
-                $"TryTransferCoinsTo rejected netId={netId} recipientNull={recipient == null} self={recipient == this} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")} max={MaxCoins}");
+                $"TransferCoinsTo rejected netId={netId} recipientNull={recipient == null} self={recipient == this} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")} max={MaxCoins}");
             return false;
         }
 
         GameLog.Write(
             "PlayerBank",
-            $"TryTransferCoinsTo applied netId={netId} recipient={recipient.netId} amount={amount} senderOld={coins} senderNew={coins - amount} recipientOld={recipient.coins} recipientNew={recipient.coins + amount}");
+            $"TransferCoinsTo applied netId={netId} recipient={recipient.netId} amount={amount} senderOld={coins} senderNew={coins - amount} recipientOld={recipient.coins} recipientNew={recipient.coins + amount}");
 
         coins -= amount;
         recipient.coins += amount;
@@ -242,14 +242,14 @@ public class PlayerBank : NetworkBehaviour
     }
 
     [Server]
-    public bool TryStealCoinsTo(
+    public bool StealCoinsTo(
         PlayerBank recipient,
         int amount,
         float duration)
     {
         GameLog.Write(
             "PlayerBank",
-            $"TryStealCoinsTo netId={netId} recipient={(recipient != null ? recipient.netId.ToString() : "NULL")} amount={amount} duration={duration} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")}");
+            $"StealCoinsTo netId={netId} recipient={(recipient != null ? recipient.netId.ToString() : "NULL")} amount={amount} duration={duration} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")}");
 
         if (recipient == null ||
             recipient == this ||
@@ -259,13 +259,13 @@ public class PlayerBank : NetworkBehaviour
         {
             GameLog.Write(
                 "PlayerBank",
-                $"TryStealCoinsTo rejected netId={netId} recipientNull={recipient == null} self={recipient == this} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")} max={MaxCoins}");
+                $"StealCoinsTo rejected netId={netId} recipientNull={recipient == null} self={recipient == this} amount={amount} coins={coins} recipientCoins={(recipient != null ? recipient.coins.ToString() : "NULL")} max={MaxCoins}");
             return false;
         }
 
         GameLog.Write(
             "PlayerBank",
-            $"TryStealCoinsTo applied netId={netId} recipient={recipient.netId} amount={amount} victimOld={coins} victimNew={coins - amount} duration={duration}");
+            $"StealCoinsTo applied netId={netId} recipient={recipient.netId} amount={amount} victimOld={coins} victimNew={coins - amount} duration={duration}");
 
         coins -= amount;
         recipient.StartCoinsRain(
@@ -276,11 +276,11 @@ public class PlayerBank : NetworkBehaviour
     }
 
     [Server]
-    public bool TrySpendCoins(int amount)
+    public bool SpendCoins(int amount)
     {
         GameLog.Write(
             "PlayerBank",
-            $"TrySpendCoins netId={netId} amount={amount} coins={coins}");
+            $"SpendCoins netId={netId} amount={amount} coins={coins}");
         return RemoveCoins(amount);
     }
 
@@ -546,13 +546,13 @@ public class PlayerBank : NetworkBehaviour
     }
 
     [Server]
-    public bool TrySpendChips(
+    public bool SpendChips(
         int denomination,
         int amount)
     {
         GameLog.Write(
             "PlayerBank",
-            $"TrySpendChips netId={netId} denomination={denomination} amount={amount}");
+            $"SpendChips netId={netId} denomination={denomination} amount={amount}");
         return RemoveChips(
             denomination,
             amount);

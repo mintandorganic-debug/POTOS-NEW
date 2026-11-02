@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext
 {
     public enum GamePhase
     {
@@ -38,15 +38,14 @@ public class GameMaster : NetworkBehaviour
         currentPlayerIn;
 
     public Player SelectedTarget =>
-        selectedTarget;
+        selection?.Target;
 
     private readonly List<Player> _players = new();
 
     public IReadOnlyList<Player> Players =>
         _players;
 
-    private Card selectedAttack;
-    private Player selectedTarget;
+    private AttackSelection selection;
 
     private bool gameStarted;
 
@@ -146,8 +145,9 @@ public class GameMaster : NetworkBehaviour
         gameStarted = false;
         currentPlayerIn = -1;
 
-        selectedAttack = null;
-        selectedTarget = null;
+        selection =
+            new AttackSelection(
+                this);
 
         currentPhase = GamePhase.Wait;
 
@@ -312,8 +312,7 @@ public class GameMaster : NetworkBehaviour
         currentPlayerIn =
             playerIndex;
 
-        selectedAttack = null;
-        selectedTarget = null;
+        selection.Clear();
 
         GameLog.Write(
             "GameMaster",
@@ -367,8 +366,7 @@ public class GameMaster : NetworkBehaviour
             return;
         }
 
-        selectedAttack = null;
-        selectedTarget = null;
+        selection.Clear();
 
         GameLog.Write(
             "GameMaster",
@@ -386,179 +384,17 @@ public class GameMaster : NetworkBehaviour
         Card card,
         Player player)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"SelectAttack card={(card != null && card.Data != null ? card.Data.name : "NULL")} player={(player != null ? player.netId.ToString() : "NULL")} phase={currentPhase}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectAttack rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.Attack)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectAttack rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (card == null ||
-            player == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectAttack rejected: card or player is null");
-
-            return false;
-        }
-
-        if (!IsCurrentPlayer(player))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectAttack rejected: not current player player={player.netId} currentPlayerIn={currentPlayerIn}");
-
-            return false;
-        }
-
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectAttack rejected: card unavailable isAvailable={card.IsAvailable} isInRoulette={card.IsInRoulette}");
-
-            return false;
-        }
-
-        if (card.OwnerNetId !=
-            player.netId)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectAttack rejected: card owner mismatch cardOwner={card.OwnerNetId} player={player.netId}");
-
-            return false;
-        }
-
-        if (card.Data == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectAttack rejected: card has no Data");
-
-            return false;
-        }
-
-        if (card.Data.CardClass !=
-                Card.CardClass.AttackLight &&
-            card.Data.CardClass !=
-                Card.CardClass.AttackSteal)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectAttack rejected: not an attack card class={card.Data.CardClass}");
-
-            return false;
-        }
-
-        selectedAttack = card;
-
-        GameLog.Write(
-            "GameMaster",
-            $"SelectAttack accepted selectedAttack={card.Data.name} class={card.Data.CardClass} player={player.netId}");
-
-        SetGamePhase(
-            GamePhase.SelectTarget);
-
-        return true;
+        return selection.SelectAttack(
+            card,
+            player);
     }
 
     [Server]
     public bool SelectTarget(
         Player player)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"SelectTarget player={(player != null ? player.netId.ToString() : "NULL")} phase={currentPhase}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectTarget rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.SelectTarget)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectTarget rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (selectedAttack == null ||
-            player == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectTarget rejected: selectedAttack or player is null selectedAttackNull={selectedAttack == null} playerNull={player == null}");
-
-            return false;
-        }
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectTarget rejected: invalid currentPlayerIn {currentPlayerIn} players={_players.Count}");
-
-            return false;
-        }
-
-        Player attacker =
-            _players[currentPlayerIn];
-
-        if (player == attacker)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectTarget rejected: target is the attacker player={player.netId}");
-
-            return false;
-        }
-
-        if (!_players.Contains(player))
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectTarget rejected: player is not in the game player={player.netId}");
-
-            return false;
-        }
-
-        selectedTarget = player;
-
-        GameLog.Write(
-            "GameMaster",
-            $"SelectTarget accepted selectedTarget={player.netId} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
-
-        SetGamePhase(
-            GamePhase.Defense);
-
-        return true;
+        return selection.SelectTarget(
+            player);
     }
 
     [Server]
@@ -566,147 +402,17 @@ public class GameMaster : NetworkBehaviour
         Card card,
         Player player)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"SelectDefense card={(card != null && card.Data != null ? card.Data.name : "NULL")} player={(player != null ? player.netId.ToString() : "NULL")} phase={currentPhase}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectDefense rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (selectedAttack == null ||
-            selectedTarget == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: selectedAttack or selectedTarget is null selectedAttackNull={selectedAttack == null} selectedTargetNull={selectedTarget == null}");
-
-            return false;
-        }
-
-        if (player == null ||
-            player != selectedTarget)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: player is not the selected target player={(player != null ? player.netId.ToString() : "NULL")} selectedTarget={selectedTarget.netId}");
-
-            return false;
-        }
-
-        if (card == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SelectDefense rejected: card is null");
-
-            return false;
-        }
-
-        if (card.OwnerNetId !=
-            player.netId)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: card owner mismatch cardOwner={card.OwnerNetId} player={player.netId}");
-
-            return false;
-        }
-
-        if (card.IsInRoulette ||
-            !card.IsAvailable)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: card unavailable isAvailable={card.IsAvailable} isInRoulette={card.IsInRoulette}");
-
-            return false;
-        }
-
-        if (card.Data == null ||
-            card.Data.CardClass !=
-                Card.CardClass.Defence)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SelectDefense rejected: not a defence card dataNull={card.Data == null}");
-
-            return false;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"SelectDefense accepted card={card.Data.name} player={player.netId}");
-
-        return true;
+        return selection.SelectDefense(
+            card,
+            player);
     }
 
     [Server]
     public bool SkipDefense(
         Player player)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"SkipDefense player={(player != null ? player.netId.ToString() : "NULL")} phase={currentPhase}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "SkipDefense rejected: game not started");
-
-            return false;
-        }
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SkipDefense rejected: wrong phase phase={currentPhase}");
-
-            return false;
-        }
-
-        if (selectedTarget == null ||
-            player == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SkipDefense rejected: selectedTarget or player is null selectedTargetNull={selectedTarget == null} playerNull={player == null}");
-
-            return false;
-        }
-
-        if (player != selectedTarget)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"SkipDefense rejected: player is not the selected target player={player.netId} selectedTarget={selectedTarget.netId}");
-
-            return false;
-        }
-
-        GameLog.Write(
-            "GameMaster",
-            $"SkipDefense accepted player={player.netId}");
-
-        return true;
+        return selection.SkipDefense(
+            player);
     }
 
     [Server]
@@ -714,7 +420,7 @@ public class GameMaster : NetworkBehaviour
     {
         GameLog.Write(
             "GameMaster",
-            $"BeginStealPhase phase={currentPhase} selectedAttack={(selectedAttack != null && selectedAttack.Data != null ? selectedAttack.Data.name : "NULL")} selectedTarget={(selectedTarget != null ? selectedTarget.netId.ToString() : "NULL")}");
+            $"BeginStealPhase phase={currentPhase} selectedAttack={(selection.Attack != null && selection.Attack.Data != null ? selection.Attack.Data.name : "NULL")} selectedTarget={(selection.Target != null ? selection.Target.netId.ToString() : "NULL")}");
 
         if (!gameStarted)
         {
@@ -735,23 +441,23 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
-        if (selectedAttack == null ||
-            selectedTarget == null)
+        if (selection.Attack == null ||
+            selection.Target == null)
         {
             GameLog.Write(
                 "GameMaster",
-                $"BeginStealPhase rejected: selectedAttack or selectedTarget is null selectedAttackNull={selectedAttack == null} selectedTargetNull={selectedTarget == null}");
+                $"BeginStealPhase rejected: selectedAttack or selectedTarget is null selectedAttackNull={selection.Attack == null} selectedTargetNull={selection.Target == null}");
 
             return false;
         }
 
-        if (selectedAttack.Data == null ||
-            selectedAttack.Data.CardClass !=
+        if (selection.Attack.Data == null ||
+            selection.Attack.Data.CardClass !=
                 Card.CardClass.AttackSteal)
         {
             GameLog.Write(
                 "GameMaster",
-                $"BeginStealPhase rejected: selected attack is not a steal card dataNull={selectedAttack.Data == null}");
+                $"BeginStealPhase rejected: selected attack is not a steal card dataNull={selection.Attack.Data == null}");
 
             return false;
         }
@@ -804,13 +510,13 @@ public class GameMaster : NetworkBehaviour
             return false;
         }
 
-        if (selectedTarget == null ||
+        if (selection.Target == null ||
             target == null ||
-            target != selectedTarget)
+            target != selection.Target)
         {
             GameLog.Write(
                 "GameMaster",
-                $"StealAccesory rejected: target is not the selected target selectedTarget={(selectedTarget != null ? selectedTarget.netId.ToString() : "NULL")} target={(target != null ? target.netId.ToString() : "NULL")}");
+                $"StealAccesory rejected: target is not the selected target selectedTarget={(selection.Target != null ? selection.Target.netId.ToString() : "NULL")} target={(target != null ? target.netId.ToString() : "NULL")}");
 
             return false;
         }
@@ -931,7 +637,26 @@ public class GameMaster : NetworkBehaviour
             "GameMaster",
             "ClearTurnState selectedAttack=NULL selectedTarget=NULL");
 
-        selectedAttack = null;
-        selectedTarget = null;
+        selection.Clear();
+    }
+
+    bool IAttackSelectionContext.GameStarted =>
+        gameStarted;
+
+    GamePhase IAttackSelectionContext.Phase =>
+        currentPhase;
+
+    bool IAttackSelectionContext.IsCurrentPlayer(
+        Player player)
+    {
+        return IsCurrentPlayer(
+            player);
+    }
+
+    void IAttackSelectionContext.SetPhase(
+        GamePhase phase)
+    {
+        SetGamePhase(
+            phase);
     }
 }

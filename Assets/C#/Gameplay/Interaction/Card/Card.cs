@@ -249,28 +249,14 @@ public class Card : InteractableObject
     private bool IsOwnedByLocalPlayer()
     {
         if (ownerNetId == 0)
-        {
-            GameLog.Write(
-                "Card",
-                $"IsOwnedByLocalPlayer=false netId={netId}: ownerNetId is 0");
-
             return false;
-        }
 
         if (!NetworkClient.spawned.TryGetValue(
                 ownerNetId,
                 out NetworkIdentity identity))
         {
-            GameLog.Write(
-                "Card",
-                $"IsOwnedByLocalPlayer=false netId={netId}: owner {ownerNetId} not spawned on client");
-
             return false;
         }
-
-        GameLog.Write(
-            "Card",
-            $"IsOwnedByLocalPlayer netId={netId} owner={ownerNetId} isOwned={identity.isOwned}");
 
         return identity.isOwned;
     }
@@ -1007,10 +993,6 @@ public class Card : InteractableObject
             !isAvailable ||
             isInRoulette)
         {
-            GameLog.Write(
-                "Card",
-                $"CanInteract=false netId={netId}: available={isAvailable} inRoulette={isInRoulette} (or not owned by local player)");
-
             return false;
         }
 
@@ -1018,47 +1000,25 @@ public class Card : InteractableObject
             GameMaster.Instance;
 
         if (gameMaster == null)
-        {
-            GameLog.Write(
-                "Card",
-                $"CanInteract=false netId={netId}: GameMaster is NULL");
-
             return false;
-        }
 
         if (!GetOwner(
                 out Player player))
         {
-            GameLog.Write(
-                "Card",
-                $"CanInteract=false netId={netId}: owner player not found");
-
             return false;
         }
 
         switch (gameMaster.CurrentPhase)
         {
             case GameMaster.GamePhase.Attack:
-                GameLog.Write(
-                    "Card",
-                    $"CanInteract netId={netId} phase=Attack seat={player.SeatIndex} currentPlayer={gameMaster.CurrentPlayerIndex} result={player.SeatIndex == gameMaster.CurrentPlayerIndex}");
-
                 return player.SeatIndex ==
                        gameMaster.CurrentPlayerIndex;
 
             case GameMaster.GamePhase.Defense:
-                GameLog.Write(
-                    "Card",
-                    $"CanInteract netId={netId} phase=Defense target={(gameMaster.SelectedTarget != null ? gameMaster.SelectedTarget.name : "NULL")} owner={player.name} result={gameMaster.SelectedTarget == player}");
-
                 return gameMaster.SelectedTarget ==
                        player;
 
             default:
-                GameLog.Write(
-                    "Card",
-                    $"CanInteract=false netId={netId}: phase={gameMaster.CurrentPhase} does not allow card interaction");
-
                 return false;
         }
     }
@@ -1069,31 +1029,17 @@ public class Card : InteractableObject
         player = null;
 
         if (ownerNetId == 0)
-        {
-            GameLog.Write(
-                "Card",
-                $"GetOwner=false netId={netId}: ownerNetId is 0");
-
             return false;
-        }
 
         if (!NetworkClient.spawned.TryGetValue(
                 ownerNetId,
                 out NetworkIdentity identity))
         {
-            GameLog.Write(
-                "Card",
-                $"GetOwner=false netId={netId}: owner {ownerNetId} not spawned on client");
-
             return false;
         }
 
         player =
             identity.GetComponent<Player>();
-
-        GameLog.Write(
-            "Card",
-            $"GetOwner netId={netId} owner={ownerNetId} player={(player != null ? player.name : "NULL")}");
 
         return player != null;
     }

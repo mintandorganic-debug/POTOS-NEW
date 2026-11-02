@@ -2,7 +2,7 @@ using Mirror;
 using System.Collections;
 using UnityEngine;
 
-public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext
+public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext, IAttackLifecycleContext, IAttackCommandContext
 {
     public static AttackSequence Instance { get; private set; }
 
@@ -21,6 +21,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     private TargetSelectionTimer targetTimer;
     private AttackResolver resolver;
     private AttackVortexFlow vortex;
+    private AttackLifecycle lifecycle;
+    private AttackCommandHandler commands;
 
     private StealPhase steal;
 
@@ -89,6 +91,20 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
                 steal,
                 targetTimer);
 
+        lifecycle =
+            new AttackLifecycle(
+                this,
+                this,
+                state,
+                steal,
+                targetTimer,
+                vortex);
+
+        commands =
+            new AttackCommandHandler(
+                this,
+                state);
+
         GameLog.Write(
             "AttackSequence",
             "Awake StealPhase created");
@@ -126,150 +142,9 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             return;
         }
 
-        if (cardIdentity == null ||
-            sender == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CmdStartSequence rejected: cardIdentity or sender is null");
-
-            return;
-        }
-
-        if (!cardIdentity.TryGetComponent(
-                out Card card))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence rejected: no Card component on netId={cardIdentity.netId}");
-
-            return;
-        }
-
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence rejected: card unavailable card={(card.Data != null ? card.Data.name : "NULL")} isAvailable={card.IsAvailable} isInRoulette={card.IsInRoulette}");
-
-            return;
-        }
-
-        Player cardOwner =
-            AttackValidator.FindPlayerByConnection(sender);
-
-        if (cardOwner == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence rejected: no player for connection {sender.connectionId}");
-
-            return;
-        }
-
-        if (!AttackValidator.IsCardOwnedByPlayer(
-                card,
-                cardOwner))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence rejected: card not owned by player card={(card.Data != null ? card.Data.name : "NULL")} player={cardOwner.netId}");
-
-            return;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CmdStartSequence rejected: GameMaster.Instance is null");
-
-            return;
-        }
-
-        // -----------------------------------------------------
-        // DEFENSE CARD
-        // -----------------------------------------------------
-
-        if (card.Data != null &&
-            card.Data.CardClass == Card.CardClass.Defence)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence defense card card={card.Data.name} owner={cardOwner.netId}");
-
-            if (!state.IsActive ||
-                state.Attacker == null ||
-                state.Target == null)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"CmdStartSequence defense rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} target={(state.Target != null ? state.Target.name : "NULL")}");
-
-                return;
-            }
-
-            Player targetPlayer =
-                state.Target.GetComponentInParent<Player>();
-
-            if (targetPlayer == null ||
-                targetPlayer.netIdentity.connectionToClient != sender)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"CmdStartSequence defense rejected: sender is not the target player targetPlayer={(targetPlayer != null ? targetPlayer.netId.ToString() : "NULL")} senderConn={sender.connectionId}");
-
-                return;
-            }
-
-            if (!gameMaster.SelectDefense(
-                    card,
-                    targetPlayer))
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"CmdStartSequence defense rejected: GameMaster.SelectDefense returned false card={card.Data.name} targetPlayer={targetPlayer.netId}");
-
-                return;
-            }
-
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence defense accepted card={card.Data.name} targetPlayer={targetPlayer.netId}");
-
-            StartDefenseSequence(
-                card,
-                targetPlayer);
-
-            return;
-        }
-
-        // -----------------------------------------------------
-        // ATTACK CARD
-        // -----------------------------------------------------
-
-        if (!gameMaster.SelectAttack(
-                card,
-                cardOwner))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdStartSequence attack rejected: GameMaster.SelectAttack returned false card={(card.Data != null ? card.Data.name : "NULL")} owner={cardOwner.netId}");
-
-            return;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"CmdStartSequence attack accepted card={(card.Data != null ? card.Data.name : "NULL")} owner={cardOwner.netId}");
-
-        StartSequence(
-            card,
-            cardOwner);
+        commands.StartRequested(
+            cardIdentity,
+            sender);
     }
 
     [Command(requiresAuthority = false)]
@@ -290,85 +165,9 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             return;
         }
 
-        if (targetIdentity == null ||
-            sender == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CmdSetTarget rejected: targetIdentity or sender is null");
-
-            return;
-        }
-
-        if (!state.IsActive ||
-            state.Attacker == null ||
-            state.Card == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdSetTarget rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")}");
-
-            return;
-        }
-
-        if (!targetIdentity.TryGetComponent(
-                out PlayerInteractable playerTarget))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdSetTarget rejected: no PlayerInteractable on netId={targetIdentity.netId}");
-
-            return;
-        }
-
-        Player targetPlayer =
-            playerTarget.GetComponentInParent<Player>();
-
-        if (targetPlayer == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CmdSetTarget rejected: no Player in parents of target");
-
-            return;
-        }
-
-        if (targetPlayer == state.Attacker)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdSetTarget rejected: target is the attacker player={state.Attacker.netId}");
-
-            return;
-        }
-
-        if (state.Attacker.netIdentity.connectionToClient != sender)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdSetTarget rejected: attacker mismatch attacker={state.Attacker.netId} senderConn={sender.connectionId}");
-
-            return;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CmdSetTarget rejected: GameMaster.Instance is null");
-
-            return;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"CmdSetTarget accepted attacker={state.Attacker.netId} targetPlayer={targetPlayer.netId}");
-
-        SetTarget(
-            playerTarget);
+        commands.SetTargetRequested(
+            targetIdentity,
+            sender);
     }
 
     [Command(requiresAuthority = false)]
@@ -389,30 +188,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             return;
         }
 
-        if (!state.IsActive ||
-            state.Attacker == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdCancelSequence rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
-
-            return;
-        }
-
-        if (state.Attacker.netIdentity.connectionToClient != sender)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CmdCancelSequence rejected: attacker mismatch attacker={state.Attacker.netId} senderConn={sender.connectionId}");
-
-            return;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"CmdCancelSequence accepted attacker={state.Attacker.netId}");
-
-        CancelSequence();
+        commands.CancelRequested(
+            sender);
     }
 
     // =========================================================
@@ -424,98 +201,10 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
         Card card,
         Player attacker)
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"StartSequence card={(card != null && card.Data != null ? card.Data.name : "NULL")} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
-
-        if (card == null ||
-            attacker == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartSequence rejected: card or attacker is null");
-
-            return;
-        }
-
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"StartSequence rejected: card unavailable isAvailable={card.IsAvailable} isInRoulette={card.IsInRoulette}");
-
-            return;
-        }
-
-        if (!AttackValidator.IsCardOwnedByPlayer(
-                card,
-                attacker))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"StartSequence rejected: card not owned by attacker attacker={attacker.netId}");
-
-            return;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartSequence cancelling previous sequence wasActive={state.IsActive}");
-
-        CancelSequence();
-
-        state.Begin(
+        lifecycle.StartSequence(
             card,
             attacker);
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartSequence state set isActive=true selectedCard={(card.Data != null ? card.Data.name : "NULL")} attacker={attacker.netId} target=NULL");
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartSequence failed: RouletteRotator.Instance is null, cancelling");
-
-            Debug.LogError(
-                "AttackSequence: RouletteRotator.Instance not found.",
-                this);
-
-            CancelSequence();
-            return;
-        }
-
-        card.SetInRoulette(true);
-
-        roulette.AttachCard(
-            card.transform);
-
-        roulette.StartRoulette(
-            attacker.transform,
-            RouletteRotator.Pattern.Direct);
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartSequence roulette started pattern=Direct attacker={attacker.netId}");
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartSequence calling RpcStartAttackPreparation attacker={attacker.netId} actionId={(card.Data != null ? card.Data.ActionId : string.Empty)}");
-
-        RpcStartAttackPreparation(
-            attacker.netIdentity,
-            card.Data != null
-                ? card.Data.ActionId
-                : string.Empty);
-
-        StartTargetSelectionTimer();
     }
-
     // =========================================================
     // TARGET SELECTION TIMER
     // =========================================================
@@ -541,124 +230,10 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
         Card defenseCard,
         Player defensePlayer)
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"StartDefenseSequence defenseCard={(defenseCard != null && defenseCard.Data != null ? defenseCard.Data.name : "NULL")} defensePlayer={(defensePlayer != null ? defensePlayer.netId.ToString() : "NULL")}");
-
-        if (defenseCard == null ||
-            defensePlayer == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartDefenseSequence rejected: defenseCard or defensePlayer is null");
-
-            return;
-        }
-
-        if (!defenseCard.IsAvailable ||
-            defenseCard.IsInRoulette)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"StartDefenseSequence rejected: card unavailable isAvailable={defenseCard.IsAvailable} isInRoulette={defenseCard.IsInRoulette}");
-
-            return;
-        }
-
-        if (defenseCard.Data == null ||
-            defenseCard.Data.CardClass !=
-                Card.CardClass.Defence)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartDefenseSequence rejected: card is not a Defence card");
-
-            return;
-        }
-
-        if (!AttackValidator.IsCardOwnedByPlayer(
-                defenseCard,
-                defensePlayer))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"StartDefenseSequence rejected: card not owned by defensePlayer defensePlayer={defensePlayer.netId}");
-
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartDefenseSequence failed: RouletteRotator.Instance is null");
-
-            Debug.LogError(
-                "AttackSequence: RouletteRotator.Instance not found.",
-                this);
-
-            return;
-        }
-
-        StopTargetSelectionTimer();
-
-        if (attackRoutine != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartDefenseSequence stopping attackRoutine (defense timer)");
-
-            StopCoroutine(
-                attackRoutine);
-
-            attackRoutine = null;
-        }
-
-        state.Card =
-            defenseCard;
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartDefenseSequence selectedCard changed to defense card={defenseCard.Data.name}");
-
-        defenseCard.SetInRoulette(true);
-
-        roulette.StopRoulette();
-
-        roulette.AttachDefenseCard(
-            defenseCard.transform);
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartDefenseSequence starting Vortex roulette toward attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
-
-        roulette.StartRoulette(
-            state.Attacker.transform,
-            RouletteRotator.Pattern.Vortex,
-            () => OnDefenseVortexCompleted(defenseCard));
-
-        if (state.Attacker != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"StartDefenseSequence calling RpcTriggerAttackAnimation attacker={state.Attacker.netId}");
-
-            RpcTriggerAttackAnimation(
-                state.Attacker.netIdentity);
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartDefenseSequence calling RpcStartAttackPreparation defensePlayer={defensePlayer.netId} actionId={defenseCard.Data.ActionId}");
-
-        RpcStartAttackPreparation(
-            defensePlayer.netIdentity,
-            defenseCard.Data.ActionId);
+        lifecycle.StartDefenseSequence(
+            defenseCard,
+            defensePlayer);
     }
-
     // =========================================================
     // TARGET
     // =========================================================
@@ -1030,79 +605,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [Server]
     private void CancelSequence()
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"CancelSequence isActive={state.IsActive} card={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} target={(state.Target != null ? state.Target.name : "NULL")}");
-
-        if (!state.IsActive)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CancelSequence skipped: sequence not active");
-
-            return;
-        }
-
-        StopTargetSelectionTimer();
-
-        steal.Stop();
-
-        if (attackRoutine != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CancelSequence stopping attackRoutine");
-
-            StopCoroutine(
-                attackRoutine);
-
-            attackRoutine = null;
-        }
-
-        Player previousAttacker =
-            state.Attacker;
-
-        Card previousCard =
-            state.Card;
-
-        RouletteCardReleaser.Release(
-            previousCard);
-
-        if (previousCard != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CancelSequence returning card to owner card={(previousCard.Data != null ? previousCard.Data.name : "NULL")}");
-
-            previousCard.ReturnToOwner();
-        }
-
-        if (previousAttacker != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"CancelSequence calling RpcCancelAttackAnimation attacker={previousAttacker.netId}");
-
-            RpcCancelAttackAnimation(
-                previousAttacker.netIdentity);
-        }
-
-        state.Reset();
-
-        GameLog.Write(
-            "AttackSequence",
-            "CancelSequence state cleared isActive=false");
-
-        if (GameMaster.Instance != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "CancelSequence calling GameMaster.EndTurn");
-
-            GameMaster.Instance.EndTurn();
-        }
+        lifecycle.CancelSequence();
     }
-
     [ClientRpc]
     private void RpcCancelAttackAnimation(
         NetworkIdentity attackerIdentity)
@@ -1148,25 +652,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [Server]
     private void FinishSequence()
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"FinishSequence isActive={state.IsActive} card={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
-
-        StopTargetSelectionTimer();
-
-        steal.Stop();
-
-        RouletteCardReleaser.Release(
-            state.Card);
-
-        state.Reset();
-        attackRoutine = null;
-
-        GameLog.Write(
-            "AttackSequence",
-            "FinishSequence state cleared isActive=false");
+        lifecycle.FinishSequence();
     }
-
     // =========================================================
     // VALIDATION
     // =========================================================
@@ -1239,5 +726,77 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     void IAttackVortexContext.ReleaseAttackRoutine()
     {
         attackRoutine = null;
+    }
+
+    bool IAttackLifecycleContext.HasAttackRoutine =>
+        attackRoutine != null;
+
+    void IAttackLifecycleContext.StopAttackRoutine()
+    {
+        if (attackRoutine != null)
+        {
+            StopCoroutine(
+                attackRoutine);
+
+            attackRoutine = null;
+        }
+    }
+
+    void IAttackLifecycleContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
+
+    void IAttackLifecycleContext.StartAttackPreparation(
+        NetworkIdentity attackerIdentity,
+        string actionId)
+    {
+        RpcStartAttackPreparation(
+            attackerIdentity,
+            actionId);
+    }
+
+    void IAttackLifecycleContext.TriggerAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcTriggerAttackAnimation(
+            attackerIdentity);
+    }
+
+    void IAttackLifecycleContext.CancelAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcCancelAttackAnimation(
+            attackerIdentity);
+    }
+
+    void IAttackCommandContext.StartSequence(
+        Card card,
+        Player attacker)
+    {
+        StartSequence(
+            card,
+            attacker);
+    }
+
+    void IAttackCommandContext.StartDefenseSequence(
+        Card defenseCard,
+        Player defensePlayer)
+    {
+        StartDefenseSequence(
+            defenseCard,
+            defensePlayer);
+    }
+
+    void IAttackCommandContext.SetTarget(
+        PlayerInteractable target)
+    {
+        SetTarget(
+            target);
+    }
+
+    void IAttackCommandContext.CancelSequence()
+    {
+        CancelSequence();
     }
 }

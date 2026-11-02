@@ -18,7 +18,7 @@ public class AttackSequence : NetworkBehaviour
     private readonly AttackState state = new();
 
     private Coroutine attackRoutine;
-    private Coroutine targetSelectionRoutine;
+    private TargetSelectionTimer targetTimer;
 
     private StealPhase steal;
 
@@ -66,6 +66,13 @@ public class AttackSequence : NetworkBehaviour
                 stealCoinsRainDuration,
                 () => state.IsActive,
                 FinishSequence);
+
+        targetTimer =
+            new TargetSelectionTimer(
+                this,
+                state,
+                targetSelectionTime,
+                CancelSequence);
 
         GameLog.Write(
             "AttackSequence",
@@ -501,100 +508,13 @@ public class AttackSequence : NetworkBehaviour
     [Server]
     private void StartTargetSelectionTimer()
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"StartTargetSelectionTimer time={targetSelectionTime} previousRunning={targetSelectionRoutine != null}");
-
-        StopTargetSelectionTimer();
-
-        targetSelectionRoutine =
-            StartCoroutine(
-                TargetSelectionRoutine());
-
-        GameLog.Write(
-            "AttackSequence",
-            "StartTargetSelectionTimer timer started");
+        targetTimer.Start();
     }
 
     [Server]
     private void StopTargetSelectionTimer()
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"StopTargetSelectionTimer running={targetSelectionRoutine != null}");
-
-        if (targetSelectionRoutine != null)
-        {
-            StopCoroutine(
-                targetSelectionRoutine);
-
-            targetSelectionRoutine = null;
-
-            GameLog.Write(
-                "AttackSequence",
-                "StopTargetSelectionTimer timer stopped");
-        }
-    }
-
-    [Server]
-    private IEnumerator TargetSelectionRoutine()
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"TargetSelectionRoutine start time={targetSelectionTime}");
-
-        float remainingTime =
-            targetSelectionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!state.IsActive ||
-                state.Card == null ||
-                state.Attacker == null)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"TargetSelectionRoutine end: sequence no longer valid isActive={state.IsActive} remaining={remainingTime}");
-
-                targetSelectionRoutine = null;
-                yield break;
-            }
-
-            if (state.Target != null)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"TargetSelectionRoutine end: target selected target={state.Target.name} remaining={remainingTime}");
-
-                targetSelectionRoutine = null;
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            yield return null;
-        }
-
-        targetSelectionRoutine = null;
-
-        GameLog.Write(
-            "AttackSequence",
-            $"TargetSelectionRoutine timed out isActive={state.IsActive} targetSelected={state.Target != null}");
-
-        if (state.IsActive &&
-            state.Target == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "TargetSelectionRoutine timeout: no target chosen, cancelling sequence");
-
-            CancelSequence();
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            "TargetSelectionRoutine end");
+        targetTimer.Stop();
     }
 
     // =========================================================
@@ -1145,7 +1065,7 @@ public class AttackSequence : NetworkBehaviour
                 "AttackSequence",
                 "StartAttackVortex failed: RouletteRotator.Instance is null, destroying card and ending turn");
 
-            DestroyCard(
+            RouletteCardReleaser.Destroy(
                 card);
 
             if (GameMaster.Instance != null)
@@ -1216,7 +1136,7 @@ public class AttackSequence : NetworkBehaviour
             "AttackSequence",
             $"OnAttackVortexCompleted card={(card != null && card.Data != null ? card.Data.name : "NULL")} isStealCard={isStealCard}");
 
-        DestroyCard(
+        RouletteCardReleaser.Destroy(
             card);
 
         if (isStealCard)
@@ -1282,26 +1202,12 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        card.SetInRoulette(false);
+        GameLog.Write(
+            "AttackSequence",
+            $"OnDefenseVortexCompleted destroying defense card={(card.Data != null ? card.Data.name : "NULL")}");
 
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.DetachCard(
-                card.transform);
-        }
-
-        if (card.gameObject != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"OnDefenseVortexCompleted destroying defense card={(card.Data != null ? card.Data.name : "NULL")}");
-
-            NetworkServer.Destroy(
-                card.gameObject);
-        }
+        RouletteCardReleaser.Destroy(
+            card);
 
         if (GameMaster.Instance != null)
         {
@@ -1314,7 +1220,7 @@ public class AttackSequence : NetworkBehaviour
 
         state.Reset();
         attackRoutine = null;
-        targetSelectionRoutine = null;
+        targetTimer.Forget();
 
         GameLog.Write(
             "AttackSequence",
@@ -1347,54 +1253,11 @@ public class AttackSequence : NetworkBehaviour
 
         state.Reset();
         attackRoutine = null;
-        targetSelectionRoutine = null;
+        targetTimer.Forget();
 
         GameLog.Write(
             "AttackSequence",
             "FinishDefenseSequence state cleared isActive=false");
-    }
-
-    // =========================================================
-    // DESTROY CARD
-    // =========================================================
-
-    [Server]
-    private void DestroyCard(
-        Card card)
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"DestroyCard card={(card != null && card.Data != null ? card.Data.name : "NULL")}");
-
-        if (card == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "DestroyCard skipped: card is null");
-
-            return;
-        }
-
-        card.SetInRoulette(false);
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.DetachCard(
-                card.transform);
-        }
-
-        if (card.gameObject != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"DestroyCard NetworkServer.Destroy card={(card.Data != null ? card.Data.name : "NULL")}");
-
-            NetworkServer.Destroy(
-                card.gameObject);
-        }
     }
 
     // =========================================================
@@ -1593,24 +1456,8 @@ public class AttackSequence : NetworkBehaviour
         Card previousCard =
             state.Card;
 
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (previousCard != null)
-        {
-            previousCard.SetInRoulette(false);
-        }
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-
-            if (previousCard != null)
-            {
-                roulette.DetachCard(
-                    previousCard.transform);
-            }
-        }
+        RouletteCardReleaser.Release(
+            previousCard);
 
         if (previousCard != null)
         {
@@ -1700,24 +1547,8 @@ public class AttackSequence : NetworkBehaviour
 
         steal.Stop();
 
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (state.Card != null)
-        {
-            state.Card.SetInRoulette(false);
-        }
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-
-            if (state.Card != null)
-            {
-                roulette.DetachCard(
-                    state.Card.transform);
-            }
-        }
+        RouletteCardReleaser.Release(
+            state.Card);
 
         state.Reset();
         attackRoutine = null;

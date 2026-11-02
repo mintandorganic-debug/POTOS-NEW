@@ -2,7 +2,7 @@ using Mirror;
 using System.Collections;
 using UnityEngine;
 
-public class AttackSequence : NetworkBehaviour
+public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext
 {
     public static AttackSequence Instance { get; private set; }
 
@@ -19,6 +19,8 @@ public class AttackSequence : NetworkBehaviour
 
     private Coroutine attackRoutine;
     private TargetSelectionTimer targetTimer;
+    private AttackResolver resolver;
+    private AttackVortexFlow vortex;
 
     private StealPhase steal;
 
@@ -73,6 +75,19 @@ public class AttackSequence : NetworkBehaviour
                 state,
                 targetSelectionTime,
                 CancelSequence);
+
+        resolver =
+            new AttackResolver(
+                this,
+                state,
+                targetActionTime);
+
+        vortex =
+            new AttackVortexFlow(
+                this,
+                state,
+                steal,
+                targetTimer);
 
         GameLog.Write(
             "AttackSequence",
@@ -825,212 +840,12 @@ public class AttackSequence : NetworkBehaviour
 
         attackRoutine =
             StartCoroutine(
-                AttackDelayRoutine());
+                resolver.Run());
     }
 
     // =========================================================
     // ATTACK TIMER
     // =========================================================
-
-    [Server]
-    private IEnumerator AttackDelayRoutine()
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"AttackDelayRoutine start targetActionTime={targetActionTime}");
-
-        Player victim =
-            state.Target != null
-                ? state.Target.GetComponentInParent<Player>()
-                : null;
-
-        if (victim == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "AttackDelayRoutine failed: victim is null, cancelling");
-
-            CancelSequence();
-            yield break;
-        }
-
-        NetworkConnectionToClient victimConnection =
-            victim.netIdentity.connectionToClient;
-
-        if (victimConnection != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine calling TargetShowDefenseTimer victim={victim.netId} time={targetActionTime}");
-
-            TargetShowDefenseTimer(
-                victimConnection,
-                targetActionTime);
-        }
-
-        float remainingTime =
-            targetActionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!state.IsActive ||
-                state.Card == null ||
-                state.Attacker == null ||
-                state.Target == null)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"AttackDelayRoutine interrupted: sequence changed during defense window isActive={state.IsActive} remaining={remainingTime}");
-
-                if (victimConnection != null)
-                {
-                    GameLog.Write(
-                        "AttackSequence",
-                        $"AttackDelayRoutine calling TargetHideDefenseTimer victim={(victim != null ? victim.netId.ToString() : "NULL")}");
-
-                    TargetHideDefenseTimer(
-                        victimConnection);
-                }
-
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            if (victimConnection != null)
-            {
-                TargetSetDefenseTimer(
-                    victimConnection,
-                    remainingTime);
-            }
-
-            yield return null;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            "AttackDelayRoutine defense window elapsed");
-
-        if (victimConnection != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine calling TargetHideDefenseTimer victim={(victim != null ? victim.netId.ToString() : "NULL")}");
-
-            TargetHideDefenseTimer(
-                victimConnection);
-        }
-
-        if (!state.IsActive ||
-            state.Card == null ||
-            state.Attacker == null ||
-            state.Target == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine end: sequence no longer valid after timer isActive={state.IsActive}");
-
-            yield break;
-        }
-
-        Card card =
-            state.Card;
-
-        Player attackPlayer =
-            state.Attacker;
-
-        PlayerInteractable attackTarget =
-            state.Target;
-
-        Player targetPlayer =
-            attackTarget.GetComponentInParent<Player>();
-
-        if (targetPlayer == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "AttackDelayRoutine failed: targetPlayer is null, cancelling");
-
-            CancelSequence();
-            yield break;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "AttackDelayRoutine failed: GameMaster.Instance is null, cancelling");
-
-            CancelSequence();
-            yield break;
-        }
-
-        if (!gameMaster.SkipDefense(
-                targetPlayer))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine failed: GameMaster.SkipDefense returned false targetPlayer={targetPlayer.netId}, cancelling");
-
-            CancelSequence();
-            yield break;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"AttackDelayRoutine defense skipped, applying attack card={(card.Data != null ? card.Data.name : "NULL")} attacker={attackPlayer.netId} targetPlayer={targetPlayer.netId}");
-
-        GameLog.Write(
-            "AttackSequence",
-            $"AttackDelayRoutine calling RpcTriggerAttackAnimation attacker={attackPlayer.netId}");
-
-        RpcTriggerAttackAnimation(
-            attackPlayer.netIdentity);
-
-        attackTarget.Attack(
-            card,
-            attackPlayer);
-
-        if (card.Data != null &&
-            card.Data.CardClass !=
-                Card.CardClass.AttackSteal &&
-            card.Data.cardEffect != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine applying card effect to target card={card.Data.name} targetPlayer={targetPlayer.netId}");
-
-            card.Data.cardEffect.ApplyEffectToTarget(
-                targetPlayer);
-        }
-
-        if (victimConnection != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"AttackDelayRoutine calling TargetStartDamagePass victim={targetPlayer.netId}");
-
-            TargetStartDamagePass(
-                victimConnection,
-                targetPlayer.netIdentity);
-        }
-
-        StartAttackVortex(
-            card,
-            attackPlayer);
-
-        attackRoutine = null;
-
-        GameLog.Write(
-            "AttackSequence",
-            "AttackDelayRoutine end: attack applied");
-
-        yield break;
-    }
 
     // =========================================================
     // ATTACK VORTEX
@@ -1041,223 +856,17 @@ public class AttackSequence : NetworkBehaviour
         Card card,
         Player attackPlayer)
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"StartAttackVortex card={(card != null && card.Data != null ? card.Data.name : "NULL")} attackPlayer={(attackPlayer != null ? attackPlayer.netId.ToString() : "NULL")}");
-
-        if (card == null ||
-            attackPlayer == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartAttackVortex failed: card or attackPlayer is null, finishing sequence");
-
-            FinishSequence();
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "StartAttackVortex failed: RouletteRotator.Instance is null, destroying card and ending turn");
-
-            RouletteCardReleaser.Destroy(
-                card);
-
-            if (GameMaster.Instance != null)
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    "StartAttackVortex calling GameMaster.EndTurn");
-
-                GameMaster.Instance.EndTurn();
-            }
-
-            return;
-        }
-
-        card.SetInRoulette(true);
-
-        roulette.StopRoulette();
-
-        roulette.AttachCard(
-            card.transform);
-
-        bool isStealCard =
-            card.Data != null &&
-            card.Data.CardClass ==
-                Card.CardClass.AttackSteal;
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartAttackVortex isStealCard={isStealCard}");
-
-        if (isStealCard)
-        {
-            Player victim =
-                state.Target != null
-                    ? state.Target.GetComponentInParent<Player>()
-                    : null;
-
-            GameLog.Write(
-                "AttackSequence",
-                $"StartAttackVortex steal.TakeCoins attacker={attackPlayer.netId} victim={(victim != null ? victim.netId.ToString() : "NULL")}");
-
-            steal.TakeCoins(
-                attackPlayer,
-                victim);
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"StartAttackVortex starting Vortex roulette attacker={attackPlayer.netId}");
-
-        roulette.StartRoulette(
-            attackPlayer.transform,
-            RouletteRotator.Pattern.Vortex,
-            () => OnAttackVortexCompleted(card));
+        vortex.StartAttackVortex(
+            card,
+            attackPlayer);
     }
-
-    [Server]
-    private void OnAttackVortexCompleted(
-        Card card)
-    {
-        bool isStealCard =
-            card != null &&
-            card.Data != null &&
-            card.Data.CardClass ==
-                Card.CardClass.AttackSteal;
-
-        GameLog.Write(
-            "AttackSequence",
-            $"OnAttackVortexCompleted card={(card != null && card.Data != null ? card.Data.name : "NULL")} isStealCard={isStealCard}");
-
-        RouletteCardReleaser.Destroy(
-            card);
-
-        if (isStealCard)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnAttackVortexCompleted steal card, requesting GameMaster.BeginStealPhase");
-
-            if (GameMaster.Instance == null ||
-                !GameMaster.Instance.BeginStealPhase())
-            {
-                GameLog.Write(
-                    "AttackSequence",
-                    $"OnAttackVortexCompleted steal phase not started (GameMaster exists={GameMaster.Instance != null}), finishing sequence");
-
-                FinishSequence();
-                return;
-            }
-
-            GameLog.Write(
-                "AttackSequence",
-                "OnAttackVortexCompleted steal phase started, calling steal.Begin");
-
-            steal.Begin();
-            return;
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnAttackVortexCompleted calling GameMaster.EndTurn");
-
-            GameMaster.Instance.EndTurn();
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            "OnAttackVortexCompleted finishing sequence");
-
-        FinishSequence();
-    }
-
-    // =========================================================
-    // DEFENSE VORTEX
-    // =========================================================
 
     [Server]
     private void OnDefenseVortexCompleted(
         Card card)
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"OnDefenseVortexCompleted card={(card != null && card.Data != null ? card.Data.name : "NULL")}");
-
-        if (card == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnDefenseVortexCompleted card is null, finishing defense sequence");
-
-            FinishDefenseSequence();
-            return;
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"OnDefenseVortexCompleted destroying defense card={(card.Data != null ? card.Data.name : "NULL")}");
-
-        RouletteCardReleaser.Destroy(
+        vortex.OnDefenseVortexCompleted(
             card);
-
-        if (GameMaster.Instance != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnDefenseVortexCompleted calling GameMaster.EndTurn");
-
-            GameMaster.Instance.EndTurn();
-        }
-
-        state.Reset();
-        attackRoutine = null;
-        targetTimer.Forget();
-
-        GameLog.Write(
-            "AttackSequence",
-            "OnDefenseVortexCompleted state cleared isActive=false");
-    }
-
-    [Server]
-    private void FinishDefenseSequence()
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"FinishDefenseSequence isActive={state.IsActive}");
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "FinishDefenseSequence calling GameMaster.EndTurn");
-
-            GameMaster.Instance.EndTurn();
-        }
-
-        state.Reset();
-        attackRoutine = null;
-        targetTimer.Forget();
-
-        GameLog.Write(
-            "AttackSequence",
-            "FinishDefenseSequence state cleared isActive=false");
     }
 
     // =========================================================
@@ -1561,4 +1170,74 @@ public class AttackSequence : NetworkBehaviour
     // =========================================================
     // VALIDATION
     // =========================================================
+
+    void IAttackResolverContext.ShowDefenseTimer(
+        NetworkConnectionToClient connection,
+        float time)
+    {
+        TargetShowDefenseTimer(
+            connection,
+            time);
+    }
+
+    void IAttackResolverContext.SetDefenseTimer(
+        NetworkConnectionToClient connection,
+        float time)
+    {
+        TargetSetDefenseTimer(
+            connection,
+            time);
+    }
+
+    void IAttackResolverContext.HideDefenseTimer(
+        NetworkConnectionToClient connection)
+    {
+        TargetHideDefenseTimer(
+            connection);
+    }
+
+    void IAttackResolverContext.TriggerAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcTriggerAttackAnimation(
+            attackerIdentity);
+    }
+
+    void IAttackResolverContext.StartDamagePass(
+        NetworkConnectionToClient connection,
+        NetworkIdentity victimIdentity)
+    {
+        TargetStartDamagePass(
+            connection,
+            victimIdentity);
+    }
+
+    void IAttackResolverContext.StartAttackVortex(
+        Card card,
+        Player attackPlayer)
+    {
+        StartAttackVortex(
+            card,
+            attackPlayer);
+    }
+
+    void IAttackResolverContext.CancelSequence()
+    {
+        CancelSequence();
+    }
+
+    void IAttackResolverContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
+
+    void IAttackVortexContext.FinishSequence()
+    {
+        FinishSequence();
+    }
+
+    void IAttackVortexContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
 }

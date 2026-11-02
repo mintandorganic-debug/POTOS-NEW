@@ -139,7 +139,7 @@ public class AttackSequence : NetworkBehaviour
         }
 
         Player cardOwner =
-            FindPlayerByConnection(sender);
+            AttackValidator.FindPlayerByConnection(sender);
 
         if (cardOwner == null)
         {
@@ -150,7 +150,7 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (!IsCardOwnedByPlayer(
+        if (!AttackValidator.IsCardOwnedByPlayer(
                 card,
                 cardOwner))
         {
@@ -430,7 +430,7 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (!IsCardOwnedByPlayer(
+        if (!AttackValidator.IsCardOwnedByPlayer(
                 card,
                 attacker))
         {
@@ -647,7 +647,7 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (!IsCardOwnedByPlayer(
+        if (!AttackValidator.IsCardOwnedByPlayer(
                 defenseCard,
                 defensePlayer))
         {
@@ -1752,56 +1752,4 @@ public class AttackSequence : NetworkBehaviour
     // =========================================================
     // VALIDATION
     // =========================================================
-
-    [Server]
-    private bool IsCardOwnedByPlayer(
-        Card card,
-        Player player)
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"IsCardOwnedByPlayer card={(card != null && card.Data != null ? card.Data.name : "NULL")} player={(player != null ? player.netId.ToString() : "NULL")}");
-
-        if (card == null ||
-            player == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "IsCardOwnedByPlayer false: card or player is null");
-
-            return false;
-        }
-
-        return card.IsOwnedByLocalConnection(
-            player.netIdentity.connectionToClient);
-    }
-
-    [Server]
-    private Player FindPlayerByConnection(
-        NetworkConnectionToClient connection)
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"FindPlayerByConnection connection={(connection != null ? connection.connectionId.ToString() : "NULL")}");
-
-        if (connection == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "FindPlayerByConnection null: connection is null");
-
-            return null;
-        }
-
-        if (connection.identity == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"FindPlayerByConnection null: connection {connection.connectionId} has no identity");
-
-            return null;
-        }
-
-        return connection.identity.GetComponent<Player>();
-    }
 }

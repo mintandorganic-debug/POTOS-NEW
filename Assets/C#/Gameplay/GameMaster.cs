@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext
 {
     public enum GamePhase
     {
@@ -47,6 +47,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
     private AttackSelection selection;
     private AccessoryTheft theft;
+    private TurnController turns;
 
     private bool gameStarted;
 
@@ -152,6 +153,11 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
         theft =
             new AccessoryTheft(
+                this,
+                selection);
+
+        turns =
+            new TurnController(
                 this,
                 selection);
 
@@ -289,100 +295,14 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     private void BeginTurn(
         int playerIndex)
     {
-        GameLog.Write(
-            "GameMaster",
-            $"BeginTurn playerIndex={playerIndex} gameStarted={gameStarted} players={_players.Count} previousPlayerIn={currentPlayerIn}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "BeginTurn skipped: game not started");
-
-            return;
-        }
-
-        if (playerIndex < 0 ||
-            playerIndex >= _players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"BeginTurn rejected: invalid player index {playerIndex} players={_players.Count}");
-
-            Debug.LogError(
-                $"GameMaster: invalid player index {playerIndex}.");
-
-            return;
-        }
-
-        currentPlayerIn =
-            playerIndex;
-
-        selection.Clear();
-
-        GameLog.Write(
-            "GameMaster",
-            $"BeginTurn current player set currentPlayerIn={currentPlayerIn} player={(_players[currentPlayerIn] != null ? _players[currentPlayerIn].netId.ToString() : "NULL")} selectedAttack=NULL selectedTarget=NULL");
-
-        SetGamePhase(
-            GamePhase.Attack);
-
-        GameLog.Write(
-            "GameMaster",
-            $"BeginTurn calling OnTurnStart player={(_players[currentPlayerIn] != null ? _players[currentPlayerIn].netId.ToString() : "NULL")}");
-
-        _players[currentPlayerIn].OnTurnStart();
+        turns.BeginTurn(
+            playerIndex);
     }
 
     [Server]
     public void EndTurn()
     {
-        GameLog.Write(
-            "GameMaster",
-            $"EndTurn gameStarted={gameStarted} currentPlayerIn={currentPlayerIn} phase={currentPhase} players={_players.Count}");
-
-        if (!gameStarted)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "EndTurn skipped: game not started");
-
-            return;
-        }
-
-        if (_players.Count == 0)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "EndTurn skipped: no players");
-
-            return;
-        }
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"EndTurn rejected: invalid currentPlayerIn {currentPlayerIn} players={_players.Count}");
-
-            Debug.LogError(
-                $"GameMaster: invalid currentPlayerIn {currentPlayerIn}.");
-
-            return;
-        }
-
-        selection.Clear();
-
-        GameLog.Write(
-            "GameMaster",
-            $"EndTurn calling OnTurnEnd player={(_players[currentPlayerIn] != null ? _players[currentPlayerIn].netId.ToString() : "NULL")} next={(currentPlayerIn + 1) % _players.Count}");
-
-        _players[currentPlayerIn].OnTurnEnd();
-
-        BeginTurn(
-            (currentPlayerIn + 1) %
-            _players.Count);
+        turns.EndTurn();
     }
 
     [Server]
@@ -439,47 +359,6 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             sender);
     }
 
-    [Server]
-    private bool IsCurrentPlayer(
-        Player player)
-    {
-        GameLog.Write(
-            "GameMaster",
-            $"IsCurrentPlayer player={(player != null ? player.netId.ToString() : "NULL")} currentPlayerIn={currentPlayerIn} players={_players.Count}");
-
-        if (player == null)
-        {
-            GameLog.Write(
-                "GameMaster",
-                "IsCurrentPlayer false: player is null");
-
-            return false;
-        }
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            GameLog.Write(
-                "GameMaster",
-                $"IsCurrentPlayer false: invalid currentPlayerIn {currentPlayerIn}");
-
-            return false;
-        }
-
-        return _players[currentPlayerIn] ==
-               player;
-    }
-
-    [Server]
-    private void ClearTurnState()
-    {
-        GameLog.Write(
-            "GameMaster",
-            "ClearTurnState selectedAttack=NULL selectedTarget=NULL");
-
-        selection.Clear();
-    }
-
     bool IAttackSelectionContext.GameStarted =>
         gameStarted;
 
@@ -489,7 +368,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     bool IAttackSelectionContext.IsCurrentPlayer(
         Player player)
     {
-        return IsCurrentPlayer(
+        return turns.IsCurrentPlayer(
             player);
     }
 
@@ -498,5 +377,11 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     {
         SetGamePhase(
             phase);
+    }
+
+    void ITurnContext.SetCurrentPlayer(
+        int index)
+    {
+        currentPlayerIn = index;
     }
 }

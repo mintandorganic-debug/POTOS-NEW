@@ -2,7 +2,7 @@ using Mirror;
 using System.Collections;
 using UnityEngine;
 
-public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext, IAttackLifecycleContext, IAttackCommandContext
+public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext, IAttackLifecycleContext, IAttackCommandContext, IAttackTargetingContext
 {
     public static AttackSequence Instance { get; private set; }
 
@@ -23,6 +23,7 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     private AttackVortexFlow vortex;
     private AttackLifecycle lifecycle;
     private AttackCommandHandler commands;
+    private AttackTargeting targeting;
 
     private StealPhase steal;
 
@@ -104,6 +105,12 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             new AttackCommandHandler(
                 this,
                 state);
+
+        targeting =
+            new AttackTargeting(
+                this,
+                state,
+                targetTimer);
 
         GameLog.Write(
             "AttackSequence",
@@ -242,181 +249,13 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     private void SetTarget(
         PlayerInteractable target)
     {
-        GameLog.Write(
-            "AttackSequence",
-            $"SetTarget target={(target != null ? target.name : "NULL")} isActive={state.IsActive} currentTarget={(state.Target != null ? state.Target.name : "NULL")}");
-
-        if (!state.IsActive)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "SetTarget rejected: sequence not active");
-
-            return;
-        }
-
-        if (state.Card == null ||
-            state.Attacker == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"SetTarget rejected: selectedCard or attacker is null selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
-
-            return;
-        }
-
-        if (target == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "SetTarget rejected: target is null");
-
-            return;
-        }
-
-        if (state.Target != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"SetTarget rejected: target already set target={state.Target.name}");
-
-            return;
-        }
-
-        Player targetPlayer =
-            target.GetComponentInParent<Player>();
-
-        if (targetPlayer == null ||
-            targetPlayer == state.Attacker)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"SetTarget rejected: invalid target player targetPlayer={(targetPlayer != null ? targetPlayer.netId.ToString() : "NULL")} attacker={state.Attacker.netId}");
-
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null ||
-            !roulette.IsRunning)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"SetTarget rejected: roulette missing or not running rouletteExists={roulette != null} isRunning={(roulette != null ? roulette.IsRunning.ToString() : "NULL")}");
-
-            return;
-        }
-
-        if (state.Card.Data != null &&
-            state.Card.Data.CardClass ==
-                Card.CardClass.Defence)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"SetTarget rejected: selected card is a Defence card card={state.Card.Data.name}");
-
-            return;
-        }
-
-        state.Target = target;
-
-        GameLog.Write(
-            "AttackSequence",
-            $"SetTarget target set target={target.name} targetPlayer={targetPlayer.netId} attacker={state.Attacker.netId}");
-
-        StopTargetSelectionTimer();
-
-        roulette.SetTarget(
-            target.EnemyCardMarker,
-            OnRouletteReachedTarget);
-
-        GameLog.Write(
-            "AttackSequence",
-            "SetTarget roulette.SetTarget called, waiting for OnRouletteReachedTarget");
+        targeting.SetTarget(
+            target);
     }
 
     // =========================================================
     // ATTACK ROULETTE CALLBACK
     // =========================================================
-
-    [Server]
-    private void OnRouletteReachedTarget()
-    {
-        GameLog.Write(
-            "AttackSequence",
-            $"OnRouletteReachedTarget isActive={state.IsActive} target={(state.Target != null ? state.Target.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
-
-        if (!state.IsActive ||
-            state.Card == null ||
-            state.Attacker == null ||
-            state.Target == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"OnRouletteReachedTarget ignored: sequence not valid isActive={state.IsActive} selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")}");
-
-            return;
-        }
-
-        Player victim =
-            state.Target.GetComponentInParent<Player>();
-
-        if (victim == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnRouletteReachedTarget failed: victim Player not found, cancelling");
-
-            CancelSequence();
-            return;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnRouletteReachedTarget failed: GameMaster.Instance is null, cancelling");
-
-            CancelSequence();
-            return;
-        }
-
-        // The target becomes the actual game target only after
-        // the roulette has reached and stopped at the target.
-        if (!gameMaster.SelectTarget(
-                victim))
-        {
-            GameLog.Write(
-                "AttackSequence",
-                $"OnRouletteReachedTarget failed: GameMaster.SelectTarget returned false victim={victim.netId}, cancelling");
-
-            CancelSequence();
-            return;
-        }
-
-        if (attackRoutine != null)
-        {
-            GameLog.Write(
-                "AttackSequence",
-                "OnRouletteReachedTarget stopping previous attackRoutine");
-
-            StopCoroutine(
-                attackRoutine);
-        }
-
-        GameLog.Write(
-            "AttackSequence",
-            $"OnRouletteReachedTarget starting AttackDelayRoutine victim={victim.netId}");
-
-        attackRoutine =
-            StartCoroutine(
-                resolver.Run());
-    }
 
     // =========================================================
     // ATTACK TIMER
@@ -798,5 +637,26 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     void IAttackCommandContext.CancelSequence()
     {
         CancelSequence();
+    }
+
+    void IAttackTargetingContext.CancelSequence()
+    {
+        CancelSequence();
+    }
+
+    bool IAttackTargetingContext.HasAttackRoutine =>
+        attackRoutine != null;
+
+    void IAttackTargetingContext.StopAttackRoutine()
+    {
+        StopCoroutine(
+            attackRoutine);
+    }
+
+    void IAttackTargetingContext.StartAttackRoutine()
+    {
+        attackRoutine =
+            StartCoroutine(
+                resolver.Run());
     }
 }

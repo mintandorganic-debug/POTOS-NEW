@@ -10,6 +10,10 @@ namespace CardCarouselUI
         private void Awake()
         {
             canvas = GetComponent<Canvas>();
+
+            global::GameLog.Write(
+                "CanvasCameraBinder",
+                $"Awake object={name} canvas={(canvas != null ? canvas.name : "NULL")}");
         }
 
         private void Update()

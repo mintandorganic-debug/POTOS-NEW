@@ -26,6 +26,10 @@ public class NinjaMover : MonoBehaviour
 
     private void Awake()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"Awake object={name} circleSpline={(circleSpline != null ? circleSpline.name : "NULL")}");
+
         Instance = this;
         flySplineContainer = gameObject.AddComponent<SplineContainer>();
     }
@@ -35,6 +39,10 @@ public class NinjaMover : MonoBehaviour
         Transform target,
         Transform enemyCardMarker)
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"MoveCard card={(card != null ? card.name : "NULL")} target={(target != null ? target.name : "NULL")} marker={(enemyCardMarker != null ? enemyCardMarker.name : "NULL")} restart={movementCoroutine != null}");
+
         this.card = card;
         this.target = target;
         this.enemyCardMarker = enemyCardMarker;
@@ -47,6 +55,10 @@ public class NinjaMover : MonoBehaviour
 
     public void StopMovement()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"StopMovement hadCoroutine={movementCoroutine != null} card={(card != null ? card.name : "NULL")}");
+
         if (movementCoroutine != null)
         {
             StopCoroutine(movementCoroutine);
@@ -60,6 +72,10 @@ public class NinjaMover : MonoBehaviour
 
     private IEnumerator MoveRoutine()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"MoveRoutine start card={(card != null ? card.name : "NULL")} flyDuration={flyDuration} delay={delay}");
+
         CreateFlySpline();
 
         float time = 0f;
@@ -78,9 +94,17 @@ public class NinjaMover : MonoBehaviour
             yield return null;
         }
 
+        GameLog.Write(
+            "NinjaMover",
+            "MoveRoutine fly finished");
+
         LookAtTarget();
 
         yield return new WaitForSeconds(delay);
+
+        GameLog.Write(
+            "NinjaMover",
+            "MoveRoutine delay finished, starting circle");
 
         yield return StartCoroutine(CircleRoutine());
     }
@@ -98,8 +122,16 @@ public class NinjaMover : MonoBehaviour
 
     private IEnumerator CircleRoutine()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"CircleRoutine start card={(card != null ? card.name : "NULL")} circleDuration={circleDuration}");
+
         float splineTime =
             FindClosestPointOnCircle(card.position);
+
+        GameLog.Write(
+            "NinjaMover",
+            $"CircleRoutine circling start splineTime={splineTime}");
 
         while (true)
         {
@@ -122,6 +154,10 @@ public class NinjaMover : MonoBehaviour
 
     private void CreateFlySpline()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"CreateFlySpline card={(card != null ? card.name : "NULL")} marker={(enemyCardMarker != null ? enemyCardMarker.name : "NULL")}");
+
         Spline spline = new Spline();
 
         Vector3 start = card.position;
@@ -176,6 +212,10 @@ public class NinjaMover : MonoBehaviour
         spline.SetTangentMode(1, TangentMode.Mirrored);
 
         flySplineContainer.Spline = spline;
+
+        GameLog.Write(
+            "NinjaMover",
+            $"CreateFlySpline done knots={spline.Count} distance={distance}");
     }
 
     private void RotateCardOnCircle(
@@ -220,6 +260,10 @@ public class NinjaMover : MonoBehaviour
 
     private float FindClosestPointOnCircle(Vector3 position)
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"FindClosestPointOnCircle position={position}");
+
         const int samples = 100;
 
         float closestT = 0f;
@@ -242,18 +286,32 @@ public class NinjaMover : MonoBehaviour
             }
         }
 
+        GameLog.Write(
+            "NinjaMover",
+            $"FindClosestPointOnCircle result closestT={closestT}");
+
         return closestT;
     }
 
     private void LookAtTarget()
     {
+        GameLog.Write(
+            "NinjaMover",
+            $"LookAtTarget card={(card != null ? card.name : "NULL")} target={(target != null ? target.name : "NULL")}");
+
         Vector3 direction =
             target.position - card.position;
 
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "NinjaMover",
+                "LookAtTarget skipped: direction too small");
+
             return;
+        }
 
         card.rotation = Quaternion.LookRotation(
             direction.normalized,

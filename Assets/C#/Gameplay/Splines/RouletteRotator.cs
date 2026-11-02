@@ -69,9 +69,17 @@ public class RouletteRotator : NetworkBehaviour
 
     private void Awake()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"Awake object={name} hasInstance={Instance != null} pivot={(roulettePivot != null ? roulettePivot.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} defenseCardMarker={(defenseCardMarker != null ? defenseCardMarker.name : "NULL")}");
+
         if (Instance != null &&
             Instance != this)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "Awake duplicate instance, destroying this object");
+
             Destroy(gameObject);
             return;
         }
@@ -79,12 +87,22 @@ public class RouletteRotator : NetworkBehaviour
         Instance = this;
 
         if (roulettePivot == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "Awake roulettePivot not assigned, using own transform");
+
             roulettePivot = transform;
+        }
 
         if (cardMarker != null)
         {
             defaultCardMarkerLocalPosition =
                 cardMarker.localPosition;
+
+            GameLog.Write(
+                "RouletteRotator",
+                $"Awake defaultCardMarkerLocalPosition={defaultCardMarkerLocalPosition}");
         }
 
         ValidateMarkerHierarchy();
@@ -92,20 +110,36 @@ public class RouletteRotator : NetworkBehaviour
 
     private void OnDestroy()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"OnDestroy object={name} wasInstance={Instance == this}");
+
         if (Instance == this)
             Instance = null;
     }
 
     private void ValidateMarkerHierarchy()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"ValidateMarkerHierarchy cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} defenseCardMarker={(defenseCardMarker != null ? defenseCardMarker.name : "NULL")}");
+
         if (cardMarker == null ||
             defenseCardMarker == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "ValidateMarkerHierarchy skipped: marker is null");
+
             return;
         }
 
         if (defenseCardMarker.parent != cardMarker)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "ValidateMarkerHierarchy warning: defenseCardMarker is not a child of cardMarker");
+
             Debug.LogWarning(
                 "RouletteRotator: defenseCardMarker must be a child of cardMarker.",
                 this);
@@ -122,8 +156,18 @@ public class RouletteRotator : NetworkBehaviour
         Pattern pattern = Pattern.Direct,
         Action onCompleted = null)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"StartRoulette attacker={(attacker != null ? attacker.name : "NULL")} pattern={pattern} hasCallback={onCompleted != null} currentTarget={(target != null ? target.name : "NULL")}");
+
         if (attacker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "StartRoulette ignored: attacker is null");
+
             return;
+        }
 
         Transform inheritedTarget = null;
 
@@ -147,6 +191,10 @@ public class RouletteRotator : NetworkBehaviour
             RotateTowardTarget(target);
         }
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"StartRoulette starting routine pattern={currentPattern} target={(target != null ? target.name : "NULL")}");
+
         rouletteCoroutine =
             StartCoroutine(
                 RouletteRoutine());
@@ -157,23 +205,45 @@ public class RouletteRotator : NetworkBehaviour
         Transform target,
         Action onCompleted)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"SetTarget target={(target != null ? target.name : "NULL")} hasCallback={onCompleted != null} isRunning={IsRunning} pattern={currentPattern} currentTarget={(this.target != null ? this.target.name : "NULL")}");
+
         if (!IsRunning ||
             currentPattern == Pattern.Vortex ||
             target == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                $"SetTarget ignored: isRunning={IsRunning} pattern={currentPattern} targetNull={target == null}");
+
             return;
         }
 
         if (this.target != null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                $"SetTarget ignored: target already set currentTarget={this.target.name}");
+
             return;
+        }
 
         this.target = target;
         this.onCompleted = onCompleted;
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"SetTarget accepted target={target.name}");
     }
 
     [Server]
     public void StopRoulette()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"StopRoulette wasRunning={rouletteCoroutine != null} pattern={currentPattern} target={(target != null ? target.name : "NULL")} hadCallback={onCompleted != null}");
+
         if (rouletteCoroutine != null)
         {
             StopCoroutine(rouletteCoroutine);
@@ -187,6 +257,10 @@ public class RouletteRotator : NetworkBehaviour
         currentPattern = Pattern.Direct;
 
         ResetMarker();
+
+        GameLog.Write(
+            "RouletteRotator",
+            "StopRoulette done");
     }
 
     // =========================================================
@@ -197,9 +271,17 @@ public class RouletteRotator : NetworkBehaviour
     public void AttachCard(
         Transform card)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"AttachCard card={(card != null ? card.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")}");
+
         if (card == null ||
             cardMarker == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "AttachCard skipped: card or cardMarker is null");
+
             return;
         }
 
@@ -212,9 +294,17 @@ public class RouletteRotator : NetworkBehaviour
     public void AttachDefenseCard(
         Transform card)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"AttachDefenseCard card={(card != null ? card.name : "NULL")} defenseCardMarker={(defenseCardMarker != null ? defenseCardMarker.name : "NULL")}");
+
         if (card == null ||
             defenseCardMarker == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "AttachDefenseCard skipped: card or defenseCardMarker is null");
+
             return;
         }
 
@@ -228,11 +318,19 @@ public class RouletteRotator : NetworkBehaviour
         Transform card,
         Transform marker)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"AttachCardInternal card={(card != null ? card.name : "NULL")} marker={(marker != null ? marker.name : "NULL")}");
+
         Card cardComponent =
             card.GetComponent<Card>();
 
         if (cardComponent != null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                $"AttachCardInternal calling OnAttachmentToRoulette card={card.name}");
+
             cardComponent.OnAttachmentToRoulette();
         }
 
@@ -256,8 +354,18 @@ public class RouletteRotator : NetworkBehaviour
     public void DetachCard(
         Transform card)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"DetachCard card={(card != null ? card.name : "NULL")} wasAttachedCard={attachedCard == card}");
+
         if (card == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "DetachCard skipped: card is null");
+
             return;
+        }
 
         if (attachedCard == card)
         {
@@ -275,8 +383,18 @@ public class RouletteRotator : NetworkBehaviour
 
     private void ResetMarker()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"ResetMarker cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} defaultLocalPosition={defaultCardMarkerLocalPosition}");
+
         if (cardMarker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "ResetMarker skipped: cardMarker is null");
+
             return;
+        }
 
         cardMarker.localPosition =
             defaultCardMarkerLocalPosition;
@@ -288,9 +406,17 @@ public class RouletteRotator : NetworkBehaviour
 
     public float GetRadius()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetRadius cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} pivot={(roulettePivot != null ? roulettePivot.name : "NULL")}");
+
         if (cardMarker == null ||
             roulettePivot == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetRadius returning 0: cardMarker or pivot is null");
+
             return 0f;
         }
 
@@ -299,6 +425,10 @@ public class RouletteRotator : NetworkBehaviour
             roulettePivot.position;
 
         offset.y = 0f;
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetRadius result radius={offset.magnitude}");
 
         return offset.magnitude;
     }
@@ -310,7 +440,15 @@ public class RouletteRotator : NetworkBehaviour
     [Server]
     private IEnumerator RouletteRoutine()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine start pattern={currentPattern} target={(target != null ? target.name : "NULL")}");
+
         yield return FullCircle();
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine full circle done pattern={currentPattern}");
 
         if (currentPattern == Pattern.Vortex)
         {
@@ -326,10 +464,22 @@ public class RouletteRotator : NetworkBehaviour
             target = null;
             currentPattern = Pattern.Direct;
 
+            GameLog.Write(
+                "RouletteRotator",
+                $"RouletteRoutine vortex completed callback={(callback != null)}");
+
             callback?.Invoke();
+
+            GameLog.Write(
+                "RouletteRotator",
+                "RouletteRoutine vortex callback invoked, routine end");
 
             yield break;
         }
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine waiting for target target={(target != null ? target.name : "NULL")}");
 
         while (target == null)
         {
@@ -351,6 +501,10 @@ public class RouletteRotator : NetworkBehaviour
         Transform directTarget =
             target;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine target acquired directTarget={(directTarget != null ? directTarget.name : "NULL")}");
+
         yield return MoveToTarget(
             directTarget);
 
@@ -362,7 +516,15 @@ public class RouletteRotator : NetworkBehaviour
 
         onCompleted = null;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine direct completed callback={(directCallback != null)}");
+
         directCallback?.Invoke();
+
+        GameLog.Write(
+            "RouletteRotator",
+            "RouletteRoutine direct callback invoked, routine end");
     }
 
     // =========================================================
@@ -372,6 +534,10 @@ public class RouletteRotator : NetworkBehaviour
     [Server]
     private IEnumerator FullCircle()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"FullCircle start initialRounds={initialRounds}");
+
         float remainingAngle =
             initialRounds * 360f;
 
@@ -399,6 +565,10 @@ public class RouletteRotator : NetworkBehaviour
 
             yield return null;
         }
+
+        GameLog.Write(
+            "RouletteRotator",
+            "FullCircle finished");
     }
 
     // =========================================================
@@ -409,10 +579,18 @@ public class RouletteRotator : NetworkBehaviour
     private IEnumerator MoveToTarget(
         Transform movementTarget)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveToTarget start movementTarget={(movementTarget != null ? movementTarget.name : "NULL")}");
+
         float remainingAngle =
             GetAngleToTarget(
                 movementTarget,
                 true);
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveToTarget initial remainingAngle={remainingAngle}");
 
         while (remainingAngle > stopAngle)
         {
@@ -465,6 +643,10 @@ public class RouletteRotator : NetworkBehaviour
 
         currentAngularSpeed = 0f;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveToTarget reached target remainingAngle={remainingAngle}");
+
         SnapToTarget(
             movementTarget);
     }
@@ -476,9 +658,17 @@ public class RouletteRotator : NetworkBehaviour
     [Server]
     private IEnumerator MoveVortex()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveVortex start pivot={(roulettePivot != null ? roulettePivot.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")}");
+
         if (roulettePivot == null ||
             cardMarker == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "MoveVortex aborted: pivot or cardMarker is null");
+
             yield break;
         }
 
@@ -486,7 +676,13 @@ public class RouletteRotator : NetworkBehaviour
             GetRadius();
 
         if (startRadius < 0.0001f)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                $"MoveVortex aborted: startRadius too small startRadius={startRadius}");
+
             yield break;
+        }
 
         float startLocalY =
             cardMarker.localPosition.y;
@@ -505,8 +701,16 @@ public class RouletteRotator : NetworkBehaviour
 
         bool depthStarted = false;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveVortex spiral start startRadius={startRadius} startLocalY={startLocalY} targetLocalY={targetLocalY} totalAngle={totalAngle} liftAnimator={(liftAnimator != null ? liftAnimator.name : "NULL")}");
+
         if (liftAnimator != null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "MoveVortex trigger DropEmpty");
+
             liftAnimator.SetTrigger(
                 "DropEmpty");
         }
@@ -608,6 +812,10 @@ public class RouletteRotator : NetworkBehaviour
                 desiredRadius <= vortexRadiusThreshold)
             {
                 depthStarted = true;
+
+                GameLog.Write(
+                    "RouletteRotator",
+                    $"MoveVortex depth started desiredRadius={desiredRadius} passedAngle={passedAngle}");
             }
 
             if (depthStarted)
@@ -644,6 +852,10 @@ public class RouletteRotator : NetworkBehaviour
             finalLocalPosition;
 
         currentAngularSpeed = 0f;
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"MoveVortex finished finalLocalPosition={finalLocalPosition} passedAngle={passedAngle}");
     }
 
     // =========================================================
@@ -689,10 +901,18 @@ public class RouletteRotator : NetworkBehaviour
     private void RotateTowardTarget(
         Transform movementTarget)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"RotateTowardTarget movementTarget={(movementTarget != null ? movementTarget.name : "NULL")}");
+
         if (roulettePivot == null ||
             cardMarker == null ||
             movementTarget == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                $"RotateTowardTarget skipped: missing reference pivot={(roulettePivot != null ? roulettePivot.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} target={(movementTarget != null ? movementTarget.name : "NULL")}");
+
             return;
         }
 
@@ -710,6 +930,10 @@ public class RouletteRotator : NetworkBehaviour
         if (markerDirection.sqrMagnitude < 0.0001f ||
             targetDirection.sqrMagnitude < 0.0001f)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "RotateTowardTarget skipped: marker or target is at pivot");
+
             return;
         }
 
@@ -732,6 +956,10 @@ public class RouletteRotator : NetworkBehaviour
             Mathf.DeltaAngle(
                 markerAngle,
                 targetAngle);
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"RotateTowardTarget rotating delta={delta}");
 
         roulettePivot.Rotate(
             Vector3.up,
@@ -807,8 +1035,18 @@ public class RouletteRotator : NetworkBehaviour
     private void SnapToTarget(
         Transform movementTarget)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"SnapToTarget movementTarget={(movementTarget != null ? movementTarget.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")}");
+
         if (cardMarker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "SnapToTarget skipped: cardMarker is null");
+
             return;
+        }
 
         Vector3 targetDirection =
             movementTarget.position -
@@ -817,7 +1055,13 @@ public class RouletteRotator : NetworkBehaviour
         targetDirection.y = 0f;
 
         if (targetDirection.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "SnapToTarget skipped: target is at pivot");
+
             return;
+        }
 
         targetDirection.Normalize();
 
@@ -836,6 +1080,10 @@ public class RouletteRotator : NetworkBehaviour
                 markerAngle,
                 360f);
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"SnapToTarget rotating delta={delta} targetAngle={targetAngle} markerAngle={markerAngle}");
+
         roulettePivot.Rotate(
             Vector3.up,
             delta,
@@ -844,8 +1092,18 @@ public class RouletteRotator : NetworkBehaviour
 
     private float GetMarkerAngle()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetMarkerAngle cardMarker={(cardMarker != null ? cardMarker.name : "NULL")}");
+
         if (cardMarker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetMarkerAngle returning 0: cardMarker is null");
+
             return 0f;
+        }
 
         Vector3 direction =
             cardMarker.position -
@@ -854,7 +1112,13 @@ public class RouletteRotator : NetworkBehaviour
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetMarkerAngle returning 0: marker is at pivot");
+
             return 0f;
+        }
 
         return Mathf.Atan2(
             direction.x,

@@ -15,15 +15,27 @@ public class NetManager : NetworkRoomManager
     public override void OnServerAddPlayer(
         NetworkConnectionToClient conn)
     {
+        GameLog.Write(
+            "NetManager",
+            $"OnServerAddPlayer conn={(conn != null ? conn.connectionId.ToString() : "NULL")} roomSlots={roomSlots.Count}");
+
         base.OnServerAddPlayer(conn);
 
         if (LobbyHandler.instance == null)
         {
+            GameLog.Write(
+                "NetManager",
+                "OnServerAddPlayer lobby refresh skipped: LobbyHandler.instance is NULL");
+
             Debug.LogWarning(
                 "LobbyHandler instance is missing. Lobby refresh skipped.");
 
             return;
         }
+
+        GameLog.Write(
+            "NetManager",
+            $"OnServerAddPlayer RpcRefreshLobby roomSlots={roomSlots.Count}");
 
         LobbyHandler.instance.RpcRefreshLobby();
     }
@@ -36,6 +48,10 @@ public class NetManager : NetworkRoomManager
         NetworkConnectionToClient conn,
         GameObject roomPlayer)
     {
+        GameLog.Write(
+            "NetManager",
+            $"OnRoomServerCreateGamePlayer conn={(conn != null ? conn.connectionId.ToString() : "NULL")} roomPlayer={(roomPlayer != null ? roomPlayer.name : "NULL")}");
+
         GameObject gamePlayer =
             Instantiate(
                 playerPrefab);
@@ -49,6 +65,10 @@ public class NetManager : NetworkRoomManager
         if (lobbyPlayer != null &&
             player != null)
         {
+            GameLog.Write(
+                "NetManager",
+                $"OnRoomServerCreateGamePlayer SetSteamData steamId={lobbyPlayer.SteamId} nickname={lobbyPlayer.Nickname} gamePlayer={gamePlayer.name}");
+
             player.SetSteamData(
                 lobbyPlayer.SteamId,
                 lobbyPlayer.Nickname);
@@ -57,6 +77,10 @@ public class NetManager : NetworkRoomManager
         {
             if (lobbyPlayer == null)
             {
+                GameLog.Write(
+                    "NetManager",
+                    "OnRoomServerCreateGamePlayer room player has no LobbyPlayer component");
+
                 Debug.LogWarning(
                     "NetManager: Room player does not have a LobbyPlayer component.",
                     roomPlayer);
@@ -64,6 +88,10 @@ public class NetManager : NetworkRoomManager
 
             if (player == null)
             {
+                GameLog.Write(
+                    "NetManager",
+                    "OnRoomServerCreateGamePlayer game player prefab has no Player component");
+
                 Debug.LogWarning(
                     "NetManager: Game player prefab does not have a Player component.",
                     gamePlayer);
@@ -80,6 +108,10 @@ public class NetManager : NetworkRoomManager
     [Server]
     public bool TryStartGame()
     {
+        GameLog.Write(
+            "NetManager",
+            $"TryStartGame serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} connections={NetworkServer.connections.Count}");
+
         var slots = roomSlots;
 
         if (!NetworkServer.active ||
@@ -91,11 +123,19 @@ public class NetManager : NetworkRoomManager
             roomSlots.Count != NetworkServer.connections.Count ||
             roomSlots.Skip(1).Any(p => !p.readyToBegin))
         {
+            GameLog.Write(
+                "NetManager",
+                $"TryStartGame refused serverActive={NetworkServer.active} gameStarting={gameStarting} sceneChanging={sceneChanging} roomSlots={roomSlots.Count} minPlayers={minPlayers} nullSlots={roomSlots.Count(p => p == null)} distinctSlots={roomSlots.Distinct().Count()} connections={NetworkServer.connections.Count} notReady={roomSlots.Count(p => p != null && !p.readyToBegin)}");
+
             return false;
         }
 
         gameStarting = true;
         sceneChanging = true;
+
+        GameLog.Write(
+            "NetManager",
+            $"TryStartGame ServerChangeScene scene={GameplayScene} players={roomSlots.Count}");
 
         ServerChangeScene(
             GameplayScene);
@@ -110,6 +150,10 @@ public class NetManager : NetworkRoomManager
     public override void OnServerDisconnect(
         NetworkConnectionToClient conn)
     {
+        GameLog.Write(
+            "NetManager",
+            $"OnServerDisconnect conn={(conn != null ? conn.connectionId.ToString() : "NULL")} gameStarting={gameStarting} sceneChanging={sceneChanging}");
+
         base.OnServerDisconnect(
             conn);
 
@@ -118,15 +162,29 @@ public class NetManager : NetworkRoomManager
             sceneChanging;
 
         if (wasStarting)
+        {
+            GameLog.Write(
+                "NetManager",
+                "OnServerDisconnect disconnect during game start, StopHost");
+
             StopHost();
+        }
 
         if (LobbyHandler.instance == null)
         {
+            GameLog.Write(
+                "NetManager",
+                "OnServerDisconnect lobby refresh skipped: LobbyHandler.instance is NULL");
+
             Debug.LogWarning(
                 "LobbyHandler instance is missing. Lobby refresh skipped.");
 
             return;
         }
+
+        GameLog.Write(
+            "NetManager",
+            "OnServerDisconnect RpcRefreshLobby");
 
         LobbyHandler.instance.RpcRefreshLobby();
     }
@@ -138,6 +196,10 @@ public class NetManager : NetworkRoomManager
     public void ChangeTransport(
         Transport _transport)
     {
+        GameLog.Write(
+            "NetManager",
+            $"ChangeTransport transport={(_transport != null ? _transport.GetType().Name : "NULL")}");
+
         transport = _transport;
     }
 
@@ -148,6 +210,10 @@ public class NetManager : NetworkRoomManager
     public override void OnRoomServerSceneChanged(
         string sceneName)
     {
+        GameLog.Write(
+            "NetManager",
+            $"OnRoomServerSceneChanged scene={sceneName}");
+
         base.OnRoomServerSceneChanged(
             sceneName);
 
@@ -157,6 +223,10 @@ public class NetManager : NetworkRoomManager
 
     public override void OnRoomServerPlayersReady()
     {
+        GameLog.Write(
+            "NetManager",
+            $"OnRoomServerPlayersReady ignored roomSlots={roomSlots.Count}");
+
         // Do nothing
     }
 }

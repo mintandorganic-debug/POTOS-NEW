@@ -15,11 +15,7 @@ public class AttackSequence : NetworkBehaviour
     [SerializeField] private int stealCoinsAmount = 5;
     [SerializeField] private float stealCoinsRainDuration = 5f;
 
-    private Card selectedCard;
-    private Player attacker;
-    private PlayerInteractable target;
-
-    private bool isActive;
+    private readonly AttackState state = new();
 
     private Coroutine attackRoutine;
     private Coroutine targetSelectionRoutine;
@@ -27,13 +23,13 @@ public class AttackSequence : NetworkBehaviour
     private StealPhase steal;
 
     public bool IsActive =>
-        isActive;
+        state.IsActive;
 
     public Card SelectedCard =>
-        selectedCard;
+        state.Card;
 
     public PlayerInteractable Target =>
-        target;
+        state.Target;
 
     // =========================================================
     // LIFECYCLE
@@ -68,7 +64,7 @@ public class AttackSequence : NetworkBehaviour
                 stealActionTime,
                 stealCoinsAmount,
                 stealCoinsRainDuration,
-                () => isActive,
+                () => state.IsActive,
                 FinishSequence);
 
         GameLog.Write(
@@ -80,7 +76,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"OnDestroy wasInstance={Instance == this} isActive={isActive}");
+            $"OnDestroy wasInstance={Instance == this} isActive={state.IsActive}");
 
         if (Instance == this)
             Instance = null;
@@ -97,7 +93,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"CmdStartSequence cardNetId={(cardIdentity != null ? cardIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={isActive}");
+            $"CmdStartSequence cardNetId={(cardIdentity != null ? cardIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
 
         if (!isServer)
         {
@@ -184,19 +180,19 @@ public class AttackSequence : NetworkBehaviour
                 "AttackSequence",
                 $"CmdStartSequence defense card card={card.Data.name} owner={cardOwner.netId}");
 
-            if (!isActive ||
-                attacker == null ||
-                target == null)
+            if (!state.IsActive ||
+                state.Attacker == null ||
+                state.Target == null)
             {
                 GameLog.Write(
                     "AttackSequence",
-                    $"CmdStartSequence defense rejected: sequence not ready isActive={isActive} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")} target={(target != null ? target.name : "NULL")}");
+                    $"CmdStartSequence defense rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} target={(state.Target != null ? state.Target.name : "NULL")}");
 
                 return;
             }
 
             Player targetPlayer =
-                target.GetComponentInParent<Player>();
+                state.Target.GetComponentInParent<Player>();
 
             if (targetPlayer == null ||
                 targetPlayer.netIdentity.connectionToClient != sender)
@@ -261,7 +257,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"CmdSetTarget targetNetId={(targetIdentity != null ? targetIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={isActive}");
+            $"CmdSetTarget targetNetId={(targetIdentity != null ? targetIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
 
         if (!isServer)
         {
@@ -282,13 +278,13 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (!isActive ||
-            attacker == null ||
-            selectedCard == null)
+        if (!state.IsActive ||
+            state.Attacker == null ||
+            state.Card == null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"CmdSetTarget rejected: sequence not ready isActive={isActive} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")} selectedCard={(selectedCard != null && selectedCard.Data != null ? selectedCard.Data.name : "NULL")}");
+                $"CmdSetTarget rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")}");
 
             return;
         }
@@ -315,20 +311,20 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (targetPlayer == attacker)
+        if (targetPlayer == state.Attacker)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"CmdSetTarget rejected: target is the attacker player={attacker.netId}");
+                $"CmdSetTarget rejected: target is the attacker player={state.Attacker.netId}");
 
             return;
         }
 
-        if (attacker.netIdentity.connectionToClient != sender)
+        if (state.Attacker.netIdentity.connectionToClient != sender)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"CmdSetTarget rejected: attacker mismatch attacker={attacker.netId} senderConn={sender.connectionId}");
+                $"CmdSetTarget rejected: attacker mismatch attacker={state.Attacker.netId} senderConn={sender.connectionId}");
 
             return;
         }
@@ -347,7 +343,7 @@ public class AttackSequence : NetworkBehaviour
 
         GameLog.Write(
             "AttackSequence",
-            $"CmdSetTarget accepted attacker={attacker.netId} targetPlayer={targetPlayer.netId}");
+            $"CmdSetTarget accepted attacker={state.Attacker.netId} targetPlayer={targetPlayer.netId}");
 
         SetTarget(
             playerTarget);
@@ -359,7 +355,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"CmdCancelSequence senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={isActive}");
+            $"CmdCancelSequence senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
 
         if (!isServer ||
             sender == null)
@@ -371,28 +367,28 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (!isActive ||
-            attacker == null)
+        if (!state.IsActive ||
+            state.Attacker == null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"CmdCancelSequence rejected: sequence not ready isActive={isActive} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
+                $"CmdCancelSequence rejected: sequence not ready isActive={state.IsActive} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
 
             return;
         }
 
-        if (attacker.netIdentity.connectionToClient != sender)
+        if (state.Attacker.netIdentity.connectionToClient != sender)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"CmdCancelSequence rejected: attacker mismatch attacker={attacker.netId} senderConn={sender.connectionId}");
+                $"CmdCancelSequence rejected: attacker mismatch attacker={state.Attacker.netId} senderConn={sender.connectionId}");
 
             return;
         }
 
         GameLog.Write(
             "AttackSequence",
-            $"CmdCancelSequence accepted attacker={attacker.netId}");
+            $"CmdCancelSequence accepted attacker={state.Attacker.netId}");
 
         CancelSequence();
     }
@@ -443,15 +439,13 @@ public class AttackSequence : NetworkBehaviour
 
         GameLog.Write(
             "AttackSequence",
-            $"StartSequence cancelling previous sequence wasActive={isActive}");
+            $"StartSequence cancelling previous sequence wasActive={state.IsActive}");
 
         CancelSequence();
 
-        selectedCard = card;
-        this.attacker = attacker;
-        target = null;
-
-        isActive = true;
+        state.Begin(
+            card,
+            attacker);
 
         GameLog.Write(
             "AttackSequence",
@@ -554,23 +548,23 @@ public class AttackSequence : NetworkBehaviour
 
         while (remainingTime > 0f)
         {
-            if (!isActive ||
-                selectedCard == null ||
-                attacker == null)
+            if (!state.IsActive ||
+                state.Card == null ||
+                state.Attacker == null)
             {
                 GameLog.Write(
                     "AttackSequence",
-                    $"TargetSelectionRoutine end: sequence no longer valid isActive={isActive} remaining={remainingTime}");
+                    $"TargetSelectionRoutine end: sequence no longer valid isActive={state.IsActive} remaining={remainingTime}");
 
                 targetSelectionRoutine = null;
                 yield break;
             }
 
-            if (target != null)
+            if (state.Target != null)
             {
                 GameLog.Write(
                     "AttackSequence",
-                    $"TargetSelectionRoutine end: target selected target={target.name} remaining={remainingTime}");
+                    $"TargetSelectionRoutine end: target selected target={state.Target.name} remaining={remainingTime}");
 
                 targetSelectionRoutine = null;
                 yield break;
@@ -586,10 +580,10 @@ public class AttackSequence : NetworkBehaviour
 
         GameLog.Write(
             "AttackSequence",
-            $"TargetSelectionRoutine timed out isActive={isActive} targetSelected={target != null}");
+            $"TargetSelectionRoutine timed out isActive={state.IsActive} targetSelected={state.Target != null}");
 
-        if (isActive &&
-            target == null)
+        if (state.IsActive &&
+            state.Target == null)
         {
             GameLog.Write(
                 "AttackSequence",
@@ -688,7 +682,7 @@ public class AttackSequence : NetworkBehaviour
             attackRoutine = null;
         }
 
-        selectedCard =
+        state.Card =
             defenseCard;
 
         GameLog.Write(
@@ -704,21 +698,21 @@ public class AttackSequence : NetworkBehaviour
 
         GameLog.Write(
             "AttackSequence",
-            $"StartDefenseSequence starting Vortex roulette toward attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
+            $"StartDefenseSequence starting Vortex roulette toward attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
 
         roulette.StartRoulette(
-            attacker.transform,
+            state.Attacker.transform,
             RouletteRotator.Pattern.Vortex,
             () => OnDefenseVortexCompleted(defenseCard));
 
-        if (attacker != null)
+        if (state.Attacker != null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"StartDefenseSequence calling RpcTriggerAttackAnimation attacker={attacker.netId}");
+                $"StartDefenseSequence calling RpcTriggerAttackAnimation attacker={state.Attacker.netId}");
 
             RpcTriggerAttackAnimation(
-                attacker.netIdentity);
+                state.Attacker.netIdentity);
         }
 
         GameLog.Write(
@@ -740,9 +734,9 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"SetTarget target={(target != null ? target.name : "NULL")} isActive={isActive} currentTarget={(this.target != null ? this.target.name : "NULL")}");
+            $"SetTarget target={(target != null ? target.name : "NULL")} isActive={state.IsActive} currentTarget={(state.Target != null ? state.Target.name : "NULL")}");
 
-        if (!isActive)
+        if (!state.IsActive)
         {
             GameLog.Write(
                 "AttackSequence",
@@ -751,12 +745,12 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (selectedCard == null ||
-            attacker == null)
+        if (state.Card == null ||
+            state.Attacker == null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"SetTarget rejected: selectedCard or attacker is null selectedCard={(selectedCard != null && selectedCard.Data != null ? selectedCard.Data.name : "NULL")} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
+                $"SetTarget rejected: selectedCard or attacker is null selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
 
             return;
         }
@@ -770,11 +764,11 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (this.target != null)
+        if (state.Target != null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"SetTarget rejected: target already set target={this.target.name}");
+                $"SetTarget rejected: target already set target={state.Target.name}");
 
             return;
         }
@@ -783,11 +777,11 @@ public class AttackSequence : NetworkBehaviour
             target.GetComponentInParent<Player>();
 
         if (targetPlayer == null ||
-            targetPlayer == attacker)
+            targetPlayer == state.Attacker)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"SetTarget rejected: invalid target player targetPlayer={(targetPlayer != null ? targetPlayer.netId.ToString() : "NULL")} attacker={attacker.netId}");
+                $"SetTarget rejected: invalid target player targetPlayer={(targetPlayer != null ? targetPlayer.netId.ToString() : "NULL")} attacker={state.Attacker.netId}");
 
             return;
         }
@@ -805,22 +799,22 @@ public class AttackSequence : NetworkBehaviour
             return;
         }
 
-        if (selectedCard.Data != null &&
-            selectedCard.Data.CardClass ==
+        if (state.Card.Data != null &&
+            state.Card.Data.CardClass ==
                 Card.CardClass.Defence)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"SetTarget rejected: selected card is a Defence card card={selectedCard.Data.name}");
+                $"SetTarget rejected: selected card is a Defence card card={state.Card.Data.name}");
 
             return;
         }
 
-        this.target = target;
+        state.Target = target;
 
         GameLog.Write(
             "AttackSequence",
-            $"SetTarget target set target={target.name} targetPlayer={targetPlayer.netId} attacker={attacker.netId}");
+            $"SetTarget target set target={target.name} targetPlayer={targetPlayer.netId} attacker={state.Attacker.netId}");
 
         StopTargetSelectionTimer();
 
@@ -842,22 +836,22 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"OnRouletteReachedTarget isActive={isActive} target={(target != null ? target.name : "NULL")} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
+            $"OnRouletteReachedTarget isActive={state.IsActive} target={(state.Target != null ? state.Target.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
 
-        if (!isActive ||
-            selectedCard == null ||
-            attacker == null ||
-            target == null)
+        if (!state.IsActive ||
+            state.Card == null ||
+            state.Attacker == null ||
+            state.Target == null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"OnRouletteReachedTarget ignored: sequence not valid isActive={isActive} selectedCard={(selectedCard != null && selectedCard.Data != null ? selectedCard.Data.name : "NULL")}");
+                $"OnRouletteReachedTarget ignored: sequence not valid isActive={state.IsActive} selectedCard={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")}");
 
             return;
         }
 
         Player victim =
-            target.GetComponentInParent<Player>();
+            state.Target.GetComponentInParent<Player>();
 
         if (victim == null)
         {
@@ -926,8 +920,8 @@ public class AttackSequence : NetworkBehaviour
             $"AttackDelayRoutine start targetActionTime={targetActionTime}");
 
         Player victim =
-            target != null
-                ? target.GetComponentInParent<Player>()
+            state.Target != null
+                ? state.Target.GetComponentInParent<Player>()
                 : null;
 
         if (victim == null)
@@ -959,14 +953,14 @@ public class AttackSequence : NetworkBehaviour
 
         while (remainingTime > 0f)
         {
-            if (!isActive ||
-                selectedCard == null ||
-                attacker == null ||
-                target == null)
+            if (!state.IsActive ||
+                state.Card == null ||
+                state.Attacker == null ||
+                state.Target == null)
             {
                 GameLog.Write(
                     "AttackSequence",
-                    $"AttackDelayRoutine interrupted: sequence changed during defense window isActive={isActive} remaining={remainingTime}");
+                    $"AttackDelayRoutine interrupted: sequence changed during defense window isActive={state.IsActive} remaining={remainingTime}");
 
                 if (victimConnection != null)
                 {
@@ -1008,26 +1002,26 @@ public class AttackSequence : NetworkBehaviour
                 victimConnection);
         }
 
-        if (!isActive ||
-            selectedCard == null ||
-            attacker == null ||
-            target == null)
+        if (!state.IsActive ||
+            state.Card == null ||
+            state.Attacker == null ||
+            state.Target == null)
         {
             GameLog.Write(
                 "AttackSequence",
-                $"AttackDelayRoutine end: sequence no longer valid after timer isActive={isActive}");
+                $"AttackDelayRoutine end: sequence no longer valid after timer isActive={state.IsActive}");
 
             yield break;
         }
 
         Card card =
-            selectedCard;
+            state.Card;
 
         Player attackPlayer =
-            attacker;
+            state.Attacker;
 
         PlayerInteractable attackTarget =
-            target;
+            state.Target;
 
         Player targetPlayer =
             attackTarget.GetComponentInParent<Player>();
@@ -1185,8 +1179,8 @@ public class AttackSequence : NetworkBehaviour
         if (isStealCard)
         {
             Player victim =
-                target != null
-                    ? target.GetComponentInParent<Player>()
+                state.Target != null
+                    ? state.Target.GetComponentInParent<Player>()
                     : null;
 
             GameLog.Write(
@@ -1318,11 +1312,7 @@ public class AttackSequence : NetworkBehaviour
             GameMaster.Instance.EndTurn();
         }
 
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
+        state.Reset();
         attackRoutine = null;
         targetSelectionRoutine = null;
 
@@ -1336,7 +1326,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"FinishDefenseSequence isActive={isActive}");
+            $"FinishDefenseSequence isActive={state.IsActive}");
 
         RouletteRotator roulette =
             RouletteRotator.Instance;
@@ -1355,11 +1345,7 @@ public class AttackSequence : NetworkBehaviour
             GameMaster.Instance.EndTurn();
         }
 
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
+        state.Reset();
         attackRoutine = null;
         targetSelectionRoutine = null;
 
@@ -1574,9 +1560,9 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"CancelSequence isActive={isActive} card={(selectedCard != null && selectedCard.Data != null ? selectedCard.Data.name : "NULL")} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")} target={(target != null ? target.name : "NULL")}");
+            $"CancelSequence isActive={state.IsActive} card={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")} target={(state.Target != null ? state.Target.name : "NULL")}");
 
-        if (!isActive)
+        if (!state.IsActive)
         {
             GameLog.Write(
                 "AttackSequence",
@@ -1602,10 +1588,10 @@ public class AttackSequence : NetworkBehaviour
         }
 
         Player previousAttacker =
-            attacker;
+            state.Attacker;
 
         Card previousCard =
-            selectedCard;
+            state.Card;
 
         RouletteRotator roulette =
             RouletteRotator.Instance;
@@ -1645,11 +1631,7 @@ public class AttackSequence : NetworkBehaviour
                 previousAttacker.netIdentity);
         }
 
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
+        state.Reset();
 
         GameLog.Write(
             "AttackSequence",
@@ -1712,7 +1694,7 @@ public class AttackSequence : NetworkBehaviour
     {
         GameLog.Write(
             "AttackSequence",
-            $"FinishSequence isActive={isActive} card={(selectedCard != null && selectedCard.Data != null ? selectedCard.Data.name : "NULL")} attacker={(attacker != null ? attacker.netId.ToString() : "NULL")}");
+            $"FinishSequence isActive={state.IsActive} card={(state.Card != null && state.Card.Data != null ? state.Card.Data.name : "NULL")} attacker={(state.Attacker != null ? state.Attacker.netId.ToString() : "NULL")}");
 
         StopTargetSelectionTimer();
 
@@ -1721,27 +1703,23 @@ public class AttackSequence : NetworkBehaviour
         RouletteRotator roulette =
             RouletteRotator.Instance;
 
-        if (selectedCard != null)
+        if (state.Card != null)
         {
-            selectedCard.SetInRoulette(false);
+            state.Card.SetInRoulette(false);
         }
 
         if (roulette != null)
         {
             roulette.StopRoulette();
 
-            if (selectedCard != null)
+            if (state.Card != null)
             {
                 roulette.DetachCard(
-                    selectedCard.transform);
+                    state.Card.transform);
             }
         }
 
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
+        state.Reset();
         attackRoutine = null;
 
         GameLog.Write(

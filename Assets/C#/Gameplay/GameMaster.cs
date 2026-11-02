@@ -279,16 +279,10 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             "GameMaster",
             "StartGame players set up, calling BeginTurn with random first player");
 
-        int firstPlayer =
-            DebugDeal.HostFirstIndex(
-                _players);
-
         BeginTurn(
-            firstPlayer >= 0
-                ? firstPlayer
-                : Random.Range(
-                    0,
-                    _players.Count));
+            Random.Range(
+                0,
+                _players.Count));
     }
 
     [Server]

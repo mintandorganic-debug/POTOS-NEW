@@ -80,17 +80,29 @@ public class Card : InteractableObject
 
     private void OnEnable()
     {
+        GameLog.Write(
+            "Card",
+            $"OnEnable netId={netId} data={(cardData != null ? cardData.name : "NULL")}");
+
         SubscribeToGamePhase();
     }
 
     private void OnDisable()
     {
+        GameLog.Write(
+            "Card",
+            $"OnDisable netId={netId} data={(cardData != null ? cardData.name : "NULL")}");
+
         ResetLocalState();
         UnsubscribeFromGamePhase();
     }
 
     private void Start()
     {
+        GameLog.Write(
+            "Card",
+            $"Start netId={netId} data={(cardData != null ? cardData.name : "NULL")} owner={ownerNetId} socket={socketIndex} available={isAvailable} inRoulette={isInRoulette}");
+
         ResetLocalState();
         ApplyVisualState();
 
@@ -98,6 +110,12 @@ public class Card : InteractableObject
         {
             OnGamePhaseChanged(
                 GameMaster.Instance.CurrentPhase);
+        }
+        else
+        {
+            GameLog.Write(
+                "Card",
+                $"Start netId={netId} GameMaster is NULL, phase not applied");
         }
     }
 
@@ -110,11 +128,27 @@ public class Card : InteractableObject
     [Server]
     public void RefreshAvailability()
     {
+        GameLog.Write(
+            "Card",
+            $"RefreshAvailability netId={netId} inRoulette={isInRoulette} available={isAvailable}");
+
         if (isInRoulette)
+        {
+            GameLog.Write(
+                "Card",
+                $"RefreshAvailability skipped netId={netId}: in roulette");
+
             return;
+        }
 
         if (GameMaster.Instance == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"RefreshAvailability skipped netId={netId}: GameMaster is NULL");
+
             return;
+        }
 
         OnGamePhaseChanged(
             GameMaster.Instance.CurrentPhase);
@@ -123,7 +157,17 @@ public class Card : InteractableObject
     private void SubscribeToGamePhase()
     {
         if (GameMaster.Instance == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"SubscribeToGamePhase skipped netId={netId}: GameMaster is NULL");
+
             return;
+        }
+
+        GameLog.Write(
+            "Card",
+            $"SubscribeToGamePhase netId={netId}");
 
         GameMaster.Instance.GamePhaseChanged -=
             OnGamePhaseChanged;
@@ -135,7 +179,17 @@ public class Card : InteractableObject
     private void UnsubscribeFromGamePhase()
     {
         if (GameMaster.Instance == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"UnsubscribeFromGamePhase skipped netId={netId}: GameMaster is NULL");
+
             return;
+        }
+
+        GameLog.Write(
+            "Card",
+            $"UnsubscribeFromGamePhase netId={netId}");
 
         GameMaster.Instance.GamePhaseChanged -=
             OnGamePhaseChanged;
@@ -144,11 +198,27 @@ public class Card : InteractableObject
     private void OnGamePhaseChanged(
         GameMaster.GamePhase phase)
     {
+        GameLog.Write(
+            "Card",
+            $"OnGamePhaseChanged netId={netId} phase={phase} isServer={isServer} inRoulette={isInRoulette}");
+
         if (!isServer)
+        {
+            GameLog.Write(
+                "Card",
+                $"OnGamePhaseChanged skipped netId={netId}: not server");
+
             return;
+        }
 
         if (isInRoulette)
+        {
+            GameLog.Write(
+                "Card",
+                $"OnGamePhaseChanged skipped netId={netId}: in roulette");
+
             return;
+        }
 
         bool shouldBeAvailable;
 
@@ -164,6 +234,10 @@ public class Card : InteractableObject
                 cardData != null &&
                 cardData.CardClass != CardClass.Defence;
         }
+
+        GameLog.Write(
+            "Card",
+            $"OnGamePhaseChanged netId={netId} phase={phase} class={(cardData != null ? cardData.CardClass.ToString() : "NULL")} shouldBeAvailable={shouldBeAvailable}");
 
         SetAvailable(
             shouldBeAvailable,
@@ -191,9 +265,17 @@ public class Card : InteractableObject
     public bool IsOwnedByLocalConnection(
         NetworkConnectionToClient connection)
     {
+        GameLog.Write(
+            "Card",
+            $"IsOwnedByLocalConnection netId={netId} connection={(connection != null ? connection.connectionId : -1)} owner={ownerNetId}");
+
         if (connection == null ||
             ownerNetId == 0)
         {
+            GameLog.Write(
+                "Card",
+                $"IsOwnedByLocalConnection=false netId={netId}: connection is NULL or ownerNetId is 0");
+
             return false;
         }
 
@@ -201,8 +283,16 @@ public class Card : InteractableObject
                 ownerNetId,
                 out NetworkIdentity ownerIdentity))
         {
+            GameLog.Write(
+                "Card",
+                $"IsOwnedByLocalConnection=false netId={netId}: owner {ownerNetId} not spawned on server");
+
             return false;
         }
+
+        GameLog.Write(
+            "Card",
+            $"IsOwnedByLocalConnection netId={netId} match={ownerIdentity.connectionToClient == connection}");
 
         return ownerIdentity.connectionToClient ==
                connection;
@@ -211,9 +301,17 @@ public class Card : InteractableObject
     [Server]
     public void RandomData()
     {
+        GameLog.Write(
+            "Card",
+            $"RandomData begin netId={netId} types={(avalaibleCardTypes == null ? -1 : avalaibleCardTypes.Count)}");
+
         if (avalaibleCardTypes == null ||
             avalaibleCardTypes.Count == 0)
         {
+            GameLog.Write(
+                "Card",
+                $"RandomData failed netId={netId}: avalaibleCardTypes is empty");
+
             Debug.LogError(
                 "Card: avalaibleCardTypes is empty.",
                 this);
@@ -228,6 +326,10 @@ public class Card : InteractableObject
 
         if (avalaibleCardTypes[index] == null)
         {
+            GameLog.Write(
+                "Card",
+                $"RandomData failed netId={netId}: CardData at index {index} is null");
+
             Debug.LogError(
                 $"Card: CardData at index {index} is null.",
                 this);
@@ -237,6 +339,10 @@ public class Card : InteractableObject
 
         cardDataIndex = index;
 
+        GameLog.Write(
+            "Card",
+            $"RandomData netId={netId} index={index}/{avalaibleCardTypes.Count} data={avalaibleCardTypes[index].name}");
+
         ApplyCardData();
 
         if (GameMaster.Instance != null)
@@ -244,12 +350,22 @@ public class Card : InteractableObject
             OnGamePhaseChanged(
                 GameMaster.Instance.CurrentPhase);
         }
+        else
+        {
+            GameLog.Write(
+                "Card",
+                $"RandomData netId={netId}: GameMaster is NULL, phase not applied");
+        }
     }
 
     private void OnCardDataChanged(
         int oldValue,
         int newValue)
     {
+        GameLog.Write(
+            "Card",
+            $"OnCardDataChanged netId={netId} {oldValue}->{newValue}");
+
         ApplyCardData();
 
         if (isServer &&
@@ -266,6 +382,10 @@ public class Card : InteractableObject
             cardDataIndex < 0 ||
             cardDataIndex >= avalaibleCardTypes.Count)
         {
+            GameLog.Write(
+                "Card",
+                $"ApplyCardData skipped netId={netId} index={cardDataIndex} types={(avalaibleCardTypes == null ? -1 : avalaibleCardTypes.Count)}");
+
             return;
         }
 
@@ -273,7 +393,17 @@ public class Card : InteractableObject
             avalaibleCardTypes[cardDataIndex];
 
         if (cardData == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"ApplyCardData skipped netId={netId} index={cardDataIndex}: CardData is NULL");
+
             return;
+        }
+
+        GameLog.Write(
+            "Card",
+            $"ApplyCardData netId={netId} index={cardDataIndex} data={cardData.name} texture={(cardData.texture == null ? "NULL" : cardData.texture.name)}");
 
         visual?.ApplyCardData(cardData);
     }
@@ -284,6 +414,10 @@ public class Card : InteractableObject
         UnavailableReason reason =
             UnavailableReason.SampleReason)
     {
+        GameLog.Write(
+            "Card",
+            $"SetAvailable netId={netId} {isAvailable}->{value} reason={reason} (previous reason={unavailableReason})");
+
         isAvailable = value;
 
         unavailableReason =
@@ -295,6 +429,10 @@ public class Card : InteractableObject
     [Server]
     public void SetInRoulette(bool value)
     {
+        GameLog.Write(
+            "Card",
+            $"SetInRoulette netId={netId} {isInRoulette}->{value}");
+
         isInRoulette = value;
 
         if (value)
@@ -321,6 +459,10 @@ public class Card : InteractableObject
         bool oldValue,
         bool newValue)
     {
+        GameLog.Write(
+            "Card",
+            $"OnRouletteStateChanged netId={netId} {oldValue}->{newValue}");
+
         if (newValue)
         {
             movement?.Detach();
@@ -340,6 +482,10 @@ public class Card : InteractableObject
         uint ownerNetId,
         int socketIndex)
     {
+        GameLog.Write(
+            "Card",
+            $"SetOwner netId={netId} owner {this.ownerNetId}->{ownerNetId} socket {this.socketIndex}->{socketIndex}");
+
         this.ownerNetId = ownerNetId;
         this.socketIndex = socketIndex;
 
@@ -348,6 +494,10 @@ public class Card : InteractableObject
 
     public override void OnStartClient()
     {
+        GameLog.Write(
+            "Card",
+            $"OnStartClient netId={netId} owner={ownerNetId} socket={socketIndex} available={isAvailable} inRoulette={isInRoulette}");
+
         base.OnStartClient();
 
         SubscribeToGamePhase();
@@ -359,6 +509,10 @@ public class Card : InteractableObject
 
         if (isInRoulette)
         {
+            GameLog.Write(
+                "Card",
+                $"OnStartClient netId={netId}: in roulette, applying roulette state");
+
             OnRouletteStateChanged(
                 false,
                 true);
@@ -368,6 +522,10 @@ public class Card : InteractableObject
 
         if (IsOwnedByLocalPlayer())
         {
+            GameLog.Write(
+                "Card",
+                $"OnStartClient netId={netId}: owned by local player, initializing interaction");
+
             InitializeInteraction();
 
             if (GameMaster.Instance != null)
@@ -378,6 +536,10 @@ public class Card : InteractableObject
         }
         else
         {
+            GameLog.Write(
+                "Card",
+                $"OnStartClient netId={netId}: not owned by local player, disabling local interaction");
+
             DisableLocalInteraction();
         }
     }
@@ -386,6 +548,10 @@ public class Card : InteractableObject
         bool oldValue,
         bool newValue)
     {
+        GameLog.Write(
+            "Card",
+            $"OnAvailabilityChanged netId={netId} {oldValue}->{newValue} reason={unavailableReason}");
+
         if (!newValue)
         {
             interaction?.ResetState();
@@ -399,6 +565,10 @@ public class Card : InteractableObject
         uint oldValue,
         uint newValue)
     {
+        GameLog.Write(
+            "Card",
+            $"OnOwnerChanged netId={netId} {oldValue}->{newValue}");
+
         ResetLocalState();
 
         AttachToSocket();
@@ -406,10 +576,18 @@ public class Card : InteractableObject
 
         if (IsOwnedByLocalPlayer())
         {
+            GameLog.Write(
+                "Card",
+                $"OnOwnerChanged netId={netId}: owned by local player, initializing interaction");
+
             InitializeInteraction();
 
             if (isInRoulette)
             {
+                GameLog.Write(
+                    "Card",
+                    $"OnOwnerChanged netId={netId}: in roulette, applying roulette state");
+
                 OnRouletteStateChanged(
                     false,
                     true);
@@ -425,6 +603,10 @@ public class Card : InteractableObject
         }
         else
         {
+            GameLog.Write(
+                "Card",
+                $"OnOwnerChanged netId={netId}: not owned by local player, disabling local interaction");
+
             DisableLocalInteraction();
         }
     }
@@ -433,11 +615,19 @@ public class Card : InteractableObject
         int oldValue,
         int newValue)
     {
+        GameLog.Write(
+            "Card",
+            $"OnSocketChanged netId={netId} {oldValue}->{newValue}");
+
         AttachToSocket();
     }
 
     private void InitializeInteraction()
     {
+        GameLog.Write(
+            "Card",
+            $"InitializeInteraction netId={netId} interaction={(interaction != null ? "ok" : "NULL")} visual={(visual != null ? "ok" : "NULL")} movement={(movement != null ? "ok" : "NULL")}");
+
         interaction?.Initialize(
             this,
             visual,
@@ -446,13 +636,27 @@ public class Card : InteractableObject
 
     private void AttachToSocket()
     {
+        GameLog.Write(
+            "Card",
+            $"AttachToSocket netId={netId} owner={ownerNetId} socket={socketIndex}");
+
         if (ownerNetId == 0)
+        {
+            GameLog.Write(
+                "Card",
+                $"AttachToSocket skipped netId={netId}: ownerNetId is 0");
+
             return;
+        }
 
         if (!NetworkClient.spawned.TryGetValue(
                 ownerNetId,
                 out NetworkIdentity identity))
         {
+            GameLog.Write(
+                "Card",
+                $"AttachToSocket skipped netId={netId}: owner {ownerNetId} not spawned on client");
+
             return;
         }
 
@@ -460,21 +664,39 @@ public class Card : InteractableObject
             identity.GetComponent<Player>();
 
         if (player == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"AttachToSocket skipped netId={netId}: owner {ownerNetId} has no Player");
+
             return;
+        }
 
         if (socketIndex < 0 ||
             socketIndex >= player.cardSockets.Count)
         {
+            GameLog.Write(
+                "Card",
+                $"AttachToSocket skipped netId={netId}: socketIndex {socketIndex} out of range (count={player.cardSockets.Count})");
+
             return;
         }
 
         Transform socket =
             player.cardSockets[socketIndex].transform;
 
+        GameLog.Write(
+            "Card",
+            $"AttachToSocket netId={netId} attaching to socket={(socket != null ? socket.name : "NULL")} of player={player.name}");
+
         movement?.AttachToSocket(socket);
 
         if (isInRoulette)
         {
+            GameLog.Write(
+                "Card",
+                $"AttachToSocket netId={netId}: in roulette, interaction disabled");
+
             visual?.DisableInteraction();
             visual?.HideUnavailableOverlay();
             return;
@@ -486,6 +708,10 @@ public class Card : InteractableObject
 
     private void DisableLocalInteraction()
     {
+        GameLog.Write(
+            "Card",
+            $"DisableLocalInteraction netId={netId}");
+
         interaction?.ResetState();
         movement?.ResetState();
 
@@ -495,6 +721,10 @@ public class Card : InteractableObject
 
     private void ResetLocalState()
     {
+        GameLog.Write(
+            "Card",
+            $"ResetLocalState netId={netId}");
+
         interaction?.ResetState();
         movement?.ResetState();
         visual?.ResetState();
@@ -503,10 +733,20 @@ public class Card : InteractableObject
     private void ApplyVisualState()
     {
         if (visual == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"ApplyVisualState skipped netId={netId}: visual is NULL");
+
             return;
+        }
 
         if (isInRoulette)
         {
+            GameLog.Write(
+                "Card",
+                $"ApplyVisualState netId={netId}: in roulette, overlay hidden, collider off");
+
             visual.HideUnavailableOverlay();
             visual.SetColliderEnabled(false);
             return;
@@ -514,10 +754,18 @@ public class Card : InteractableObject
 
         if (!IsOwnedByLocalPlayer())
         {
+            GameLog.Write(
+                "Card",
+                $"ApplyVisualState netId={netId}: not owned by local player, overlay hidden, collider off");
+
             visual.HideUnavailableOverlay();
             visual.SetColliderEnabled(false);
             return;
         }
+
+        GameLog.Write(
+            "Card",
+            $"ApplyVisualState netId={netId}: available={isAvailable}, collider on");
 
         visual.ApplyAvailability(
             isAvailable);
@@ -527,6 +775,10 @@ public class Card : InteractableObject
 
     public void OnAttachmentToRoulette()
     {
+        GameLog.Write(
+            "Card",
+            $"OnAttachmentToRoulette netId={netId}");
+
         movement?.Detach();
         ResetLocalState();
 
@@ -536,8 +788,18 @@ public class Card : InteractableObject
 
     public void RequestMoveToZoomSocket()
     {
+        GameLog.Write(
+            "Card",
+            $"RequestMoveToZoomSocket netId={netId}");
+
         if (!IsOwnedByLocalPlayer())
+        {
+            GameLog.Write(
+                "Card",
+                $"RequestMoveToZoomSocket skipped netId={netId}: not owned by local player");
+
             return;
+        }
 
         CmdMoveToZoomSocket();
     }
@@ -546,16 +808,36 @@ public class Card : InteractableObject
     private void CmdMoveToZoomSocket(
         NetworkConnectionToClient sender = null)
     {
+        GameLog.Write(
+            "Card",
+            $"CmdMoveToZoomSocket netId={netId} sender={(sender != null ? sender.connectionId : -1)}");
+
         if (!IsOwnedByLocalConnection(sender))
+        {
+            GameLog.Write(
+                "Card",
+                $"CmdMoveToZoomSocket rejected netId={netId}: sender does not own card");
+
             return;
+        }
 
         if (isInRoulette)
+        {
+            GameLog.Write(
+                "Card",
+                $"CmdMoveToZoomSocket rejected netId={netId}: in roulette");
+
             return;
+        }
 
         if (!NetworkServer.spawned.TryGetValue(
                 ownerNetId,
                 out NetworkIdentity identity))
         {
+            GameLog.Write(
+                "Card",
+                $"CmdMoveToZoomSocket rejected netId={netId}: owner {ownerNetId} not spawned on server");
+
             return;
         }
 
@@ -563,10 +845,26 @@ public class Card : InteractableObject
             identity.GetComponent<Player>();
 
         if (player == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"CmdMoveToZoomSocket rejected netId={netId}: owner {ownerNetId} has no Player");
+
             return;
+        }
 
         if (player.cardZoomSocket == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"CmdMoveToZoomSocket rejected netId={netId}: cardZoomSocket is NULL");
+
             return;
+        }
+
+        GameLog.Write(
+            "Card",
+            $"CmdMoveToZoomSocket netId={netId} moving to zoom socket of player={player.name}");
 
         movement?.MoveToZoomSocket(
             player.cardZoomSocket);
@@ -574,13 +872,27 @@ public class Card : InteractableObject
 
     public void ReturnToOwner()
     {
+        GameLog.Write(
+            "Card",
+            $"ReturnToOwner netId={netId} owner={ownerNetId} socket={socketIndex}");
+
         if (ownerNetId == 0)
+        {
+            GameLog.Write(
+                "Card",
+                $"ReturnToOwner skipped netId={netId}: ownerNetId is 0");
+
             return;
+        }
 
         if (!NetworkClient.spawned.TryGetValue(
                 ownerNetId,
                 out NetworkIdentity identity))
         {
+            GameLog.Write(
+                "Card",
+                $"ReturnToOwner skipped netId={netId}: owner {ownerNetId} not spawned on client");
+
             return;
         }
 
@@ -588,16 +900,30 @@ public class Card : InteractableObject
             identity.GetComponent<Player>();
 
         if (player == null)
+        {
+            GameLog.Write(
+                "Card",
+                $"ReturnToOwner skipped netId={netId}: owner {ownerNetId} has no Player");
+
             return;
+        }
 
         if (socketIndex < 0 ||
             socketIndex >= player.cardSockets.Count)
         {
+            GameLog.Write(
+                "Card",
+                $"ReturnToOwner skipped netId={netId}: socketIndex {socketIndex} out of range (count={player.cardSockets.Count})");
+
             return;
         }
 
         Transform socket =
             player.cardSockets[socketIndex].transform;
+
+        GameLog.Write(
+            "Card",
+            $"ReturnToOwner netId={netId} moving to socket={(socket != null ? socket.name : "NULL")} of player={player.name}");
 
         interaction?.ResetState();
         visual?.DisableHighlight();
@@ -609,24 +935,54 @@ public class Card : InteractableObject
 
     public override void OnLookEnter()
     {
+        GameLog.Write(
+            "Card",
+            $"OnLookEnter netId={netId} data={(cardData != null ? cardData.name : "NULL")}");
+
         if (!CanInteract())
+        {
+            GameLog.Write(
+                "Card",
+                $"OnLookEnter ignored netId={netId}: cannot interact");
+
             return;
+        }
 
         interaction?.OnLookEnter();
     }
 
     public override void OnLookExit()
     {
+        GameLog.Write(
+            "Card",
+            $"OnLookExit netId={netId} data={(cardData != null ? cardData.name : "NULL")}");
+
         if (!IsOwnedByLocalPlayer())
+        {
+            GameLog.Write(
+                "Card",
+                $"OnLookExit ignored netId={netId}: not owned by local player");
+
             return;
+        }
 
         interaction?.OnLookExit();
     }
 
     public override void Interact()
     {
+        GameLog.Write(
+            "Card",
+            $"Interact netId={netId} data={(cardData != null ? cardData.name : "NULL")} zoomed={IsZoomed}");
+
         if (!CanInteract())
+        {
+            GameLog.Write(
+                "Card",
+                $"Interact ignored netId={netId}: cannot interact");
+
             return;
+        }
 
         interaction?.Interact();
     }
@@ -646,7 +1002,7 @@ public class Card : InteractableObject
         if (gameMaster == null)
             return false;
 
-        if (!TryGetOwner(
+        if (!GetOwner(
                 out Player player))
         {
             return false;
@@ -667,7 +1023,7 @@ public class Card : InteractableObject
         }
     }
 
-    public bool TryGetOwner(
+    public bool GetOwner(
         out Player player)
     {
         player = null;

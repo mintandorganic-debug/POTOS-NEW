@@ -10,8 +10,18 @@ public class CardInfoPanel : MonoBehaviour
 
     public void Show(CardData data)
     {
+        GameLog.Write(
+            "CardInfoPanel",
+            $"Show card={(data != null ? data.name : "NULL")}");
+
         if (data == null)
+        {
+            GameLog.Write(
+                "CardInfoPanel",
+                "Show skipped: card data is NULL");
+
             return;
+        }
 
         nameText.text =
             data.CardName;
@@ -27,6 +37,10 @@ public class CardInfoPanel : MonoBehaviour
 
     public void Hide()
     {
+        GameLog.Write(
+            "CardInfoPanel",
+            "Hide");
+
         gameObject.SetActive(false);
     }
 }

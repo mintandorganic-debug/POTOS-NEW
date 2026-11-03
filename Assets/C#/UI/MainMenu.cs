@@ -1,7 +1,4 @@
 using Mirror;
-using Mirror.FizzySteam;
-using Steamworks;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,95 +8,32 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] InputField ipInput;
 
-    private CSteamID currentLobby;
-    private Callback<LobbyCreated_t> lobbyCreated;
-    private Callback<GameLobbyJoinRequested_t> requestAquired;
-    private Callback<LobbyEnter_t> lobbyEntered;
+    private SteamLobbySession steamSession;
 
     private void Start()
     {
+        GameLog.Write(
+            "MainMenu",
+            $"Start ipInput={(ipInput != null ? ipInput.name : "NULL")}");
+
         Cursor.visible = true;
 
         instance = this;
 
-        lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
-        requestAquired = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequested);
-        lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+        steamSession = new SteamLobbySession();
     }
 
     private void OnDestroy()
     {
-        // Release Steam callbacks so a reloaded menu does not
-        // leave stale handlers pointing at a destroyed MainMenu.
-        lobbyCreated?.Dispose();
-        requestAquired?.Dispose();
-        lobbyEntered?.Dispose();
+        GameLog.Write(
+            "MainMenu",
+            $"OnDestroy isCurrentInstance={instance == this}");
 
-        lobbyCreated = null;
-        requestAquired = null;
-        lobbyEntered = null;
+        steamSession?.Dispose();
+        steamSession = null;
 
         if (instance == this)
             instance = null;
-    }
-
-    // =========================================================
-    // TRANSPORT
-    // =========================================================
-
-    // Transports are resolved from the persistent NetworkManager at runtime.
-    // Inspector references would point at the scene copy that Mirror destroys
-    // when the menu scene is reloaded.
-    private static Transport GetSteamTransport()
-    {
-        NetworkManager manager = NetworkManager.singleton;
-
-        return manager != null
-            ? manager.GetComponentInChildren<FizzySteamworks>(true)
-            : null;
-    }
-
-    private static Transport GetIpTransport()
-    {
-        NetworkManager manager = NetworkManager.singleton;
-
-        if (manager == null)
-            return null;
-
-        foreach (Transport transport in
-                 manager.GetComponentsInChildren<Transport>(true))
-        {
-            if (transport is not FizzySteamworks)
-                return transport;
-        }
-
-        return null;
-    }
-
-    private static bool TrySetTransport(Transport transport)
-    {
-        if (NetworkManager.singleton is not NetManager manager)
-        {
-            Debug.LogError("MainMenu: NetManager is missing.");
-            return false;
-        }
-
-        if (transport == null)
-        {
-            Debug.LogError("MainMenu: transport is missing on the persistent NetworkManager.");
-            return false;
-        }
-
-        if (NetworkClient.active || NetworkServer.active)
-        {
-            Debug.LogWarning("MainMenu: network is already active, transport not changed.");
-            return false;
-        }
-
-        manager.ChangeTransport(transport);
-        Transport.active = transport;
-
-        return true;
     }
 
     // =========================================================
@@ -108,94 +42,121 @@ public class MainMenu : MonoBehaviour
 
     public void HostSteam()
     {
-        if (!TrySetTransport(GetSteamTransport()))
-            return;
+        GameLog.Write(
+            "MainMenu",
+            "HostSteam button pressed");
 
-        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 5);
+        if (!NetTransportSelector.Set(NetTransportSelector.GetSteam()))
+        {
+            GameLog.Write(
+                "MainMenu",
+                "HostSteam aborted: Steam transport could not be set");
+
+            return;
+        }
+
+        steamSession.CreateLobby();
     }
 
     public void HostIp()
     {
-        if (!TrySetTransport(GetIpTransport()))
-            return;
+        GameLog.Write(
+            "MainMenu",
+            "HostIp button pressed");
 
-        NetworkManager.singleton.StartHost();
-    }
-
-    private void OnLobbyCreated(LobbyCreated_t callback)
-    {
-        if (callback.m_eResult != EResult.k_EResultOK)
-            return;
-
-        currentLobby = new CSteamID(callback.m_ulSteamIDLobby);
-
-        SteamMatchmaking.SetLobbyData(
-            currentLobby,
-            "HostAddress",
-            SteamUser.GetSteamID().ToString());
-
-        Debug.Log("Lobby host: " + SteamUser.GetSteamID());
-
-        NetworkManager.singleton.StartHost();
-    }
-
-    private void OnJoinRequested(GameLobbyJoinRequested_t callback)
-    {
-        SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
-    }
-
-    private void OnLobbyEntered(LobbyEnter_t callback)
-    {
-        // The host also receives LobbyEnter after creating the lobby,
-        // and a client must not start a second connection.
-        if (NetworkServer.active || NetworkClient.active)
-            return;
-
-        CSteamID lobby = new CSteamID(callback.m_ulSteamIDLobby);
-
-        string hostAddress =
-            SteamMatchmaking.GetLobbyData(lobby, "HostAddress");
-
-        if (string.IsNullOrEmpty(hostAddress))
+        if (!NetTransportSelector.Set(NetTransportSelector.GetIp()))
         {
-            Debug.LogError("MainMenu: lobby has no HostAddress.");
+            GameLog.Write(
+                "MainMenu",
+                "HostIp aborted: IP transport could not be set");
+
             return;
         }
 
-        if (!TrySetTransport(GetSteamTransport()))
-            return;
+        GameLog.Write(
+            "MainMenu",
+            "HostIp StartHost");
 
-        Debug.Log($"Connecting to host: {hostAddress}");
-
-        NetworkManager.singleton.StartClient(new Uri($"steam://{hostAddress}"));
+        NetworkManager.singleton.StartHost();
     }
 
     public void Client()
     {
-        if (!TrySetTransport(GetIpTransport()))
+        GameLog.Write(
+            "MainMenu",
+            $"Client button pressed address={(ipInput != null ? ipInput.text : "NULL")}");
+
+        if (!NetTransportSelector.Set(NetTransportSelector.GetIp()))
+        {
+            GameLog.Write(
+                "MainMenu",
+                "Client aborted: IP transport could not be set");
+
             return;
+        }
 
         NetworkManager.singleton.networkAddress = ipInput.text;
+
+        GameLog.Write(
+            "MainMenu",
+            $"Client StartClient address={NetworkManager.singleton.networkAddress}");
+
         NetworkManager.singleton.StartClient();
     }
 
     public void Server()
     {
+        GameLog.Write(
+            "MainMenu",
+            "Server button pressed, StartServer");
+
         NetworkManager.singleton.StartServer();
     }
 
     public void Stop()
     {
+        GameLog.Write(
+            "MainMenu",
+            $"Stop button pressed serverActive={NetworkServer.active} clientConnected={NetworkClient.isConnected}");
+
         if (NetworkServer.active && NetworkClient.isConnected)
+        {
+            GameLog.Write(
+                "MainMenu",
+                "Stop StopHost");
+
             NetworkManager.singleton.StopHost();
+        }
         else if (NetworkClient.isConnected)
+        {
+            GameLog.Write(
+                "MainMenu",
+                "Stop StopClient");
+
             NetworkManager.singleton.StopClient();
+        }
         else if (NetworkServer.active)
+        {
+            GameLog.Write(
+                "MainMenu",
+                "Stop StopServer");
+
             NetworkManager.singleton.StopServer();
+        }
+        else
+        {
+            GameLog.Write(
+                "MainMenu",
+                "Stop nothing to stop");
+        }
     }
 
     public void CloseApp()
     {
+        GameLog.Write(
+            "MainMenu",
+            "CloseApp Application.Quit");
+
         Application.Quit();
     }
 }

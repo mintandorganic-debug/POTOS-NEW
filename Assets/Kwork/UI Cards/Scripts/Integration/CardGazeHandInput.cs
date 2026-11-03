@@ -27,6 +27,10 @@ namespace CardCarouselUI
 
         public void SetPointerArea(RectTransform area)
         {
+            global::GameLog.Write(
+                "CardGazeHandInput",
+                $"SetPointerArea area={(area != null ? area.name : "NULL")}");
+
             pointerArea = area;
         }
 
@@ -51,6 +55,10 @@ namespace CardCarouselUI
 
         private void Show()
         {
+            global::GameLog.Write(
+                "CardGazeHandInput",
+                $"Show gaze entered hand zone, requesting open hasListeners={ShowRequested != null}");
+
             isShown = true;
             pointerEntered = false;
             pointerLostTime = 0f;
@@ -59,6 +67,10 @@ namespace CardCarouselUI
 
         private void Hide()
         {
+            global::GameLog.Write(
+                "CardGazeHandInput",
+                $"Hide requesting close (escape or pointer left area) pointerEntered={pointerEntered} pointerLostTime={pointerLostTime} hasListeners={HideRequested != null}");
+
             isShown = false;
             isSuppressed = true;
             HideRequested?.Invoke();

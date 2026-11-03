@@ -14,6 +14,10 @@ namespace CardCarouselUI
 
         public MouseModePopup(IPopup inner, HandCameraSnap cameraSnap)
         {
+            global::GameLog.Write(
+                "MouseModePopup",
+                $"Constructor hasInner={inner != null} hasCameraSnap={cameraSnap != null}");
+
             this.inner = inner;
             this.cameraSnap = cameraSnap;
         }
@@ -24,6 +28,10 @@ namespace CardCarouselUI
         {
             previousLockMode = Cursor.lockState;
             previousVisible = Cursor.visible;
+
+            global::GameLog.Write(
+                "MouseModePopup",
+                $"Show mouse mode on, previousLockMode={previousLockMode} previousVisible={previousVisible}");
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -36,6 +44,10 @@ namespace CardCarouselUI
 
         public void Hide()
         {
+            global::GameLog.Write(
+                "MouseModePopup",
+                $"Hide mouse mode off, restoring lockMode={previousLockMode} visible={previousVisible}");
+
             cameraSnap.Release();
             UnfreezeInteraction();
 
@@ -51,6 +63,10 @@ namespace CardCarouselUI
 
             frozen = player != null ? player.GetComponentInChildren<Interactor>() : null;
 
+            global::GameLog.Write(
+                "MouseModePopup",
+                $"FreezeInteraction localPlayer={(player != null ? player.name : "NULL")} interactor={(frozen != null ? frozen.name : "NULL")} hudExists={(global::HudController.Instance != null)}");
+
             if (frozen != null)
             {
                 frozen.StopAllCoroutines();
@@ -63,6 +79,10 @@ namespace CardCarouselUI
 
         private void UnfreezeInteraction()
         {
+            global::GameLog.Write(
+                "MouseModePopup",
+                $"UnfreezeInteraction interactor={(frozen != null ? frozen.name : "NULL")}");
+
             if (frozen != null)
                 frozen.enabled = true;
 

@@ -18,10 +18,18 @@ public class CardVisual : MonoBehaviour
     public void ApplyCardData(
         CardData data)
     {
+        GameLog.Write(
+            "CardVisual",
+            $"ApplyCardData begin card={name} data={(data == null ? "NULL" : data.name)}");
+
         if (data == null ||
             cardMesh == null ||
             data.texture == null)
         {
+            GameLog.Write(
+                "CardVisual",
+                $"ApplyCardData skipped data={(data == null ? "NULL" : data.name)} mesh={(cardMesh == null ? "NULL" : "ok")}");
+
             return;
         }
 
@@ -31,8 +39,16 @@ public class CardVisual : MonoBehaviour
         if (materials == null ||
             materials.Length <= 1)
         {
+            GameLog.Write(
+                "CardVisual",
+                $"ApplyCardData skipped: materials={(materials == null ? -1 : materials.Length)}");
+
             return;
         }
+
+        GameLog.Write(
+            "CardVisual",
+            $"ApplyCardData texture={data.texture.name}");
 
         Material material =
             materials[1];
@@ -49,6 +65,10 @@ public class CardVisual : MonoBehaviour
     public void ApplyAvailability(
         bool available)
     {
+        GameLog.Write(
+            "CardVisual",
+            $"ApplyAvailability card={name} available={available} overlay={(unavailableOverlay != null ? "ok" : "NULL")}");
+
         if (unavailableOverlay != null)
         {
             unavailableOverlay.SetActive(
@@ -58,6 +78,10 @@ public class CardVisual : MonoBehaviour
 
     public void HideUnavailableOverlay()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"HideUnavailableOverlay card={name} overlay={(unavailableOverlay != null ? "ok" : "NULL")}");
+
         if (unavailableOverlay != null)
         {
             unavailableOverlay.SetActive(false);
@@ -67,6 +91,10 @@ public class CardVisual : MonoBehaviour
     public void SetHover(
         bool value)
     {
+        GameLog.Write(
+            "CardVisual",
+            $"SetHover card={name} value={value} highlight={(highlight != null ? "ok" : "NULL")}");
+
         if (highlight != null)
         {
             highlight.enabled = value;
@@ -75,6 +103,10 @@ public class CardVisual : MonoBehaviour
 
     public void StartDescriptionSwap()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"StartDescriptionSwap card={name} delay={descriptionDelay}");
+
         StopDescriptionSwap();
 
         if (cardMesh != null)
@@ -94,6 +126,10 @@ public class CardVisual : MonoBehaviour
 
     private IEnumerator SwapDescription()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"SwapDescription start card={name} delay={descriptionDelay}");
+
         yield return new WaitForSeconds(
             descriptionDelay);
 
@@ -108,14 +144,26 @@ public class CardVisual : MonoBehaviour
         }
 
         descriptionRoutine = null;
+
+        GameLog.Write(
+            "CardVisual",
+            $"SwapDescription end card={name}: description shown, card mesh hidden");
     }
 
     public void StopDescriptionSwap()
     {
         if (descriptionRoutine == null)
         {
+            GameLog.Write(
+                "CardVisual",
+                $"StopDescriptionSwap card={name}: no routine running");
+
             return;
         }
+
+        GameLog.Write(
+            "CardVisual",
+            $"StopDescriptionSwap card={name}: routine stopped");
 
         StopCoroutine(
             descriptionRoutine);
@@ -125,6 +173,10 @@ public class CardVisual : MonoBehaviour
 
     public void ShowCardMesh()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"ShowCardMesh card={name}");
+
         StopDescriptionSwap();
 
         if (descriptionMesh != null)
@@ -140,6 +192,10 @@ public class CardVisual : MonoBehaviour
 
     public void DisableHighlight()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"DisableHighlight card={name} highlight={(highlight != null ? "ok" : "NULL")}");
+
         if (highlight != null)
         {
             highlight.enabled = false;
@@ -149,6 +205,10 @@ public class CardVisual : MonoBehaviour
     public void SetColliderEnabled(
         bool value)
     {
+        GameLog.Write(
+            "CardVisual",
+            $"SetColliderEnabled card={name} value={value} collider={(cardCollider != null ? "ok" : "NULL")}");
+
         if (cardCollider != null)
         {
             cardCollider.enabled = value;
@@ -157,6 +217,10 @@ public class CardVisual : MonoBehaviour
 
     public void DisableInteraction()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"DisableInteraction card={name}");
+
         StopDescriptionSwap();
         ShowCardMesh();
 
@@ -167,6 +231,10 @@ public class CardVisual : MonoBehaviour
 
     public void ResetState()
     {
+        GameLog.Write(
+            "CardVisual",
+            $"ResetState card={name}");
+
         StopDescriptionSwap();
         ShowCardMesh();
         DisableHighlight();

@@ -42,33 +42,72 @@ public class PlayerBankVisual : MonoBehaviour
 
     private void Start()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"Start bank={(bank != null ? bank.netId.ToString() : "NULL")} object={name} chipPrefabs={chipPrefabs.Count}");
+
         CreateCoinStacks();
         CreateChipStacks();
 
         bank.CoinsChanged += OnCoinsChanged;
         bank.ChipsChanged += OnChipsChanged;
 
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"Start subscribed to bank events bank={(bank != null ? bank.netId.ToString() : "NULL")}");
+
         Refresh();
     }
 
     private void OnDestroy()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"OnDestroy bank={(bank != null ? bank.netId.ToString() : "NULL")} object={name}");
+
         if (bank == null)
+        {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"OnDestroy skipped: bank is NULL");
             return;
+        }
 
         bank.CoinsChanged -= OnCoinsChanged;
         bank.ChipsChanged -= OnChipsChanged;
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"OnDestroy unsubscribed from bank events bank={(bank != null ? bank.netId.ToString() : "NULL")}");
     }
 
     #region Money Rain
 
     public void PlayCoinsRain(int count)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"PlayCoinsRain count={count} vfx={(coinsVfx != null ? "set" : "NULL")}");
+
         if (coinsVfx == null)
+        {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"PlayCoinsRain skipped: coinsVfx is NULL count={count}");
             return;
+        }
 
         if (count <= 0)
+        {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"PlayCoinsRain skipped: count <= 0 count={count}");
             return;
+        }
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"PlayCoinsRain playing count={count}");
 
         coinsVfx.SetInt(
             VfxCountProperty,
@@ -79,11 +118,29 @@ public class PlayerBankVisual : MonoBehaviour
 
     public void PlayChipsRain(int count)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"PlayChipsRain count={count} vfx={(chipsVfx != null ? "set" : "NULL")}");
+
         if (chipsVfx == null)
+        {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"PlayChipsRain skipped: chipsVfx is NULL count={count}");
             return;
+        }
 
         if (count <= 0)
+        {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"PlayChipsRain skipped: count <= 0 count={count}");
             return;
+        }
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"PlayChipsRain playing count={count}");
 
         chipsVfx.SetInt(
             VfxCountProperty,
@@ -98,8 +155,16 @@ public class PlayerBankVisual : MonoBehaviour
 
     private void CreateCoinStacks()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CreateCoinStacks coinPrefab={(coinPrefab != null ? "set" : "NULL")} stack10Position={(coinStack10Position != null ? "set" : "NULL")} stack20Position={(coinStack20Position != null ? "set" : "NULL")}");
+
         if (coinPrefab == null)
         {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateCoinStacks aborted: coin prefab is not assigned");
+
             Debug.LogWarning(
                 "Coin prefab is not assigned.",
                 this);
@@ -109,6 +174,10 @@ public class PlayerBankVisual : MonoBehaviour
 
         if (coinStack10Position == null)
         {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateCoinStacks stack 10 position is not assigned");
+
             Debug.LogWarning(
                 "Coin stack 10 position is not assigned.",
                 this);
@@ -120,10 +189,18 @@ public class PlayerBankVisual : MonoBehaviour
                     "CoinStack_10",
                     coinStack10Position,
                     coinPrefab);
+
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateCoinStacks stack 10 created stack={(coinStack10 != null ? "set" : "NULL")}");
         }
 
         if (coinStack20Position == null)
         {
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateCoinStacks stack 20 position is not assigned");
+
             Debug.LogWarning(
                 "Coin stack 20 position is not assigned.",
                 this);
@@ -135,6 +212,10 @@ public class PlayerBankVisual : MonoBehaviour
                     "CoinStack_20",
                     coinStack20Position,
                     coinPrefab);
+
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateCoinStacks stack 20 created stack={(coinStack20 != null ? "set" : "NULL")}");
         }
     }
 
@@ -142,11 +223,19 @@ public class PlayerBankVisual : MonoBehaviour
         int oldValue,
         int newValue)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"OnCoinsChanged old={oldValue} new={newValue}");
+
         RebuildCoinVisuals();
     }
 
     private void RebuildCoinVisuals()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"RebuildCoinVisuals bank.Coins={(bank != null ? bank.Coins.ToString() : "NULL")} stack10={(coinStack10 != null ? "set" : "NULL")} stack20={(coinStack20 != null ? "set" : "NULL")}");
+
         int firstStackAmount =
             Mathf.Min(
                 bank.Coins,
@@ -156,6 +245,10 @@ public class PlayerBankVisual : MonoBehaviour
             Mathf.Max(
                 bank.Coins - 10,
                 0);
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"RebuildCoinVisuals amounts first={firstStackAmount} second={secondStackAmount}");
 
         if (coinStack10 != null)
         {
@@ -176,6 +269,10 @@ public class PlayerBankVisual : MonoBehaviour
 
     private void CreateChipStacks()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CreateChipStacks bank={(bank != null ? bank.netId.ToString() : "NULL")} existingStacks={stacks.Count}");
+
         stacks.Clear();
 
         foreach (int denomination in
@@ -187,6 +284,10 @@ public class PlayerBankVisual : MonoBehaviour
 
             if (entry == null)
             {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"CreateChipStacks skipped: no chip prefab entry denomination={denomination}");
+
                 Debug.LogWarning(
                     $"No chip prefab entry for denomination {denomination}.",
                     this);
@@ -196,6 +297,10 @@ public class PlayerBankVisual : MonoBehaviour
 
             if (entry.prefab == null)
             {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"CreateChipStacks skipped: no chip prefab denomination={denomination}");
+
                 Debug.LogWarning(
                     $"No chip prefab for denomination {denomination}.",
                     this);
@@ -205,6 +310,10 @@ public class PlayerBankVisual : MonoBehaviour
 
             if (entry.stackPosition == null)
             {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"CreateChipStacks skipped: no stack position denomination={denomination}");
+
                 Debug.LogWarning(
                     $"No stack position for denomination {denomination}.",
                     this);
@@ -219,25 +328,46 @@ public class PlayerBankVisual : MonoBehaviour
                     entry.prefab);
 
             if (stack == null)
+            {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"CreateChipStacks skipped: stack is NULL denomination={denomination}");
                 continue;
+            }
 
             stacks.Add(
                 denomination,
                 stack);
+
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CreateChipStacks stack added denomination={denomination} totalStacks={stacks.Count}");
         }
     }
 
     private ChipPrefabEntry GetPrefabEntry(
         int denomination)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"GetPrefabEntry denomination={denomination} entries={chipPrefabs.Count}");
+
         foreach (ChipPrefabEntry entry in chipPrefabs)
         {
             if (entry.denomination ==
                 denomination)
             {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"GetPrefabEntry found denomination={denomination}");
+
                 return entry;
             }
         }
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"GetPrefabEntry not found denomination={denomination}");
 
         return null;
     }
@@ -246,11 +376,19 @@ public class PlayerBankVisual : MonoBehaviour
         int denomination,
         int amount)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"OnChipsChanged denomination={denomination} amount={amount}");
+
         RebuildChipVisuals();
     }
 
     private void RebuildChipVisuals()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"RebuildChipVisuals bank={(bank != null ? bank.netId.ToString() : "NULL")} stacks={stacks.Count}");
+
         Dictionary<int, int> visualAmounts =
             CalculateVisualAmounts();
 
@@ -261,12 +399,20 @@ public class PlayerBankVisual : MonoBehaviour
                     denomination,
                     out ChipStackView stack))
             {
+                GameLog.Write(
+                    "PlayerBankVisual",
+                    $"RebuildChipVisuals skipped: no stack denomination={denomination}");
+
                 continue;
             }
 
             visualAmounts.TryGetValue(
                 denomination,
                 out int amount);
+
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"RebuildChipVisuals set stack denomination={denomination} visualAmount={amount}");
 
             stack.SetAmount(
                 amount);
@@ -275,6 +421,10 @@ public class PlayerBankVisual : MonoBehaviour
 
     private Dictionary<int, int> CalculateVisualAmounts()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CalculateVisualAmounts bank={(bank != null ? bank.netId.ToString() : "NULL")} denominations={(bank != null ? bank.AvailableDenominations.Count.ToString() : "NULL")}");
+
         Dictionary<int, int> result =
             new Dictionary<int, int>();
 
@@ -318,7 +468,15 @@ public class PlayerBankVisual : MonoBehaviour
 
             result[next] +=
                 converted;
+
+            GameLog.Write(
+                "PlayerBankVisual",
+                $"CalculateVisualAmounts converted current={current} next={next} value={value} converted={converted} remainder={remainder}");
         }
+
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CalculateVisualAmounts done entries={result.Count}");
 
         return result;
     }
@@ -332,6 +490,10 @@ public class PlayerBankVisual : MonoBehaviour
         Transform position,
         Transform prefab)
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CreateStack name={stackName} position={(position != null ? position.name : "NULL")} prefab={(prefab != null ? prefab.name : "NULL")} chipHeight={chipHeight}");
+
         GameObject stackObject =
             new GameObject(
                 stackName);
@@ -356,6 +518,10 @@ public class PlayerBankVisual : MonoBehaviour
             prefab,
             chipHeight);
 
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"CreateStack created name={stackName}");
+
         return stack;
     }
 
@@ -365,6 +531,10 @@ public class PlayerBankVisual : MonoBehaviour
 
     private void Refresh()
     {
+        GameLog.Write(
+            "PlayerBankVisual",
+            $"Refresh bank={(bank != null ? bank.netId.ToString() : "NULL")}");
+
         RebuildCoinVisuals();
         RebuildChipVisuals();
     }

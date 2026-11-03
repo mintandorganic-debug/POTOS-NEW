@@ -3,7 +3,7 @@ using System.Collections;
 using Mirror;
 using UnityEngine;
 
-public class RouletteRotator : NetworkBehaviour
+public class RouletteRotator : NetworkBehaviour, IRouletteMotion
 {
     public enum Pattern
     {
@@ -44,8 +44,25 @@ public class RouletteRotator : NetworkBehaviour
 
     private Coroutine rouletteCoroutine;
 
+    private RouletteCardAttachment attachment;
+
+    private RouletteCardAttachment Attachment =>
+        attachment ??= new RouletteCardAttachment(
+            this);
+
+    private RouletteTargetMover targetMover;
+
+    private RouletteTargetMover TargetMover =>
+        targetMover ??= new RouletteTargetMover(
+            this);
+
+    private RouletteVortexMover vortexMover;
+
+    private RouletteVortexMover VortexMover =>
+        vortexMover ??= new RouletteVortexMover(
+            this);
+
     private Transform target;
-    private Transform attachedCard;
 
     private Action onCompleted;
 
@@ -69,9 +86,17 @@ public class RouletteRotator : NetworkBehaviour
 
     private void Awake()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"Awake object={name} hasInstance={Instance != null} pivot={(roulettePivot != null ? roulettePivot.name : "NULL")} cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} defenseCardMarker={(defenseCardMarker != null ? defenseCardMarker.name : "NULL")}");
+
         if (Instance != null &&
             Instance != this)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "Awake duplicate instance, destroying this object");
+
             Destroy(gameObject);
             return;
         }
@@ -79,12 +104,22 @@ public class RouletteRotator : NetworkBehaviour
         Instance = this;
 
         if (roulettePivot == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "Awake roulettePivot not assigned, using own transform");
+
             roulettePivot = transform;
+        }
 
         if (cardMarker != null)
         {
             defaultCardMarkerLocalPosition =
                 cardMarker.localPosition;
+
+            GameLog.Write(
+                "RouletteRotator",
+                $"Awake defaultCardMarkerLocalPosition={defaultCardMarkerLocalPosition}");
         }
 
         ValidateMarkerHierarchy();
@@ -92,20 +127,36 @@ public class RouletteRotator : NetworkBehaviour
 
     private void OnDestroy()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"OnDestroy object={name} wasInstance={Instance == this}");
+
         if (Instance == this)
             Instance = null;
     }
 
     private void ValidateMarkerHierarchy()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"ValidateMarkerHierarchy cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} defenseCardMarker={(defenseCardMarker != null ? defenseCardMarker.name : "NULL")}");
+
         if (cardMarker == null ||
             defenseCardMarker == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "ValidateMarkerHierarchy skipped: marker is null");
+
             return;
         }
 
         if (defenseCardMarker.parent != cardMarker)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "ValidateMarkerHierarchy warning: defenseCardMarker is not a child of cardMarker");
+
             Debug.LogWarning(
                 "RouletteRotator: defenseCardMarker must be a child of cardMarker.",
                 this);
@@ -122,8 +173,18 @@ public class RouletteRotator : NetworkBehaviour
         Pattern pattern = Pattern.Direct,
         Action onCompleted = null)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"StartRoulette attacker={(attacker != null ? attacker.name : "NULL")} pattern={pattern} hasCallback={onCompleted != null} currentTarget={(target != null ? target.name : "NULL")}");
+
         if (attacker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "StartRoulette ignored: attacker is null");
+
             return;
+        }
 
         Transform inheritedTarget = null;
 
@@ -147,6 +208,10 @@ public class RouletteRotator : NetworkBehaviour
             RotateTowardTarget(target);
         }
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"StartRoulette starting routine pattern={currentPattern} target={(target != null ? target.name : "NULL")}");
+
         rouletteCoroutine =
             StartCoroutine(
                 RouletteRoutine());
@@ -157,23 +222,45 @@ public class RouletteRotator : NetworkBehaviour
         Transform target,
         Action onCompleted)
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"SetTarget target={(target != null ? target.name : "NULL")} hasCallback={onCompleted != null} isRunning={IsRunning} pattern={currentPattern} currentTarget={(this.target != null ? this.target.name : "NULL")}");
+
         if (!IsRunning ||
             currentPattern == Pattern.Vortex ||
             target == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                $"SetTarget ignored: isRunning={IsRunning} pattern={currentPattern} targetNull={target == null}");
+
             return;
         }
 
         if (this.target != null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                $"SetTarget ignored: target already set currentTarget={this.target.name}");
+
             return;
+        }
 
         this.target = target;
         this.onCompleted = onCompleted;
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"SetTarget accepted target={target.name}");
     }
 
     [Server]
     public void StopRoulette()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"StopRoulette wasRunning={rouletteCoroutine != null} pattern={currentPattern} target={(target != null ? target.name : "NULL")} hadCallback={onCompleted != null}");
+
         if (rouletteCoroutine != null)
         {
             StopCoroutine(rouletteCoroutine);
@@ -187,6 +274,10 @@ public class RouletteRotator : NetworkBehaviour
         currentPattern = Pattern.Direct;
 
         ResetMarker();
+
+        GameLog.Write(
+            "RouletteRotator",
+            "StopRoulette done");
     }
 
     // =========================================================
@@ -197,76 +288,25 @@ public class RouletteRotator : NetworkBehaviour
     public void AttachCard(
         Transform card)
     {
-        if (card == null ||
-            cardMarker == null)
-        {
-            return;
-        }
-
-        AttachCardInternal(
-            card,
-            cardMarker);
+        Attachment.AttachCard(
+            card);
     }
 
     [Server]
     public void AttachDefenseCard(
         Transform card)
     {
-        if (card == null ||
-            defenseCardMarker == null)
-        {
-            return;
-        }
-
-        AttachCardInternal(
-            card,
-            defenseCardMarker);
+        Attachment.AttachDefenseCard(
+            card);
     }
 
-    [Server]
-    private void AttachCardInternal(
-        Transform card,
-        Transform marker)
-    {
-        Card cardComponent =
-            card.GetComponent<Card>();
-
-        if (cardComponent != null)
-        {
-            cardComponent.OnAttachmentToRoulette();
-        }
-
-        attachedCard = card;
-
-        card.SetParent(
-            marker,
-            false);
-
-        card.localPosition =
-            Vector3.zero;
-
-        card.localRotation =
-            Quaternion.identity;
-
-        card.localScale =
-            Vector3.one;
-    }
 
     [Server]
     public void DetachCard(
         Transform card)
     {
-        if (card == null)
-            return;
-
-        if (attachedCard == card)
-        {
-            attachedCard = null;
-        }
-
-        card.SetParent(
-            null,
-            true);
+        Attachment.DetachCard(
+            card);
     }
 
     // =========================================================
@@ -275,11 +315,7 @@ public class RouletteRotator : NetworkBehaviour
 
     private void ResetMarker()
     {
-        if (cardMarker == null)
-            return;
-
-        cardMarker.localPosition =
-            defaultCardMarkerLocalPosition;
+        Attachment.ResetMarker();
     }
 
     // =========================================================
@@ -288,9 +324,17 @@ public class RouletteRotator : NetworkBehaviour
 
     public float GetRadius()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetRadius cardMarker={(cardMarker != null ? cardMarker.name : "NULL")} pivot={(roulettePivot != null ? roulettePivot.name : "NULL")}");
+
         if (cardMarker == null ||
             roulettePivot == null)
         {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetRadius returning 0: cardMarker or pivot is null");
+
             return 0f;
         }
 
@@ -299,6 +343,10 @@ public class RouletteRotator : NetworkBehaviour
             roulettePivot.position;
 
         offset.y = 0f;
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetRadius result radius={offset.magnitude}");
 
         return offset.magnitude;
     }
@@ -310,11 +358,19 @@ public class RouletteRotator : NetworkBehaviour
     [Server]
     private IEnumerator RouletteRoutine()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine start pattern={currentPattern} target={(target != null ? target.name : "NULL")}");
+
         yield return FullCircle();
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine full circle done pattern={currentPattern}");
 
         if (currentPattern == Pattern.Vortex)
         {
-            yield return MoveVortex();
+            yield return VortexMover.Run();
 
             currentAngularSpeed = 0f;
             rouletteCoroutine = null;
@@ -326,10 +382,22 @@ public class RouletteRotator : NetworkBehaviour
             target = null;
             currentPattern = Pattern.Direct;
 
+            GameLog.Write(
+                "RouletteRotator",
+                $"RouletteRoutine vortex completed callback={(callback != null)}");
+
             callback?.Invoke();
+
+            GameLog.Write(
+                "RouletteRotator",
+                "RouletteRoutine vortex callback invoked, routine end");
 
             yield break;
         }
+
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine waiting for target target={(target != null ? target.name : "NULL")}");
 
         while (target == null)
         {
@@ -351,6 +419,10 @@ public class RouletteRotator : NetworkBehaviour
         Transform directTarget =
             target;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine target acquired directTarget={(directTarget != null ? directTarget.name : "NULL")}");
+
         yield return MoveToTarget(
             directTarget);
 
@@ -362,7 +434,15 @@ public class RouletteRotator : NetworkBehaviour
 
         onCompleted = null;
 
+        GameLog.Write(
+            "RouletteRotator",
+            $"RouletteRoutine direct completed callback={(directCallback != null)}");
+
         directCallback?.Invoke();
+
+        GameLog.Write(
+            "RouletteRotator",
+            "RouletteRoutine direct callback invoked, routine end");
     }
 
     // =========================================================
@@ -372,6 +452,10 @@ public class RouletteRotator : NetworkBehaviour
     [Server]
     private IEnumerator FullCircle()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"FullCircle start initialRounds={initialRounds}");
+
         float remainingAngle =
             initialRounds * 360f;
 
@@ -399,6 +483,10 @@ public class RouletteRotator : NetworkBehaviour
 
             yield return null;
         }
+
+        GameLog.Write(
+            "RouletteRotator",
+            "FullCircle finished");
     }
 
     // =========================================================
@@ -409,242 +497,13 @@ public class RouletteRotator : NetworkBehaviour
     private IEnumerator MoveToTarget(
         Transform movementTarget)
     {
-        float remainingAngle =
-            GetAngleToTarget(
-                movementTarget,
-                true);
-
-        while (remainingAngle > stopAngle)
-        {
-            float speedMultiplier = 1f;
-
-            if (remainingAngle < slowdownAngle)
-            {
-                speedMultiplier =
-                    Mathf.InverseLerp(
-                        stopAngle,
-                        slowdownAngle,
-                        remainingAngle);
-            }
-
-            float desiredSpeed =
-                springSpeed *
-                speedMultiplier;
-
-            currentAngularSpeed =
-                MoveSpeedWithInertia(
-                    desiredSpeed);
-
-            if (remainingAngle <= slowdownAngle &&
-                currentAngularSpeed < minSpeed)
-            {
-                currentAngularSpeed =
-                    minSpeed;
-            }
-
-            float rotation =
-                currentAngularSpeed *
-                Time.deltaTime;
-
-            rotation =
-                Mathf.Min(
-                    rotation,
-                    remainingAngle);
-
-            Rotate(
-                rotation,
-                true);
-
-            remainingAngle =
-                GetAngleToTarget(
-                    movementTarget,
-                    true);
-
-            yield return null;
-        }
-
-        currentAngularSpeed = 0f;
-
-        SnapToTarget(
+        return TargetMover.MoveToTarget(
             movementTarget);
     }
 
     // =========================================================
     // VORTEX
     // =========================================================
-
-    [Server]
-    private IEnumerator MoveVortex()
-    {
-        if (roulettePivot == null ||
-            cardMarker == null)
-        {
-            yield break;
-        }
-
-        float startRadius =
-            GetRadius();
-
-        if (startRadius < 0.0001f)
-            yield break;
-
-        float startLocalY =
-            cardMarker.localPosition.y;
-
-        float targetLocalY =
-            startLocalY +
-            vortexDepth;
-
-        float totalAngle =
-            Mathf.Max(
-                1f,
-                vortexRounds) *
-            360f;
-
-        float passedAngle = 0f;
-
-        bool depthStarted = false;
-
-        if (liftAnimator != null)
-        {
-            liftAnimator.SetTrigger(
-                "DropEmpty");
-        }
-
-        while (passedAngle < totalAngle)
-        {
-            float progress =
-                passedAngle /
-                totalAngle;
-
-            float desiredRadius =
-                Mathf.Lerp(
-                    startRadius,
-                    0f,
-                    progress);
-
-            // -------------------------------------------------
-            // ROTATE ROULETTE
-            //
-            // This rotates cardMarker.
-            // defenseCardMarker follows automatically because
-            // it is a child of cardMarker.
-            // -------------------------------------------------
-
-            float desiredSpeed =
-                normalSpeed *
-                vortexSpeedMultiplier;
-
-            currentAngularSpeed =
-                MoveSpeedWithInertia(
-                    desiredSpeed);
-
-            float minimumSpeed =
-                minSpeed *
-                vortexSpeedMultiplier;
-
-            if (currentAngularSpeed <
-                minimumSpeed)
-            {
-                currentAngularSpeed =
-                    minimumSpeed;
-            }
-
-            float rotation =
-                currentAngularSpeed *
-                Time.deltaTime;
-
-            rotation =
-                Mathf.Min(
-                    rotation,
-                    totalAngle -
-                    passedAngle);
-
-            Rotate(
-                rotation,
-                true);
-
-            passedAngle +=
-                rotation;
-
-            // -------------------------------------------------
-            // MOVE MAIN MARKER TOWARD CENTER
-            //
-            // Only cardMarker is moved.
-            // Defense marker and its card follow automatically.
-            // -------------------------------------------------
-
-            Vector3 offset =
-                cardMarker.position -
-                roulettePivot.position;
-
-            offset.y = 0f;
-
-            if (offset.sqrMagnitude >
-                0.0001f)
-            {
-                offset.Normalize();
-
-                Vector3 worldPosition =
-                    roulettePivot.position +
-                    offset * desiredRadius;
-
-                Vector3 localPosition =
-                    roulettePivot.InverseTransformPoint(
-                        worldPosition);
-
-                localPosition.y =
-                    cardMarker.localPosition.y;
-
-                cardMarker.localPosition =
-                    localPosition;
-            }
-
-            // -------------------------------------------------
-            // DEPTH
-            // -------------------------------------------------
-
-            if (!depthStarted &&
-                desiredRadius <= vortexRadiusThreshold)
-            {
-                depthStarted = true;
-            }
-
-            if (depthStarted)
-            {
-                Vector3 localPosition =
-                    cardMarker.localPosition;
-
-                localPosition.y =
-                    Mathf.MoveTowards(
-                        localPosition.y,
-                        targetLocalY,
-                        vortexDepthSpeed *
-                        Time.deltaTime);
-
-                cardMarker.localPosition =
-                    localPosition;
-            }
-
-            yield return null;
-        }
-
-        // -----------------------------------------------------
-        // FINAL POSITION
-        // -----------------------------------------------------
-
-        Vector3 finalLocalPosition =
-            cardMarker.localPosition;
-
-        finalLocalPosition.x = 0f;
-        finalLocalPosition.z = 0f;
-        finalLocalPosition.y = targetLocalY;
-
-        cardMarker.localPosition =
-            finalLocalPosition;
-
-        currentAngularSpeed = 0f;
-    }
 
     // =========================================================
     // INERTIA
@@ -689,163 +548,34 @@ public class RouletteRotator : NetworkBehaviour
     private void RotateTowardTarget(
         Transform movementTarget)
     {
-        if (roulettePivot == null ||
-            cardMarker == null ||
-            movementTarget == null)
-        {
-            return;
-        }
-
-        Vector3 markerDirection =
-            cardMarker.position -
-            roulettePivot.position;
-
-        Vector3 targetDirection =
-            movementTarget.position -
-            roulettePivot.position;
-
-        markerDirection.y = 0f;
-        targetDirection.y = 0f;
-
-        if (markerDirection.sqrMagnitude < 0.0001f ||
-            targetDirection.sqrMagnitude < 0.0001f)
-        {
-            return;
-        }
-
-        markerDirection.Normalize();
-        targetDirection.Normalize();
-
-        float markerAngle =
-            Mathf.Atan2(
-                markerDirection.x,
-                markerDirection.z) *
-            Mathf.Rad2Deg;
-
-        float targetAngle =
-            Mathf.Atan2(
-                targetDirection.x,
-                targetDirection.z) *
-            Mathf.Rad2Deg;
-
-        float delta =
-            Mathf.DeltaAngle(
-                markerAngle,
-                targetAngle);
-
-        roulettePivot.Rotate(
-            Vector3.up,
-            delta,
-            Space.World);
+        TargetMover.RotateTowardTarget(
+            movementTarget);
     }
 
     // =========================================================
     // ANGLES
     // =========================================================
 
-    private float GetAngleToTarget(
-        Transform movementTarget,
-        bool counterClockwise)
-    {
-        if (cardMarker == null ||
-            movementTarget == null)
-        {
-            return 0f;
-        }
-
-        Vector3 markerDirection =
-            cardMarker.position -
-            roulettePivot.position;
-
-        Vector3 targetDirection =
-            movementTarget.position -
-            roulettePivot.position;
-
-        markerDirection.y = 0f;
-        targetDirection.y = 0f;
-
-        if (markerDirection.sqrMagnitude < 0.001f ||
-            targetDirection.sqrMagnitude < 0.001f)
-        {
-            return 0f;
-        }
-
-        markerDirection.Normalize();
-        targetDirection.Normalize();
-
-        float markerAngle =
-            Mathf.Atan2(
-                markerDirection.x,
-                markerDirection.z) *
-            Mathf.Rad2Deg;
-
-        float targetAngle =
-            Mathf.Atan2(
-                targetDirection.x,
-                targetDirection.z) *
-            Mathf.Rad2Deg;
-
-        if (counterClockwise)
-        {
-            return Mathf.Repeat(
-                targetAngle -
-                markerAngle,
-                360f);
-        }
-
-        return Mathf.Repeat(
-            markerAngle -
-            targetAngle,
-            360f);
-    }
 
     // =========================================================
     // SNAP
     // =========================================================
 
-    [Server]
-    private void SnapToTarget(
-        Transform movementTarget)
-    {
-        if (cardMarker == null)
-            return;
-
-        Vector3 targetDirection =
-            movementTarget.position -
-            roulettePivot.position;
-
-        targetDirection.y = 0f;
-
-        if (targetDirection.sqrMagnitude < 0.001f)
-            return;
-
-        targetDirection.Normalize();
-
-        float targetAngle =
-            Mathf.Atan2(
-                targetDirection.x,
-                targetDirection.z) *
-            Mathf.Rad2Deg;
-
-        float markerAngle =
-            GetMarkerAngle();
-
-        float delta =
-            Mathf.Repeat(
-                targetAngle -
-                markerAngle,
-                360f);
-
-        roulettePivot.Rotate(
-            Vector3.up,
-            delta,
-            Space.Self);
-    }
 
     private float GetMarkerAngle()
     {
+        GameLog.Write(
+            "RouletteRotator",
+            $"GetMarkerAngle cardMarker={(cardMarker != null ? cardMarker.name : "NULL")}");
+
         if (cardMarker == null)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetMarkerAngle returning 0: cardMarker is null");
+
             return 0f;
+        }
 
         Vector3 direction =
             cardMarker.position -
@@ -854,11 +584,89 @@ public class RouletteRotator : NetworkBehaviour
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "RouletteRotator",
+                "GetMarkerAngle returning 0: marker is at pivot");
+
             return 0f;
+        }
 
         return Mathf.Atan2(
             direction.x,
             direction.z) *
             Mathf.Rad2Deg;
+    }
+
+    Transform IRouletteMotion.RoulettePivot =>
+        roulettePivot;
+
+    Transform IRouletteMotion.CardMarker =>
+        cardMarker;
+
+    Animator IRouletteMotion.LiftAnimator =>
+        liftAnimator;
+
+    float IRouletteMotion.NormalSpeed =>
+        normalSpeed;
+
+    float IRouletteMotion.MinSpeed =>
+        minSpeed;
+
+    float IRouletteMotion.VortexRounds =>
+        vortexRounds;
+
+    float IRouletteMotion.VortexDepth =>
+        vortexDepth;
+
+    float IRouletteMotion.VortexRadiusThreshold =>
+        vortexRadiusThreshold;
+
+    float IRouletteMotion.VortexDepthSpeed =>
+        vortexDepthSpeed;
+
+    float IRouletteMotion.VortexSpeedMultiplier =>
+        vortexSpeedMultiplier;
+
+    float IRouletteMotion.CurrentAngularSpeed
+    {
+        get => currentAngularSpeed;
+        set => currentAngularSpeed = value;
+    }
+
+    Transform IRouletteMotion.DefenseCardMarker =>
+        defenseCardMarker;
+
+    Vector3 IRouletteMotion.DefaultCardMarkerLocalPosition =>
+        defaultCardMarkerLocalPosition;
+
+    float IRouletteMotion.StopAngle =>
+        stopAngle;
+
+    float IRouletteMotion.SlowdownAngle =>
+        slowdownAngle;
+
+    float IRouletteMotion.SpringSpeed =>
+        springSpeed;
+
+    float IRouletteMotion.GetMarkerAngle()
+    {
+        return GetMarkerAngle();
+    }
+
+    float IRouletteMotion.MoveSpeedWithInertia(
+        float desiredSpeed)
+    {
+        return MoveSpeedWithInertia(
+            desiredSpeed);
+    }
+
+    void IRouletteMotion.Rotate(
+        float degrees,
+        bool counterClockwise)
+    {
+        Rotate(
+            degrees,
+            counterClockwise);
     }
 }

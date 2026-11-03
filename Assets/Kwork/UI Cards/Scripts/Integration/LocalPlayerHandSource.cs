@@ -8,6 +8,10 @@ namespace CardCarouselUI
     {
         public IReadOnlyList<HandCardInfo> GetCards()
         {
+            global::GameLog.Write(
+                "LocalPlayerHandSource",
+                "GetCards collecting local hand cards");
+
             global::Card[] cards =
                 UnityEngine.Object.FindObjectsByType<global::Card>(
                     FindObjectsSortMode.None);
@@ -22,6 +26,10 @@ namespace CardCarouselUI
                     hand.Add(ToInfo(card));
             }
 
+            global::GameLog.Write(
+                "LocalPlayerHandSource",
+                $"GetCards sceneCards={cards.Length} localHandCards={hand.Count}");
+
             return hand;
         }
 
@@ -34,13 +42,24 @@ namespace CardCarouselUI
         {
             global::CardData data = card.Data;
 
+            global::GameLog.Write(
+                "LocalPlayerHandSource",
+                $"ToInfo card={(card != null ? card.name : "NULL")} netId={(card != null ? card.netId.ToString() : "NULL")} data={(data != null ? data.name : "NULL")}");
+
             return new HandCardInfo(
                 data.CardName,
                 data.Sprite,
                 data.Description,
                 ToCategory(data.CardClass),
                 isHovered => HandCardHighlight.Set(card, isHovered),
-                () => card.Interact());
+                () =>
+                {
+                    global::GameLog.Write(
+                        "LocalPlayerHandSource",
+                        $"Card activated from hand card={(card != null ? card.name : "NULL")} netId={(card != null ? card.netId.ToString() : "NULL")}");
+
+                    card.Interact();
+                });
         }
 
         private static HandCardCategory ToCategory(global::Card.CardClass cardClass)

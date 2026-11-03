@@ -34,6 +34,10 @@ namespace CardCarouselUI
 
         private void Awake()
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"Awake object={name} carouselPrefab={(carouselPrefab != null ? carouselPrefab.name : "NULL")} defaultCardTemplate={(defaultCardTemplate != null ? defaultCardTemplate.name : "NULL")} categoryTemplates={(categoryTemplates != null ? categoryTemplates.Count : 0)}");
+
             Canvas canvas = CreateCanvas();
             CanvasGroup group = CreateContentGroup(canvas.transform);
 
@@ -42,6 +46,10 @@ namespace CardCarouselUI
 
             CardCarouselController carousel =
                 carouselInstance.GetComponentInChildren<CardCarouselController>(true);
+
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"Awake carousel instantiated instance={carouselInstance.name} carouselController={(carousel != null ? carousel.name : "NULL")}");
 
             RectTransform content = (RectTransform)group.transform;
             content.localRotation = Quaternion.Euler(tiltBackDegrees, 0f, 0f);
@@ -61,22 +69,38 @@ namespace CardCarouselUI
                 new MouseModePopup(popup, new HandCameraSnap(gaze.Zone)));
 
             canvas.gameObject.AddComponent<HandHoverZoneGizmos>();
+
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                "Awake hand carousel built (popup, gaze input, controller, gizmos)");
         }
 
         private void OnEnable()
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"OnEnable object={name} hasInput={input != null} hasController={controller != null}");
+
             input.ShowRequested += controller.Open;
             input.HideRequested += controller.Close;
         }
 
         private void OnDisable()
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"OnDisable object={name} hasInput={input != null} hasController={controller != null}");
+
             input.ShowRequested -= controller.Open;
             input.HideRequested -= controller.Close;
         }
 
         private Canvas CreateCanvas()
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"CreateCanvas sortingOrder={sortingOrder} planeDistance={planeDistance} referenceResolution={referenceResolution}");
+
             GameObject canvasObject = new GameObject(
                 "Hand Carousel Canvas",
                 typeof(Canvas),
@@ -102,6 +126,10 @@ namespace CardCarouselUI
 
         private static void FitToScreenCanvas(RectTransform root, float scale, float offsetY)
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"FitToScreenCanvas root={(root != null ? root.name : "NULL")} scale={scale} offsetY={offsetY}");
+
             root.anchorMin = new Vector2(0.5f, 0.5f);
             root.anchorMax = new Vector2(0.5f, 0.5f);
             root.pivot = new Vector2(0.5f, 0.5f);
@@ -112,6 +140,10 @@ namespace CardCarouselUI
 
         private static CanvasGroup CreateContentGroup(Transform canvasTransform)
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"CreateContentGroup canvasTransform={(canvasTransform != null ? canvasTransform.name : "NULL")}");
+
             GameObject content = new GameObject("Content", typeof(RectTransform), typeof(CanvasGroup));
             content.transform.SetParent(canvasTransform, false);
 
@@ -126,6 +158,10 @@ namespace CardCarouselUI
 
         private Dictionary<HandCardCategory, RectTransform> BuildTemplateMap()
         {
+            global::GameLog.Write(
+                "HandCarouselInstaller",
+                $"BuildTemplateMap entries={(categoryTemplates != null ? categoryTemplates.Count : 0)}");
+
             Dictionary<HandCardCategory, RectTransform> map =
                 new Dictionary<HandCardCategory, RectTransform>();
 

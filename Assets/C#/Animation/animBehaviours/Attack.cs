@@ -9,6 +9,10 @@ public class Attack : StateMachineBehaviour
         AnimatorStateInfo stateInfo,
         int layerIndex)
     {
+        GameLog.Write(
+            "Attack",
+            $"OnStateEnter index={index} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
+
         PlayerAnimator playerAnimator =
             animator.GetComponentInParent<PlayerAnimator>();
         playerAnimator.AttackStartedOrCanceled(index);

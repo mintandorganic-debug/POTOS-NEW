@@ -12,12 +12,20 @@ public class ChipStackView : MonoBehaviour
         Transform chipPrefab,
         float chipHeight)
     {
+        GameLog.Write(
+            "ChipStackView",
+            $"Initialize object={name} chipPrefab={(chipPrefab != null ? chipPrefab.name : "NULL")} chipHeight={chipHeight}");
+
         this.chipPrefab = chipPrefab;
         this.chipHeight = chipHeight;
     }
 
     public void SetAmount(int amount)
     {
+        GameLog.Write(
+            "ChipStackView",
+            $"SetAmount object={name} amount={amount} existingChips={chips.Count}");
+
         amount = Mathf.Max(0, amount);
 
         while (chips.Count < amount)
@@ -29,6 +37,10 @@ public class ChipStackView : MonoBehaviour
 
             chips.Add(chip);
         }
+
+        GameLog.Write(
+            "ChipStackView",
+            $"SetAmount object={name} amount={amount} totalChips={chips.Count}");
 
         for (int i = 0; i < chips.Count; i++)
         {

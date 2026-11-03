@@ -20,6 +20,10 @@ public class SplineMover : MonoBehaviour
 
     private void Start()
     {
+        GameLog.Write(
+            "SplineMover",
+            $"Start object={name} container={(container != null ? container.name : "NULL")}");
+
         instance = this;
     }
 
@@ -27,26 +31,46 @@ public class SplineMover : MonoBehaviour
         Transform card,
         Transform playerB)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"MoveCard card={(card != null ? card.name : "NULL")} playerB={(playerB != null ? playerB.name : "NULL")} container={(container != null ? container.name : "NULL")}");
+
         if (card == null)
         {
+            GameLog.Write(
+                "SplineMover",
+                "MoveCard aborted: card is null");
+
             Debug.LogError("Cannot move card: card is null.");
             return;
         }
 
         if (playerB == null)
         {
+            GameLog.Write(
+                "SplineMover",
+                "MoveCard aborted: playerB is null");
+
             Debug.LogError("Cannot move card: player B is null.");
             return;
         }
 
         if (container == null)
         {
+            GameLog.Write(
+                "SplineMover",
+                "MoveCard aborted: container is null");
+
             Debug.LogError("Cannot move card: SplineContainer is null.");
             return;
         }
 
         if (container.Splines.Count < 2)
         {
+            GameLog.Write(
+                "SplineMover",
+                $"MoveCard aborted: not enough splines count={container.Splines.Count}");
+
             Debug.LogError(
                 "SplineContainer must contain at least Entry and Circle splines.");
             return;
@@ -62,16 +86,28 @@ public class SplineMover : MonoBehaviour
 
     private void EnsureGeneratedSplines()
     {
+        GameLog.Write(
+            "SplineMover",
+            $"EnsureGeneratedSplines splineCount={container.Splines.Count}");
+
         while (container.Splines.Count < 4)
         {
             container.AddSpline();
         }
+
+        GameLog.Write(
+            "SplineMover",
+            $"EnsureGeneratedSplines done splineCount={container.Splines.Count}");
     }
 
     private IEnumerator MoveRoutine(
         Transform card,
         Transform playerB)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"MoveRoutine start card={(card != null ? card.name : "NULL")} playerB={(playerB != null ? playerB.name : "NULL")}");
+
         Vector3 circleCenter =
             container.transform.position;
 
@@ -91,11 +127,19 @@ public class SplineMover : MonoBehaviour
             true,
             circleCenter);
 
+        GameLog.Write(
+            "SplineMover",
+            "MoveRoutine entry and full circle finished");
+
         // Calculate the exit angle relative to K0.
         float exitAngle =
             GetExitAngle(
                 circleCenter,
                 playerB);
+
+        GameLog.Write(
+            "SplineMover",
+            $"MoveRoutine exitAngle={exitAngle} partialCircle={exitAngle > 0.01f}");
 
         // Build the second part of the same circle.
         BuildPartialCircle(
@@ -125,19 +169,33 @@ public class SplineMover : MonoBehaviour
             exitDuration,
             false,
             circleCenter);
+
+        GameLog.Write(
+            "SplineMover",
+            $"MoveRoutine finished card={(card != null ? card.name : "NULL")}");
     }
 
     private float GetExitAngle(
         Vector3 circleCenter,
         Transform playerB)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"GetExitAngle circleCenter={circleCenter} playerB={(playerB != null ? playerB.name : "NULL")}");
+
         Vector3 toPlayer =
             playerB.position - circleCenter;
 
         toPlayer.y = 0f;
 
         if (toPlayer.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "SplineMover",
+                "GetExitAngle returning 0: player is at circle center");
+
             return 0f;
+        }
 
         toPlayer.Normalize();
 
@@ -157,7 +215,13 @@ public class SplineMover : MonoBehaviour
         fromCenter.y = 0f;
 
         if (fromCenter.sqrMagnitude < 0.001f)
+        {
+            GameLog.Write(
+                "SplineMover",
+                "GetExitAngle returning 0: K0 is at circle center");
+
             return 0f;
+        }
 
         fromCenter.Normalize();
 
@@ -170,6 +234,10 @@ public class SplineMover : MonoBehaviour
         if (angle < 0f)
             angle += 360f;
 
+        GameLog.Write(
+            "SplineMover",
+            $"GetExitAngle result angle={angle}");
+
         return angle;
     }
 
@@ -177,6 +245,10 @@ public class SplineMover : MonoBehaviour
         Vector3 circleCenter,
         float endAngle)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"BuildPartialCircle circleCenter={circleCenter} endAngle={endAngle}");
+
         Spline sourceCircle =
             container.Splines[1];
 
@@ -203,6 +275,10 @@ public class SplineMover : MonoBehaviour
 
         if (radius < 0.001f)
         {
+            GameLog.Write(
+                "SplineMover",
+                $"BuildPartialCircle aborted: radius too small radius={radius}");
+
             Debug.LogError(
                 "Cannot build partial circle: circle radius is too small.");
             return;
@@ -223,7 +299,13 @@ public class SplineMover : MonoBehaviour
                 360f);
 
         if (totalAngle < 0.01f)
+        {
+            GameLog.Write(
+                "SplineMover",
+                $"BuildPartialCircle skipped: totalAngle too small totalAngle={totalAngle}");
+
             return;
+        }
 
         const float maxSegmentAngle = 90f;
 
@@ -303,12 +385,20 @@ public class SplineMover : MonoBehaviour
 
             partialCircle.Add(knot);
         }
+
+        GameLog.Write(
+            "SplineMover",
+            $"BuildPartialCircle done segmentCount={segmentCount} totalAngle={totalAngle} radius={radius}");
     }
 
     private void BuildExitSpline(
         Vector3 circleCenter,
         Transform playerB)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"BuildExitSpline circleCenter={circleCenter} playerB={(playerB != null ? playerB.name : "NULL")} targetHeight={targetHeight}");
+
         Spline partialCircle =
             container.Splines[2];
 
@@ -333,7 +423,13 @@ public class SplineMover : MonoBehaviour
             toTarget.magnitude;
 
         if (distance < 0.001f)
+        {
+            GameLog.Write(
+                "SplineMover",
+                $"BuildExitSpline skipped: distance too small distance={distance}");
+
             return;
+        }
 
         Vector3 direction =
             toTarget.normalized;
@@ -382,6 +478,10 @@ public class SplineMover : MonoBehaviour
         Vector3 control2,
         Vector3 end)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"AddBezierSegment start={start} control1={control1} control2={control2} end={end}");
+
         Vector3 localStart =
             container.transform.InverseTransformPoint(
                 start);
@@ -423,6 +523,10 @@ public class SplineMover : MonoBehaviour
         bool isCircle,
         Vector3 circleCenter)
     {
+        GameLog.Write(
+            "SplineMover",
+            $"MoveAlongSpline start card={(card != null ? card.name : "NULL")} splineIndex={splineIndex} duration={duration} isCircle={isCircle} circleCenter={circleCenter}");
+
         Spline spline =
             container.Splines[splineIndex];
 
@@ -473,6 +577,10 @@ public class SplineMover : MonoBehaviour
             finalPosition,
             isCircle,
             circleCenter);
+
+        GameLog.Write(
+            "SplineMover",
+            $"MoveAlongSpline end splineIndex={splineIndex} finalPosition={finalPosition}");
     }
 
     private void UpdateCardRotation(

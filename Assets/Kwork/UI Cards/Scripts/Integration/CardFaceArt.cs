@@ -11,13 +11,29 @@ namespace CardCarouselUI
 
         public static void Apply(RectTransform card, Sprite face)
         {
+            global::GameLog.Write(
+                "CardFaceArt",
+                $"Apply card={(card != null ? card.name : "NULL")} face={(face != null ? face.name : "NULL")}");
+
             if (face == null || !card.TryGetComponent(out CardHover hover))
+            {
+                global::GameLog.Write(
+                    "CardFaceArt",
+                    $"Apply skipped card={(card != null ? card.name : "NULL")} hasFace={face != null} hasCardHover={card != null && card.GetComponent<CardHover>() != null}");
+
                 return;
+            }
 
             Transform frame = FindLayer(card, FrameLayer);
 
             if (frame == null)
+            {
+                global::GameLog.Write(
+                    "CardFaceArt",
+                    $"Apply skipped: frame layer not found card={card.name}");
+
                 return;
+            }
 
             Transform illustration = FindLayer(card, IllustrationLayer);
 
@@ -30,12 +46,20 @@ namespace CardCarouselUI
 
             hover.UseIllustration(faceRect, faceImage);
 
+            global::GameLog.Write(
+                "CardFaceArt",
+                $"Apply done card={card.name} face={face.name} illustrationHidden={illustration != null} hasCardVisual={card.GetComponent<CardVisual>() != null}");
+
             if (card.TryGetComponent(out CardVisual visual))
                 visual.AddTintGraphic(faceImage);
         }
 
         private static RectTransform CreateFace(Transform frame, Sprite face, float height)
         {
+            global::GameLog.Write(
+                "CardFaceArt",
+                $"CreateFace frame={(frame != null ? frame.name : "NULL")} face={(face != null ? face.name : "NULL")} height={height}");
+
             GameObject faceObject = new GameObject("Face", typeof(RectTransform), typeof(Image));
 
             RectTransform rect = (RectTransform)faceObject.transform;
@@ -62,6 +86,10 @@ namespace CardCarouselUI
                 if (child.name == layerName)
                     return child;
             }
+
+            global::GameLog.Write(
+                "CardFaceArt",
+                $"FindLayer layer not found layer={layerName} root={root.name}");
 
             return null;
         }

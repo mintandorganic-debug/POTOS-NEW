@@ -76,6 +76,15 @@ public class DiceLift : MonoBehaviour
             yield break;
         }
 
+        if (!HasParameter("PlatformUp"))
+        {
+            GameLog.Write(
+                "DiceLift",
+                "RaiseRoutine skipped: Lift_AC has no PlatformUp trigger");
+
+            yield break;
+        }
+
         raised = true;
 
         GameLog.Write(
@@ -121,6 +130,21 @@ public class DiceLift : MonoBehaviour
 
         animator.SetTrigger(
             "PlatformDown");
+    }
+
+    private bool HasParameter(
+        string parameterName)
+    {
+        foreach (AnimatorControllerParameter parameter in
+                 animator.parameters)
+        {
+            if (parameter.name == parameterName)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private bool FindAnimator()

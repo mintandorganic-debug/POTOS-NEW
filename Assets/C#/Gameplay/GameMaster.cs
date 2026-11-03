@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext, IDicePhaseContext
 {
     public enum GamePhase
     {
@@ -14,7 +14,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         Attack,
         SelectTarget,
         Defense,
-        Steal
+        Steal,
+        Dice
     }
 
     [SerializeField] private SpawnpointCalculator spawnpointCalculator;
@@ -24,6 +25,9 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
     public event Action<GamePhase> GamePhaseChanged;
     public event Action<int> CurrentPlayerChanged;
+
+    public static event Action<uint, float> DicePhaseStarted;
+    public static event Action<uint, int, int, int, float> DiceRolled;
 
     [SyncVar(hook = nameof(OnGamePhaseChanged))]
     [SerializeField] private GamePhase currentPhase = GamePhase.Wait;
@@ -48,6 +52,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     private AttackSelection selection;
     private AccessoryTheft theft;
     private TurnController turns;
+    private DicePhase dice;
 
     private bool gameStarted;
 
@@ -72,6 +77,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         }
 
         Instance = this;
+
+        gameObject.AddComponent<DicePhaseView>();
 
         GameLog.Write(
             "GameMaster",
@@ -160,6 +167,13 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             new TurnController(
                 this,
                 selection);
+
+        dice =
+            new DicePhase(
+                this,
+                this,
+                5f,
+                3f);
 
         currentPhase = GamePhase.Wait;
 
@@ -302,6 +316,12 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     [Server]
     public void EndTurn()
     {
+        if (dice != null &&
+            dice.TryBegin())
+        {
+            return;
+        }
+
         turns.EndTurn();
     }
 
@@ -383,5 +403,102 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         int index)
     {
         currentPlayerIn = index;
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdThrowDice(
+        float power,
+        NetworkConnectionToClient sender = null)
+    {
+        GameLog.Write(
+            "GameMaster",
+            $"CmdThrowDice sender={(sender != null ? sender.connectionId : -1)} power={power}");
+
+        if (sender == null ||
+            dice == null)
+        {
+            return;
+        }
+
+        Player thrower = null;
+
+        foreach (Player player in _players)
+        {
+            if (player != null &&
+                player.netIdentity != null &&
+                player.netIdentity.connectionToClient == sender)
+            {
+                thrower = player;
+                break;
+            }
+        }
+
+        if (thrower == null)
+        {
+            GameLog.Write(
+                "GameMaster",
+                $"CmdThrowDice rejected: no player for connection={sender.connectionId}");
+
+            return;
+        }
+
+        dice.RequestThrow(
+            thrower,
+            power);
+    }
+
+    [ClientRpc]
+    private void RpcDicePhaseStarted(
+        uint playerNetId,
+        float duration)
+    {
+        DicePhaseStarted?.Invoke(
+            playerNetId,
+            duration);
+    }
+
+    [ClientRpc]
+    private void RpcDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        float power)
+    {
+        DiceRolled?.Invoke(
+            playerNetId,
+            first,
+            second,
+            third,
+            power);
+    }
+
+    void IDicePhaseContext.AdvanceTurn()
+    {
+        turns.EndTurn();
+    }
+
+    void IDicePhaseContext.NotifyDicePhaseStarted(
+        uint playerNetId,
+        float duration)
+    {
+        RpcDicePhaseStarted(
+            playerNetId,
+            duration);
+    }
+
+    void IDicePhaseContext.NotifyDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        float power)
+    {
+        RpcDiceRolled(
+            playerNetId,
+            first,
+            second,
+            third,
+            power);
     }
 }

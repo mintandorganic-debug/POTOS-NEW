@@ -5,10 +5,28 @@ public class DiceLift : MonoBehaviour
 {
     private const string LiftControllerName = "Lift_AC";
     private const float FallbackClipLength = 1f;
+    private const float RiseMargin = 0.2f;
 
     private Animator animator;
     private Coroutine routine;
-    private bool raised;
+    private bool platformLowered;
+    private bool plateRaised;
+
+    public float RiseDuration
+    {
+        get
+        {
+            if (!FindAnimator() ||
+                !HasParameter("PlatformUp"))
+            {
+                return 0f;
+            }
+
+            return GetClipLength("PLATFORM_APPEAR") +
+                   GetClipLength("DICE_PLATE_APPEAR") +
+                   RiseMargin;
+        }
+    }
 
     private void Start()
     {
@@ -35,20 +53,23 @@ public class DiceLift : MonoBehaviour
     {
         GameLog.Write(
             "DiceLift",
-            $"OnPhaseChanged phase={phase} raised={raised}");
+            $"OnPhaseChanged phase={phase} platformLowered={platformLowered} plateRaised={plateRaised}");
 
         if (phase == GameMaster.GamePhase.Dice)
         {
-            if (!raised)
-            {
-                Run(
-                    RaiseRoutine());
-            }
+            Run(
+                RaiseRoutine());
 
             return;
         }
 
-        if (raised)
+        if (phase == GameMaster.GamePhase.Wait)
+        {
+            return;
+        }
+
+        if (plateRaised ||
+            !platformLowered)
         {
             Run(
                 LowerRoutine());
@@ -71,28 +92,33 @@ public class DiceLift : MonoBehaviour
 
     private IEnumerator RaiseRoutine()
     {
-        if (!FindAnimator())
-        {
-            yield break;
-        }
-
-        if (!HasParameter("PlatformUp"))
+        if (!FindAnimator() ||
+            !HasParameter("PlatformUp"))
         {
             GameLog.Write(
                 "DiceLift",
-                "RaiseRoutine skipped: Lift_AC has no PlatformUp trigger");
+                "RaiseRoutine skipped: Lift_AC has no dice triggers");
 
             yield break;
         }
-
-        raised = true;
 
         GameLog.Write(
             "DiceLift",
             "RaiseRoutine platform up");
 
+        animator.ResetTrigger(
+            "DropEmpty");
+
+        animator.ResetTrigger(
+            "PlatformDown");
+
+        animator.ResetTrigger(
+            "PlateDown");
+
         animator.SetTrigger(
             "PlatformUp");
+
+        platformLowered = false;
 
         yield return new WaitForSeconds(
             GetClipLength("PLATFORM_APPEAR"));
@@ -103,26 +129,43 @@ public class DiceLift : MonoBehaviour
 
         animator.SetTrigger(
             "PlateUp");
+
+        plateRaised = true;
     }
 
     private IEnumerator LowerRoutine()
     {
-        if (!FindAnimator())
+        if (!FindAnimator() ||
+            !HasParameter("PlatformDown"))
         {
             yield break;
         }
 
-        raised = false;
+        animator.ResetTrigger(
+            "PlatformUp");
 
-        GameLog.Write(
-            "DiceLift",
-            "LowerRoutine plate down");
+        animator.ResetTrigger(
+            "PlateUp");
 
-        animator.SetTrigger(
-            "PlateDown");
+        if (plateRaised)
+        {
+            GameLog.Write(
+                "DiceLift",
+                "LowerRoutine plate down");
 
-        yield return new WaitForSeconds(
-            GetClipLength("DICE_PLATE_HIDE"));
+            animator.SetTrigger(
+                "PlateDown");
+
+            plateRaised = false;
+
+            yield return new WaitForSeconds(
+                GetClipLength("DICE_PLATE_HIDE"));
+        }
+
+        if (platformLowered)
+        {
+            yield break;
+        }
 
         GameLog.Write(
             "DiceLift",
@@ -130,6 +173,8 @@ public class DiceLift : MonoBehaviour
 
         animator.SetTrigger(
             "PlatformDown");
+
+        platformLowered = true;
     }
 
     private bool HasParameter(

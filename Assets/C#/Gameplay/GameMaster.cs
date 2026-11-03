@@ -474,6 +474,19 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             power);
     }
 
+    float IDicePhaseContext.LiftRiseDuration
+    {
+        get
+        {
+            DiceLift lift =
+                GetComponent<DiceLift>();
+
+            return lift != null
+                ? lift.RiseDuration
+                : 0f;
+        }
+    }
+
     void IDicePhaseContext.AdvanceTurn()
     {
         turns.EndTurn();

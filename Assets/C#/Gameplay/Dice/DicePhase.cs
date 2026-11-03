@@ -20,6 +20,7 @@ public class DicePhase
 
     private bool active;
     private bool thrown;
+    private bool timerRunning;
 
     public DicePhase(
         IDicePhaseContext context,
@@ -75,12 +76,10 @@ public class DicePhase
         active = true;
         thrown = false;
 
+        timerRunning = false;
+
         context.SetPhase(
             GameMaster.GamePhase.Dice);
-
-        context.NotifyDicePhaseStarted(
-            player.netId,
-            duration);
 
         GameLog.Write(
             "DicePhase",
@@ -97,11 +96,12 @@ public class DicePhase
         float power)
     {
         if (!active ||
-            thrown)
+            thrown ||
+            !timerRunning)
         {
             GameLog.Write(
                 "DicePhase",
-                $"RequestThrow rejected: active={active} thrown={thrown}");
+                $"RequestThrow rejected: active={active} thrown={thrown} timerRunning={timerRunning}");
 
             return false;
         }
@@ -127,6 +127,25 @@ public class DicePhase
     private IEnumerator Run(
         Player player)
     {
+        float liftDelay =
+            context.LiftRiseDuration;
+
+        GameLog.Write(
+            "DicePhase",
+            $"Run waiting for lift liftDelay={liftDelay}");
+
+        if (liftDelay > 0f)
+        {
+            yield return new WaitForSeconds(
+                liftDelay);
+        }
+
+        timerRunning = true;
+
+        context.NotifyDicePhaseStarted(
+            player.netId,
+            duration);
+
         float remaining =
             duration;
 
@@ -250,6 +269,7 @@ public class DicePhase
 
         active = false;
         thrown = false;
+        timerRunning = false;
 
         context.AdvanceTurn();
     }

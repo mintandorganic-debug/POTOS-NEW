@@ -1,5 +1,7 @@
 public interface IDicePhaseContext : IAttackSelectionContext
 {
+    float LiftRiseDuration { get; }
+
     void AdvanceTurn();
 
     void NotifyDicePhaseStarted(

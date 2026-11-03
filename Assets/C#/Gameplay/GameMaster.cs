@@ -79,6 +79,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         Instance = this;
 
         gameObject.AddComponent<DicePhaseView>();
+        gameObject.AddComponent<DiceLift>();
 
         GameLog.Write(
             "GameMaster",

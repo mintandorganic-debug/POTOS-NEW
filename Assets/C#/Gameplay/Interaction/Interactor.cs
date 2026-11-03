@@ -17,7 +17,6 @@ public class Interactor : NetworkBehaviour
     [SerializeField] private LayerMask interactionMask = ~0;
 
     [Header("Card Info")]
-    [SerializeField] private float cardInfoDelay = 0.5f;
 
     private InteractableObject currentTarget;
 
@@ -26,10 +25,7 @@ public class Interactor : NetworkBehaviour
     private EventSystem eventSystem;
     private HudController hudController;
 
-    private Card hoveredCard;
     private Card selectedCard;
-
-    private Coroutine cardInfoRoutine;
 
     private void Awake()
     {
@@ -150,94 +146,11 @@ public class Interactor : NetworkBehaviour
 
         currentTarget?.OnLookExit();
 
-        StopCardInfoRoutine();
-
-        hoveredCard = null;
-
         currentTarget = newTarget;
 
         currentTarget?.OnLookEnter();
 
         UpdateHint();
-
-        if (currentTarget is Card card &&
-            card.IsAvailable)
-        {
-            hoveredCard = card;
-
-            GameLog.Write(
-                "Interactor",
-                $"DetectTarget hovering available card netId={card.netId} data={(card.Data != null ? card.Data.name : "NULL")}, card info scheduled in {cardInfoDelay}s");
-
-            cardInfoRoutine =
-                StartCoroutine(
-                    ShowCardInfoAfterDelay(card));
-        }
-        else
-        {
-            GameLog.Write(
-                "Interactor",
-                $"DetectTarget no available card under look, hiding card info (target={(currentTarget != null ? currentTarget.name : "NULL")})");
-
-            hudController?.HideCardInfo();
-        }
-    }
-
-    // =========================================================
-    // CARD INFO
-    // =========================================================
-
-    private IEnumerator ShowCardInfoAfterDelay(
-        Card card)
-    {
-        GameLog.Write(
-            "Interactor",
-            $"ShowCardInfoAfterDelay start card={(card != null ? card.name : "NULL")} delay={cardInfoDelay}");
-
-        yield return new WaitForSeconds(
-            cardInfoDelay);
-
-        if (currentTarget != card ||
-            hoveredCard != card ||
-            !card.IsAvailable ||
-            card.Data == null)
-        {
-            GameLog.Write(
-                "Interactor",
-                $"ShowCardInfoAfterDelay cancelled card={(card != null ? card.name : "NULL")}: still looked at={currentTarget == card} hovered={hoveredCard == card} available={card != null && card.IsAvailable} data={(card != null && card.Data != null ? card.Data.name : "NULL")}");
-
-            yield break;
-        }
-
-        hudController?.ShowCardInfo(
-            card.Data);
-
-        cardInfoRoutine = null;
-
-        GameLog.Write(
-            "Interactor",
-            $"ShowCardInfoAfterDelay end card={(card != null ? card.name : "NULL")}: card info shown data={card.Data.name}");
-    }
-
-    private void StopCardInfoRoutine()
-    {
-        if (cardInfoRoutine == null)
-        {
-            GameLog.Write(
-                "Interactor",
-                $"StopCardInfoRoutine: no routine running");
-
-            return;
-        }
-
-        GameLog.Write(
-            "Interactor",
-            $"StopCardInfoRoutine: routine stopped");
-
-        StopCoroutine(
-            cardInfoRoutine);
-
-        cardInfoRoutine = null;
     }
 
     // =========================================================

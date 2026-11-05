@@ -102,6 +102,72 @@ public class DiceHands : MonoBehaviour
         GameLog.Write(
             "DiceHands",
             "Begin: hands switched to DicePrep");
+
+        StartCoroutine(
+            Probe());
+    }
+
+    private IEnumerator Probe()
+    {
+        for (int i = 0;
+             i < 8;
+             i++)
+        {
+            yield return new WaitForSeconds(
+                0.5f);
+
+            if (hands == null ||
+                loaded == null)
+            {
+                yield break;
+            }
+
+            string dicePositions = string.Empty;
+
+            foreach (Rigidbody body in
+                     FindObjectsByType<Rigidbody>(
+                         FindObjectsInactive.Include,
+                         FindObjectsSortMode.None))
+            {
+                if (body.name.StartsWith("SingleDie"))
+                {
+                    dicePositions +=
+                        $" die(active={body.gameObject.activeInHierarchy} pos={body.position.ToString("F2")} kinematic={body.isKinematic} layer={LayerMask.LayerToName(body.gameObject.layer)})";
+                }
+            }
+
+            string bones = string.Empty;
+
+            foreach (GameObject bone in loaded.DiceControlBones)
+            {
+                bones += $" {bone.name}={bone.transform.position.ToString("F2")}";
+            }
+
+            string bowl = "NULL";
+
+            if (plateBowl != null)
+            {
+                Collider[] colliders =
+                    plateBowl.GetComponentsInChildren<Collider>(true);
+
+                Bounds bounds = new Bounds(plateBowl.transform.position, Vector3.zero);
+
+                foreach (Collider collider in colliders)
+                {
+                    bounds.Encapsulate(
+                        collider.bounds);
+                }
+
+                bowl = $"pos={plateBowl.transform.position.ToString("F2")} scale={plateBowl.transform.lossyScale.ToString("F2")} colliders={colliders.Length} boundsCenter={bounds.center.ToString("F2")} boundsSize={bounds.size.ToString("F2")}";
+            }
+
+            Camera cam =
+                Camera.main;
+
+            GameLog.Write(
+                "DiceHands",
+                $"Probe t={(i + 1) * 0.5f} handsState={CurrentStateName()} charging={hands.GetBool("IsCharging")} charge={torch.Charge:0.00} visible={loaded.DiceVisible} bones={bones} dice={dicePositions} plate={(loaded.Plate != null ? loaded.Plate.position.ToString("F2") : "NULL")} bowl={bowl} camera={(cam != null ? cam.transform.position.ToString("F2") + " fwd=" + cam.transform.forward.ToString("F2") : "NULL")}");
+        }
     }
 
     private void OnDiceRolled(

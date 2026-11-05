@@ -256,9 +256,17 @@ public class DiceLift : MonoBehaviour
             {
                 animator = candidate;
 
+                SkinnedMeshRenderer[] renderers =
+                    candidate.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+
+                foreach (SkinnedMeshRenderer renderer in renderers)
+                {
+                    renderer.updateWhenOffscreen = true;
+                }
+
                 GameLog.Write(
                     "DiceLift",
-                    $"FindAnimator found animator={candidate.name}");
+                    $"FindAnimator found animator={candidate.name} skinnedRenderers={renderers.Length} updateWhenOffscreen=true");
 
                 return true;
             }

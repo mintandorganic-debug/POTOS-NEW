@@ -80,6 +80,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
         gameObject.AddComponent<DicePhaseView>();
         gameObject.AddComponent<DiceLift>();
+        gameObject.AddComponent<DiceHands>();
 
         GameLog.Write(
             "GameMaster",

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: This is your warning. Every trap begins with a single step.
   cardEffect: {fileID: 11400000, guid: 223bc37935a905041bfb55bc75b0c235, type: 2}
   interactableCards: []
-  actionId: COLT
+  actionId: WEB
   emissiveColor: {r: 0.70980394, g: 0.1764706, b: 0.19607843, a: 0}
   sprite: {fileID: 21300000, guid: dbebf8e88d473034ea61d9c8168eff50, type: 3}
   texture: {fileID: 2800000, guid: 9b2ca79db5fec3447bd3456d51646fff, type: 3}

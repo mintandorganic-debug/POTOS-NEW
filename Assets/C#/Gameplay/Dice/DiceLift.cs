@@ -1,29 +1,26 @@
-using System.Collections;
 using UnityEngine;
 
 public class DiceLift : MonoBehaviour
 {
     private const string LiftControllerName = "Lift_AC";
     private const float FallbackClipLength = 1f;
-    private const float RiseMargin = 0.2f;
+    private const float RiseMargin = 0.3f;
 
     private Animator animator;
-    private Coroutine routine;
     private bool platformLowered;
-    private bool plateRaised;
+    private bool diceRaised;
 
     public float RiseDuration
     {
         get
         {
             if (!FindAnimator() ||
-                !HasParameter("PlatformUp"))
+                !HasParameter("PlateUp"))
             {
                 return 0f;
             }
 
-            return GetClipLength("PLATFORM_APPEAR") +
-                   GetClipLength("DICE_PLATE_APPEAR") +
+            return GetClipLength("DICE_PLATE_APPEAR") +
                    RiseMargin;
         }
     }
@@ -53,12 +50,21 @@ public class DiceLift : MonoBehaviour
     {
         GameLog.Write(
             "DiceLift",
-            $"OnPhaseChanged phase={phase} platformLowered={platformLowered} plateRaised={plateRaised}");
+            $"OnPhaseChanged phase={phase} platformLowered={platformLowered} diceRaised={diceRaised}");
+
+        if (!FindAnimator() ||
+            !HasParameter("PlateUp"))
+        {
+            GameLog.Write(
+                "DiceLift",
+                "OnPhaseChanged skipped: Lift_AC has no dice triggers");
+
+            return;
+        }
 
         if (phase == GameMaster.GamePhase.Dice)
         {
-            Run(
-                RaiseRoutine());
+            Raise();
 
             return;
         }
@@ -68,43 +74,19 @@ public class DiceLift : MonoBehaviour
             return;
         }
 
-        if (plateRaised ||
-            !platformLowered)
-        {
-            Run(
-                LowerRoutine());
-        }
+        Lower();
     }
 
-    private void Run(
-        IEnumerator next)
+    private void Raise()
     {
-        if (routine != null)
+        if (diceRaised)
         {
-            StopCoroutine(
-                routine);
-        }
-
-        routine =
-            StartCoroutine(
-                next);
-    }
-
-    private IEnumerator RaiseRoutine()
-    {
-        if (!FindAnimator() ||
-            !HasParameter("PlatformUp"))
-        {
-            GameLog.Write(
-                "DiceLift",
-                "RaiseRoutine skipped: Lift_AC has no dice triggers");
-
-            yield break;
+            return;
         }
 
         GameLog.Write(
             "DiceLift",
-            "RaiseRoutine platform up");
+            "Raise dice plate with platform");
 
         animator.ResetTrigger(
             "DropEmpty");
@@ -116,60 +98,40 @@ public class DiceLift : MonoBehaviour
             "PlateDown");
 
         animator.SetTrigger(
-            "PlatformUp");
-
-        platformLowered = false;
-
-        yield return new WaitForSeconds(
-            GetClipLength("PLATFORM_APPEAR"));
-
-        GameLog.Write(
-            "DiceLift",
-            "RaiseRoutine plate up");
-
-        animator.SetTrigger(
             "PlateUp");
 
-        plateRaised = true;
+        diceRaised = true;
+        platformLowered = false;
     }
 
-    private IEnumerator LowerRoutine()
+    private void Lower()
     {
-        if (!FindAnimator() ||
-            !HasParameter("PlatformDown"))
-        {
-            yield break;
-        }
-
-        animator.ResetTrigger(
-            "PlatformUp");
-
         animator.ResetTrigger(
             "PlateUp");
 
-        if (plateRaised)
+        if (diceRaised)
         {
             GameLog.Write(
                 "DiceLift",
-                "LowerRoutine plate down");
+                "Lower dice plate with platform");
 
             animator.SetTrigger(
                 "PlateDown");
 
-            plateRaised = false;
+            diceRaised = false;
+            platformLowered = true;
 
-            yield return new WaitForSeconds(
-                GetClipLength("DICE_PLATE_HIDE"));
+            return;
         }
 
         if (platformLowered)
         {
-            yield break;
+            return;
         }
 
         GameLog.Write(
             "DiceLift",
-            "LowerRoutine platform down");
+            "Lower platform");
 
         animator.SetTrigger(
             "PlatformDown");

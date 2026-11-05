@@ -8,14 +8,19 @@ public static class DiceLiftSetup
 {
     private const string ControllerPath = "Assets/Lift_AC.controller";
     private const string ModelPath = "Assets/props/models/platform.fbx";
-    private const string PlatformLayer = "PlatformLift";
-    private const string PlateLayer = "DicePlate";
+    private const string LiftLayer = "Lift";
+
+    private static readonly string[] OldLayers =
+    {
+        "PlatformLift",
+        "DicePlate",
+        "SlotMachine"
+    };
 
     private static readonly string[] Triggers =
     {
         "DropEmpty",
         "PlatformDown",
-        "PlatformUp",
         "PlateUp",
         "PlateDown"
     };
@@ -53,7 +58,6 @@ public static class DiceLiftSetup
 
         string[] required =
         {
-            "PLATFORM_APPEAR",
             "PLATFORM_HIDE",
             "DICE_PLATE_APPEAR",
             "DICE_PLATE_HIDE"
@@ -81,19 +85,18 @@ public static class DiceLiftSetup
             }
         }
 
-        RemoveLayer(
-            controller,
-            PlatformLayer);
+        foreach (string oldLayer in OldLayers)
+        {
+            RemoveLayer(
+                controller,
+                oldLayer);
+        }
 
         RemoveLayer(
             controller,
-            PlateLayer);
+            LiftLayer);
 
-        AddPlatformLayer(
-            controller,
-            clips);
-
-        AddPlateLayer(
+        AddLiftLayer(
             controller,
             clips);
 
@@ -101,7 +104,7 @@ public static class DiceLiftSetup
         AssetDatabase.SaveAssets();
 
         Debug.Log(
-            "DiceLiftSetup: layers PlatformLift and DicePlate added to Lift_AC, Base Layer untouched");
+            "DiceLiftSetup: layer Lift added to Lift_AC (platform hide, dice plate appear, dice plate hide), Base Layer untouched");
     }
 
     private static bool IsConfigured()
@@ -112,11 +115,11 @@ public static class DiceLiftSetup
 
         return controller != null &&
                controller.layers.Any(
-                   l => l.name == PlatformLayer) &&
-               controller.layers.Any(
-                   l => l.name == PlateLayer) &&
+                   l => l.name == LiftLayer) &&
+               !controller.layers.Any(
+                   l => OldLayers.Contains(l.name)) &&
                controller.parameters.Any(
-                   p => p.name == "PlatformUp");
+                   p => p.name == "PlateUp");
     }
 
     private static void RemoveLayer(
@@ -158,99 +161,12 @@ public static class DiceLiftSetup
         return clips;
     }
 
-    private static void AddPlatformLayer(
+    private static void AddLiftLayer(
         AnimatorController controller,
         Dictionary<string, AnimationClip> clips)
-    {
-        AnimatorStateMachine machine =
-            AddLayer(
-                controller,
-                PlatformLayer);
-
-        AnimatorState idle =
-            machine.AddState(
-                "Idle");
-
-        AnimatorState down =
-            machine.AddState(
-                "Down");
-
-        down.motion = clips["PLATFORM_HIDE"];
-
-        AnimatorState up =
-            machine.AddState(
-                "Up");
-
-        up.motion = clips["PLATFORM_APPEAR"];
-
-        machine.defaultState = idle;
-
-        AddTriggerTransition(
-            idle,
-            down,
-            "PlatformDown");
-
-        AddTriggerTransition(
-            idle,
-            down,
-            "DropEmpty");
-
-        AddTriggerTransition(
-            up,
-            down,
-            "PlatformDown");
-
-        AddTriggerTransition(
-            up,
-            down,
-            "DropEmpty");
-
-        AddTriggerTransition(
-            down,
-            up,
-            "PlatformUp");
-    }
-
-    private static void AddPlateLayer(
-        AnimatorController controller,
-        Dictionary<string, AnimationClip> clips)
-    {
-        AnimatorStateMachine machine =
-            AddLayer(
-                controller,
-                PlateLayer);
-
-        AnimatorState hide =
-            machine.AddState(
-                "Hide");
-
-        hide.motion = clips["DICE_PLATE_HIDE"];
-
-        AnimatorState appear =
-            machine.AddState(
-                "Appear");
-
-        appear.motion = clips["DICE_PLATE_APPEAR"];
-
-        machine.defaultState = hide;
-
-        AddTriggerTransition(
-            hide,
-            appear,
-            "PlateUp");
-
-        AddTriggerTransition(
-            appear,
-            hide,
-            "PlateDown");
-    }
-
-    private static AnimatorStateMachine AddLayer(
-        AnimatorController controller,
-        string layerName)
     {
         controller.AddLayer(
-            layerName);
+            LiftLayer);
 
         AnimatorControllerLayer[] layers =
             controller.layers;
@@ -261,7 +177,62 @@ public static class DiceLiftSetup
         layers[index].defaultWeight = 1f;
         controller.layers = layers;
 
-        return controller.layers[index].stateMachine;
+        AnimatorStateMachine machine =
+            controller.layers[index].stateMachine;
+
+        AnimatorState idle =
+            machine.AddState(
+                "Idle");
+
+        AnimatorState platformHide =
+            machine.AddState(
+                "PlatformHide");
+
+        platformHide.motion = clips["PLATFORM_HIDE"];
+
+        AnimatorState diceAppear =
+            machine.AddState(
+                "DiceAppear");
+
+        diceAppear.motion = clips["DICE_PLATE_APPEAR"];
+
+        AnimatorState diceHide =
+            machine.AddState(
+                "DiceHide");
+
+        diceHide.motion = clips["DICE_PLATE_HIDE"];
+
+        machine.defaultState = idle;
+
+        AddTriggerTransition(
+            idle,
+            platformHide,
+            "PlatformDown");
+
+        AddTriggerTransition(
+            idle,
+            platformHide,
+            "DropEmpty");
+
+        AddTriggerTransition(
+            idle,
+            diceAppear,
+            "PlateUp");
+
+        AddTriggerTransition(
+            platformHide,
+            diceAppear,
+            "PlateUp");
+
+        AddTriggerTransition(
+            diceHide,
+            diceAppear,
+            "PlateUp");
+
+        AddTriggerTransition(
+            diceAppear,
+            diceHide,
+            "PlateDown");
     }
 
     private static void AddTriggerTransition(
@@ -274,7 +245,7 @@ public static class DiceLiftSetup
                 to);
 
         transition.hasExitTime = false;
-        transition.duration = 0f;
+        transition.duration = 0.1f;
 
         transition.AddCondition(
             AnimatorConditionMode.If,

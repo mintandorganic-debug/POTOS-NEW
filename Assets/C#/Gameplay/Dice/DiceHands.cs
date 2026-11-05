@@ -192,6 +192,49 @@ public class DiceHands : MonoBehaviour
             "AutoThrow done");
     }
 
+    public void DebugCharge()
+    {
+        BeginLocal();
+
+        if (hands != null)
+        {
+            hands.SetBool(
+                "IsCharging",
+                true);
+        }
+    }
+
+    public void DebugThrow()
+    {
+        if (hands == null ||
+            loaded == null)
+        {
+            GameLog.Write(
+                "DiceHands",
+                "DebugThrow skipped: press the charge key first");
+
+            return;
+        }
+
+        loaded.score =
+            new[]
+            {
+                Random.Range(1, 7),
+                Random.Range(1, 7),
+                Random.Range(1, 7)
+            };
+
+        hands.SetBool(
+            "IsCharging",
+            false);
+
+        loaded.DiceVisible = true;
+
+        GameLog.Write(
+            "DiceHands",
+            $"DebugThrow score={string.Join(",", loaded.score)}");
+    }
+
     public void FinishLocal()
     {
         Finish();

@@ -14,26 +14,45 @@ public class DiceDebugKeys : MonoBehaviour
             return;
         }
 
-        if (keyboard.f9Key.wasPressedThisFrame)
+        DiceLift lift =
+            GetComponent<DiceLift>();
+
+        DiceHands handsView =
+            GetComponent<DiceHands>();
+
+        if (keyboard.f7Key.wasPressedThisFrame)
         {
             GameLog.Write(
                 "DiceDebugKeys",
-                "F9: local dice start (lift up, hands to DicePrep)");
-
-            DiceLift lift =
-                GetComponent<DiceLift>();
+                "F7: lift and plate up");
 
             if (lift != null)
             {
                 lift.DebugRaise();
             }
+        }
 
-            DiceHands handsView =
-                GetComponent<DiceHands>();
+        if (keyboard.f8Key.wasPressedThisFrame)
+        {
+            GameLog.Write(
+                "DiceDebugKeys",
+                "F8: hands take dice and shake (charge)");
 
             if (handsView != null)
             {
-                handsView.BeginLocal();
+                handsView.DebugCharge();
+            }
+        }
+
+        if (keyboard.f9Key.wasPressedThisFrame)
+        {
+            GameLog.Write(
+                "DiceDebugKeys",
+                "F9: throw");
+
+            if (handsView != null)
+            {
+                handsView.DebugThrow();
             }
         }
 
@@ -41,18 +60,12 @@ public class DiceDebugKeys : MonoBehaviour
         {
             GameLog.Write(
                 "DiceDebugKeys",
-                "F10: local dice finish (hands idle, lift down)");
-
-            DiceHands handsView =
-                GetComponent<DiceHands>();
+                "F10: reset hands and lift");
 
             if (handsView != null)
             {
                 handsView.FinishLocal();
             }
-
-            DiceLift lift =
-                GetComponent<DiceLift>();
 
             if (lift != null)
             {

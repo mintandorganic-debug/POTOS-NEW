@@ -65,6 +65,11 @@ public class DiceHands : MonoBehaviour
             return;
         }
 
+        BeginLocal();
+    }
+
+    public void BeginLocal()
+    {
         if (!Prepare())
         {
             return;
@@ -185,6 +190,11 @@ public class DiceHands : MonoBehaviour
         GameLog.Write(
             "DiceHands",
             "AutoThrow done");
+    }
+
+    public void FinishLocal()
+    {
+        Finish();
     }
 
     private void Finish()

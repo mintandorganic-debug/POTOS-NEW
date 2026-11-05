@@ -81,6 +81,9 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         gameObject.AddComponent<DicePhaseView>();
         gameObject.AddComponent<DiceLift>();
         gameObject.AddComponent<DiceHands>();
+#if UNITY_EDITOR
+        gameObject.AddComponent<DiceDebugKeys>();
+#endif
 
         GameLog.Write(
             "GameMaster",

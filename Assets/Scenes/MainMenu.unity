@@ -3801,17 +3801,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1660057539 &9223372036854775807
-SceneRoots:
-  m_ObjectHideFlags: 0
-  m_Roots:
-  - {fileID: 2013410475}
-  - {fileID: 1398922770}
-  - {fileID: 86566295}
-  - {fileID: 898100604}
-  - {fileID: 2045429251}
-  - {fileID: 1314393487}
-  - {fileID: 841551116}
 --- !u!1 &3100000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -4107,3 +4096,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 835da69f8b024835879755ac04d03b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteamLobbyTagger
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 2013410475}
+  - {fileID: 1398922770}
+  - {fileID: 86566295}
+  - {fileID: 898100604}
+  - {fileID: 2045429251}
+  - {fileID: 1314393487}
+  - {fileID: 841551116}

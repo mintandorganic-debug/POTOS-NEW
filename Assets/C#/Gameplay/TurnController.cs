@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class TurnController
 {
     private readonly ITurnContext context;
     private readonly AttackSelection selection;
+
+    public event Action<Player> TurnBegan;
 
     public TurnController(
         ITurnContext context,
@@ -63,6 +66,9 @@ public class TurnController
             $"BeginTurn calling OnTurnStart player={(context.Players[context.CurrentPlayerIndex] != null ? context.Players[context.CurrentPlayerIndex].netId.ToString() : "NULL")}");
 
         context.Players[context.CurrentPlayerIndex].OnTurnStart();
+
+        TurnBegan?.Invoke(
+            context.Players[context.CurrentPlayerIndex]);
     }
 
     public void EndTurn()

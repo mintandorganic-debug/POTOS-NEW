@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext, ITurnStageContext, IDiceStageContext
 {
     public enum GamePhase
     {
@@ -14,7 +14,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         Attack,
         SelectTarget,
         Defense,
-        Steal
+        Steal,
+        Dice
     }
 
     [SerializeField] private SpawnpointCalculator spawnpointCalculator;
@@ -24,6 +25,16 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
     public event Action<GamePhase> GamePhaseChanged;
     public event Action<int> CurrentPlayerChanged;
+    public event Action<TurnStage> StageChanged;
+
+    public static event Action<uint, float> DiceStarted;
+    public static event Action<uint, int, int, int, string, int, int, float> DiceRolled;
+
+    [SyncVar(hook = nameof(OnStageHookChanged))]
+    [SerializeField] private TurnStage currentStage = TurnStage.CardAttack;
+
+    public TurnStage CurrentStage =>
+        currentStage;
 
     [SyncVar(hook = nameof(OnGamePhaseChanged))]
     [SerializeField] private GamePhase currentPhase = GamePhase.Wait;
@@ -48,6 +59,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     private AttackSelection selection;
     private AccessoryTheft theft;
     private TurnController turns;
+    private TurnStageSequence stages;
+    private IDiceThrowHandler diceThrow;
 
     private bool gameStarted;
 
@@ -72,6 +85,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         }
 
         Instance = this;
+
+        gameObject.AddComponent<DiceStageView>();
 
         GameLog.Write(
             "GameMaster",
@@ -160,6 +175,31 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             new TurnController(
                 this,
                 selection);
+
+        DiceStage dice =
+            new DiceStage(
+                this,
+                this,
+                DiceCombinationEvaluator.CreateDefault(),
+                new PlayerBankPayout(),
+                5f,
+                3f);
+
+        diceThrow = dice;
+
+        stages =
+            new TurnStageSequence(
+                this,
+                new ITurnStage[]
+                {
+                    new CardAttackStage(),
+                    dice,
+                    new SlotStage()
+                });
+
+        turns.TurnBegan +=
+            player => stages.Begin(
+                player);
 
         currentPhase = GamePhase.Wait;
 
@@ -302,6 +342,14 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     [Server]
     public void EndTurn()
     {
+        if (stages != null &&
+            stages.IsActive)
+        {
+            stages.TrySkipCurrent();
+
+            return;
+        }
+
         turns.EndTurn();
     }
 
@@ -383,5 +431,139 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         int index)
     {
         currentPlayerIn = index;
+    }
+
+    private void OnStageHookChanged(
+        TurnStage oldStage,
+        TurnStage newStage)
+    {
+        GameLog.Write(
+            "GameMaster",
+            $"OnStageHookChanged {oldStage} -> {newStage} isServer={isServer} isClient={isClient}");
+
+        StageChanged?.Invoke(
+            newStage);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdThrowDice(
+        float power,
+        NetworkConnectionToClient sender = null)
+    {
+        GameLog.Write(
+            "GameMaster",
+            $"CmdThrowDice sender={(sender != null ? sender.connectionId : -1)} power={power}");
+
+        if (sender == null ||
+            diceThrow == null)
+        {
+            return;
+        }
+
+        Player thrower = null;
+
+        foreach (Player player in _players)
+        {
+            if (player != null &&
+                player.netIdentity != null &&
+                player.netIdentity.connectionToClient == sender)
+            {
+                thrower = player;
+                break;
+            }
+        }
+
+        if (thrower == null)
+        {
+            GameLog.Write(
+                "GameMaster",
+                $"CmdThrowDice rejected: no player for connection={sender.connectionId}");
+
+            return;
+        }
+
+        diceThrow.RequestThrow(
+            thrower,
+            power);
+    }
+
+    [ClientRpc]
+    private void RpcDiceStarted(
+        uint playerNetId,
+        float duration)
+    {
+        DiceStarted?.Invoke(
+            playerNetId,
+            duration);
+    }
+
+    [ClientRpc]
+    private void RpcDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        string combination,
+        int chips,
+        int coins,
+        float power)
+    {
+        DiceRolled?.Invoke(
+            playerNetId,
+            first,
+            second,
+            third,
+            combination,
+            chips,
+            coins,
+            power);
+    }
+
+    void ITurnStageContext.SetStage(
+        TurnStage stage)
+    {
+        currentStage = stage;
+    }
+
+    void ITurnStageContext.AdvanceTurn()
+    {
+        turns.EndTurn();
+    }
+
+    void IDiceStageContext.SetPhase(
+        GamePhase phase)
+    {
+        SetGamePhase(
+            phase);
+    }
+
+    void IDiceStageContext.NotifyDiceStarted(
+        uint playerNetId,
+        float duration)
+    {
+        RpcDiceStarted(
+            playerNetId,
+            duration);
+    }
+
+    void IDiceStageContext.NotifyDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        string combination,
+        int chips,
+        int coins,
+        float power)
+    {
+        RpcDiceRolled(
+            playerNetId,
+            first,
+            second,
+            third,
+            combination,
+            chips,
+            coins,
+            power);
     }
 }

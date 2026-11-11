@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class DiceResultDisplay : MonoBehaviour
 {
-    private const float SpinTime = 1f;
+    private const float MinSpinTime = 0.5f;
+    private const float MaxSpinTime = 3f;
+    private const float EndSpinSpeed = 0.1f;
     private const float Distance = 0.6f;
     private const float Spacing = 0.14f;
     private const float Scale = 1.2f;
     private const float PanelBottom = 75f;
     private const float PanelGap = 12f;
-    private const float SettleTime = 0.35f;
+    private const float SettleTime = 0.6f;
     private const float MinSpinSpeed = 360f;
     private const float MaxSpinSpeed = 900f;
 
@@ -36,14 +38,16 @@ public class DiceResultDisplay : MonoBehaviour
     public string LastCombination { get; private set; } = string.Empty;
 
     public void Show(
-        IList<Rigidbody> dice)
+        IList<Rigidbody> dice,
+        float power)
     {
         Hide();
 
         running =
             StartCoroutine(
                 Run(
-                    dice));
+                    dice,
+                    power));
     }
 
     public void Hide()
@@ -101,8 +105,16 @@ public class DiceResultDisplay : MonoBehaviour
     }
 
     private IEnumerator Run(
-        IList<Rigidbody> dice)
+        IList<Rigidbody> dice,
+        float power)
     {
+        float spinTime =
+            Mathf.Lerp(
+                MinSpinTime,
+                MaxSpinTime,
+                Mathf.Clamp01(
+                    power));
+
         int[] values =
             dice
                 .Where(d => d != null)
@@ -221,7 +233,7 @@ public class DiceResultDisplay : MonoBehaviour
 
         float time = 0f;
 
-        while (time < SpinTime)
+        while (time < spinTime)
         {
             time += Time.deltaTime;
 
@@ -234,9 +246,18 @@ public class DiceResultDisplay : MonoBehaviour
                     cam,
                     i);
 
+                float slowdown =
+                    Mathf.Lerp(
+                        1f,
+                        EndSpinSpeed,
+                        Mathf.SmoothStep(
+                            0f,
+                            1f,
+                            time / spinTime));
+
                 copies[i].transform.Rotate(
                     spinAxes[i],
-                    spinSpeeds[i] * Time.deltaTime,
+                    spinSpeeds[i] * slowdown * Time.deltaTime,
                     Space.World);
             }
 
@@ -252,6 +273,39 @@ public class DiceResultDisplay : MonoBehaviour
         {
             startRotations[i] =
                 copies[i].transform.rotation;
+        }
+
+        Vector3[] settleAxes =
+            new Vector3[copies.Count];
+
+        float[] settleAngles =
+            new float[copies.Count];
+
+        for (int i = 0;
+             i < copies.Count;
+             i++)
+        {
+            Quaternion target =
+                FrontRotation(
+                    values[i],
+                    cam,
+                    copies[i].transform.position);
+
+            Quaternion delta =
+                target * Quaternion.Inverse(startRotations[i]);
+
+            delta.ToAngleAxis(
+                out float angle,
+                out Vector3 axis);
+
+            if (Vector3.Dot(axis, spinAxes[i]) < 0f)
+            {
+                axis = -axis;
+                angle = 360f - angle;
+            }
+
+            settleAxes[i] = axis;
+            settleAngles[i] = angle;
         }
 
         time = 0f;
@@ -277,12 +331,10 @@ public class DiceResultDisplay : MonoBehaviour
                     i);
 
                 copies[i].transform.rotation =
-                    Quaternion.Slerp(
-                        startRotations[i],
-                        FrontRotation(
-                            values[i],
-                            cam),
-                        blend);
+                    Quaternion.AngleAxis(
+                        settleAngles[i] * blend,
+                        settleAxes[i]) *
+                    startRotations[i];
             }
 
             yield return null;
@@ -291,8 +343,12 @@ public class DiceResultDisplay : MonoBehaviour
 
     private static Quaternion FrontRotation(
         int value,
-        Transform cam)
+        Transform cam,
+        Vector3 diePosition)
     {
+        Vector3 toCamera =
+            (cam.position - diePosition).normalized;
+
         Vector3 face =
             FaceDirections[value - 1];
 
@@ -308,7 +364,7 @@ public class DiceResultDisplay : MonoBehaviour
 
         Quaternion world =
             Quaternion.LookRotation(
-                -cam.forward,
+                toCamera,
                 cam.up);
 
         return world * Quaternion.Inverse(die);

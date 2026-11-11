@@ -15,6 +15,7 @@ public class HandsAnimationTest : MonoBehaviour
     private const float ShakeEnd = 2.2f;
     private const float ThrowStart = 2.3f;
     private const float FullPowerTime = 2f;
+    private const float ThrowPower = 0.95f;
     private const float NearDistance = 0.35f;
     private const float LateralSpread = 0.02f;
     private const int LineSegments = 24;
@@ -266,14 +267,15 @@ public class HandsAnimationTest : MonoBehaviour
 
         ReleaseDice(
             plate,
-            power);
+            ThrowPower);
 
         StartCoroutine(
             LogFlight(
                 plate));
 
         StartCoroutine(
-            ShowResultWhenStopped());
+            ShowResultWhenStopped(
+                power));
 
         while (time < length)
         {
@@ -585,7 +587,8 @@ public class HandsAnimationTest : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowResultWhenStopped()
+    private IEnumerator ShowResultWhenStopped(
+        float chargePower)
     {
         yield return new WaitForSeconds(
             FlightTime);
@@ -601,7 +604,8 @@ public class HandsAnimationTest : MonoBehaviour
         }
 
         resultDisplay.Show(
-            dice);
+            dice,
+            chargePower);
     }
 
     private bool AllDiceStopped()

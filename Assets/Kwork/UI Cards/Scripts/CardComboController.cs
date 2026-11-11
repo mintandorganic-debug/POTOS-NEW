@@ -30,6 +30,10 @@ namespace CardCarouselUI
         [SerializeField] private RectTransform comboIconParent;
         [SerializeField] private RectTransform comboIconPrefab;
 
+        [Header("Combo icons")]
+        [Tooltip("Crafting is not in the game yet, so the icons between cards are off.")]
+        [SerializeField] private bool showComboIcons = false;
+
         [Header("Combinations")]
         [SerializeField] private List<CardCombo> combinations = new();
 
@@ -209,6 +213,9 @@ namespace CardCarouselUI
         private void RefreshComboIcons()
         {
             ClearComboIcons();
+
+            if (!showComboIcons)
+                return;
 
             IReadOnlyList<RectTransform> cards =
                 carousel.Cards;

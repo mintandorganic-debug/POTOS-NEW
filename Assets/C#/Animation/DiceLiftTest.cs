@@ -259,8 +259,7 @@ public class DiceLiftTest : MonoBehaviour
 
         foreach (Animator candidate in
                  FindObjectsByType<Animator>(
-                     FindObjectsInactive.Include,
-                     FindObjectsSortMode.None))
+                     FindObjectsInactive.Include))
         {
             if (candidate.runtimeAnimatorController == null ||
                 candidate.runtimeAnimatorController.name != LiftControllerName)

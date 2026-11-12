@@ -920,7 +920,7 @@ public class GameAudioManager : MonoBehaviour
         PlaySoundAtPlayer(player != null ? player.netIdentity : null, clip, volumeScale, isAftermath, delay, isVoice);
     }
 
-    private readonly Dictionary<(uint, int), float> lastPlayedClipTimes = new();
+    private readonly Dictionary<(uint, AudioClip), float> lastPlayedClipTimes = new();
 
     public void PlaySoundAtPlayer(
         NetworkIdentity speakerIdentity,
@@ -934,15 +934,14 @@ public class GameAudioManager : MonoBehaviour
             return;
 
         uint netId = speakerIdentity != null ? speakerIdentity.netId : 0;
-        int clipId = clip.GetInstanceID();
-        if (lastPlayedClipTimes.TryGetValue((netId, clipId), out float lastTime))
+        if (lastPlayedClipTimes.TryGetValue((netId, clip), out float lastTime))
         {
             if (Time.unscaledTime - lastTime < 0.25f)
             {
                 return;
             }
         }
-        lastPlayedClipTimes[(netId, clipId)] = Time.unscaledTime;
+        lastPlayedClipTimes[(netId, clip)] = Time.unscaledTime;
 
         StartCoroutine(PlaySoundAtPlayerRoutine(speakerIdentity, clip, volumeScale, isAftermath, delay, isVoice));
     }

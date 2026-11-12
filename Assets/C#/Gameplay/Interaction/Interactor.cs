@@ -48,7 +48,7 @@ public class Interactor : NetworkBehaviour
         base.OnStartLocalPlayer();
 
         hudController =
-            FindFirstObjectByType<HudController>();
+            FindAnyObjectByType<HudController>();
 
         GameLog.Write(
             "Interactor",

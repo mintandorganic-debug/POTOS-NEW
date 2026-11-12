@@ -9,6 +9,10 @@ namespace CardCarouselUI
 
         public HandHoverZone(float radiusPadding, float dropFraction)
         {
+            global::GameLog.Write(
+                "HandHoverZone",
+                $"Constructor radiusPadding={radiusPadding} dropFraction={dropFraction}");
+
             this.radiusPadding = radiusPadding;
             this.dropFraction = dropFraction;
         }

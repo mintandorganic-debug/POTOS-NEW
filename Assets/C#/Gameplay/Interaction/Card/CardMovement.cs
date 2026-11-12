@@ -30,6 +30,10 @@ public class CardMovement : MonoBehaviour
 
     public void StartHover()
     {
+        GameLog.Write(
+            "CardMovement",
+            $"StartHover card={name} delay={hoverDelay} target=({hoverY}, {hoverZ})");
+
         StopHover();
 
         hoverRoutine =
@@ -39,6 +43,10 @@ public class CardMovement : MonoBehaviour
 
     private IEnumerator StartHoverAfterDelay()
     {
+        GameLog.Write(
+            "CardMovement",
+            $"StartHoverAfterDelay start card={name} delay={hoverDelay}");
+
         yield return new WaitForSeconds(
             hoverDelay);
 
@@ -49,10 +57,18 @@ public class CardMovement : MonoBehaviour
                 hoverZ);
 
         hoverRoutine = null;
+
+        GameLog.Write(
+            "CardMovement",
+            $"StartHoverAfterDelay end card={name} targetLocalPosition={targetLocalPosition}");
     }
 
     public void ResetHover()
     {
+        GameLog.Write(
+            "CardMovement",
+            $"ResetHover card={name}");
+
         StopHover();
 
         targetLocalPosition =
@@ -62,7 +78,17 @@ public class CardMovement : MonoBehaviour
     private void StopHover()
     {
         if (hoverRoutine == null)
+        {
+            GameLog.Write(
+                "CardMovement",
+                $"StopHover card={name}: no hover routine running");
+
             return;
+        }
+
+        GameLog.Write(
+            "CardMovement",
+            $"StopHover card={name}: hover routine stopped");
 
         StopCoroutine(hoverRoutine);
         hoverRoutine = null;
@@ -71,8 +97,18 @@ public class CardMovement : MonoBehaviour
     public void AttachToSocket(
         Transform socket)
     {
+        GameLog.Write(
+            "CardMovement",
+            $"AttachToSocket card={name} socket={(socket != null ? socket.name : "NULL")}");
+
         if (socket == null)
+        {
+            GameLog.Write(
+                "CardMovement",
+                $"AttachToSocket skipped card={name}: socket is NULL");
+
             return;
+        }
 
         StopHover();
 
@@ -96,6 +132,10 @@ public class CardMovement : MonoBehaviour
     public void MoveToZoomSocket(
         Transform socket)
     {
+        GameLog.Write(
+            "CardMovement",
+            $"MoveToZoomSocket card={name} socket={(socket != null ? socket.name : "NULL")} speed={zoomMoveSpeed}");
+
         MoveTo(
             socket,
             zoomMoveSpeed);
@@ -105,8 +145,18 @@ public class CardMovement : MonoBehaviour
         Transform socket,
         float speed)
     {
+        GameLog.Write(
+            "CardMovement",
+            $"MoveTo card={name} socket={(socket != null ? socket.name : "NULL")} speed={speed}");
+
         if (socket == null)
+        {
+            GameLog.Write(
+                "CardMovement",
+                $"MoveTo skipped card={name}: socket is NULL");
+
             return;
+        }
 
         StopHover();
 
@@ -135,6 +185,10 @@ public class CardMovement : MonoBehaviour
     {
         if (movementTargetSocket == null)
         {
+            GameLog.Write(
+                "CardMovement",
+                $"UpdateSocketMovement card={name}: target socket lost, movement stopped");
+
             isMoving = false;
             return;
         }
@@ -180,10 +234,18 @@ public class CardMovement : MonoBehaviour
 
         movementTargetSocket = null;
         isMoving = false;
+
+        GameLog.Write(
+            "CardMovement",
+            $"UpdateSocketMovement card={name}: arrived at socket={(socket != null ? socket.name : "NULL")}");
     }
 
     public void Detach()
     {
+        GameLog.Write(
+            "CardMovement",
+            $"Detach card={name} parent={(transform.parent != null ? transform.parent.name : "NULL")}");
+
         StopHover();
 
         movementTargetSocket = null;
@@ -199,6 +261,10 @@ public class CardMovement : MonoBehaviour
 
     public void ResetState()
     {
+        GameLog.Write(
+            "CardMovement",
+            $"ResetState card={name} wasMoving={isMoving}");
+
         StopHover();
 
         targetLocalPosition =

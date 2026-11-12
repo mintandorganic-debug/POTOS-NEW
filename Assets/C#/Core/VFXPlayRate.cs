@@ -10,6 +10,10 @@ public class VFXFixedPlayRate : MonoBehaviour {
     private VisualEffect vfx;
 
     private void OnEnable() {
+        GameLog.Write(
+            "VFXFixedPlayRate",
+            $"OnEnable object={name} playRate={playRate}");
+
         vfx = GetComponent<VisualEffect>();
         Apply();
     }

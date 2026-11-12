@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBank : NetworkBehaviour
+public partial class PlayerBank : NetworkBehaviour, IMoneyRainContext, IBankStore
 {
     [Serializable]
     public struct ChipAmount
@@ -60,8 +60,25 @@ public class PlayerBank : NetworkBehaviour
     [SyncVar(hook = nameof(OnCoinsChanged))]
     private int coins;
 
-    private Coroutine coinsRainRoutine;
-    private Coroutine chipsRainRoutine;
+    private CoinWallet coinWallet;
+
+    private ChipWallet chipWallet;
+
+    private CoinWallet CoinOps =>
+        coinWallet ??= new CoinWallet(
+            this);
+
+    private ChipWallet ChipOps =>
+        chipWallet ??= new ChipWallet(
+            this);
+
+    private MoneyRain rain;
+
+    private MoneyRain Rain =>
+        rain ??= new MoneyRain(
+            this,
+            this);
+
 
     public int Coins =>
         coins;
@@ -74,6 +91,10 @@ public class PlayerBank : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"OnStartServer netId={netId} initialCoins={initialCoins} initialChips={initialChips} maxCoins={MaxCoins} denominations={availableDenominations.Count}");
+
         base.OnStartServer();
 
         coins =
@@ -81,6 +102,10 @@ public class PlayerBank : NetworkBehaviour
                 initialCoins,
                 0,
                 MaxCoins);
+
+        GameLog.Write(
+            "PlayerBank",
+            $"OnStartServer coins initialized netId={netId} coins={coins}");
 
         foreach (int denomination in availableDenominations)
         {
@@ -92,12 +117,26 @@ public class PlayerBank : NetworkBehaviour
                         Mathf.Max(
                             0,
                             initialChips)));
+
+                GameLog.Write(
+                    "PlayerBank",
+                    $"OnStartServer chip entry added netId={netId} denomination={denomination} amount={Mathf.Max(0, initialChips)}");
+            }
+            else
+            {
+                GameLog.Write(
+                    "PlayerBank",
+                    $"OnStartServer chip entry already exists netId={netId} denomination={denomination}");
             }
         }
     }
 
     public override void OnStartClient()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"OnStartClient netId={netId} coins={coins} chipsEntries={chips.Count} visual={(visual != null ? visual.name : "NULL")}");
+
         base.OnStartClient();
 
         chips.Callback += OnChipsChanged;
@@ -107,6 +146,10 @@ public class PlayerBank : NetworkBehaviour
 
     public override void OnStopClient()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"OnStopClient netId={netId}");
+
         chips.Callback -= OnChipsChanged;
 
         base.OnStopClient();
@@ -115,92 +158,56 @@ public class PlayerBank : NetworkBehaviour
     #region Coins
 
     [Server]
-    public bool AddCoins(int amount)
+    public bool AddCoins(
+        int amount)
     {
-        if (amount <= 0)
-            return false;
-
-        int newCoins =
-            Mathf.Min(
-                coins + amount,
-                MaxCoins);
-
-        if (newCoins == coins)
-            return false;
-
-        coins =
-            newCoins;
-
-        return true;
+        return CoinOps.AddCoins(
+            amount);
     }
 
     [Server]
-    public bool RemoveCoins(int amount)
+    public bool RemoveCoins(
+        int amount)
     {
-        if (amount <= 0)
-            return false;
-
-        if (coins < amount)
-            return false;
-
-        coins -= amount;
-
-        return true;
+        return CoinOps.RemoveCoins(
+            amount);
     }
 
     [Server]
-    public bool TryTransferCoinsTo(
+    public bool TransferCoinsTo(
         PlayerBank recipient,
         int amount)
     {
-        if (recipient == null ||
-            recipient == this ||
-            amount <= 0 ||
-            coins < amount ||
-            recipient.coins > MaxCoins - amount)
-        {
-            return false;
-        }
-
-        coins -= amount;
-        recipient.coins += amount;
-
-        return true;
+        return CoinOps.TransferCoinsTo(
+            recipient,
+            amount);
     }
 
     [Server]
-    public bool TryStealCoinsTo(
+    public bool StealCoinsTo(
         PlayerBank recipient,
         int amount,
         float duration)
     {
-        if (recipient == null ||
-            recipient == this ||
-            amount <= 0 ||
-            coins < amount ||
-            recipient.coins > MaxCoins - amount)
-        {
-            return false;
-        }
-
-        coins -= amount;
-        recipient.StartCoinsRain(
+        return CoinOps.StealCoinsTo(
+            recipient,
             amount,
             duration);
-
-        return true;
     }
 
     [Server]
-    public bool TrySpendCoins(int amount)
+    public bool SpendCoins(
+        int amount)
     {
-        return RemoveCoins(amount);
+        return CoinOps.SpendCoins(
+            amount);
     }
 
-    public bool HasCoins(int amount)
+    public bool HasCoins(
+        int amount)
     {
-        return amount >= 0 &&
-               coins >= amount;
+        return CoinOps.HasCoins(
+            amount);
     }
 
     [Server]
@@ -209,99 +216,27 @@ public class PlayerBank : NetworkBehaviour
         float duration,
         bool addCoins = true)
     {
-        if (amount <= 0)
-            return;
-
-        int actualAmount =
-            addCoins
-                ? Mathf.Min(
-                    amount,
-                    MaxCoins - coins)
-                : amount;
-
-        if (actualAmount <= 0)
-            return;
-
-        if (coinsRainRoutine != null)
-        {
-            StopCoroutine(
-                coinsRainRoutine);
-
-            coinsRainRoutine = null;
-        }
-
-        RpcPlayCoinsRain(
-            actualAmount);
-
-        if (!addCoins ||
-            duration <= 0f)
-        {
-            if (addCoins)
-                AddCoins(actualAmount);
-
-            return;
-        }
-
-        coinsRainRoutine =
-            StartCoroutine(
-                CoinsRainRoutine(
-                    actualAmount,
-                    duration));
-    }
-
-    [Server]
-    private IEnumerator CoinsRainRoutine(
-        int amount,
-        float duration)
-    {
-        float startTime =
-            Time.time;
-
-        int addedAmount = 0;
-
-        while (addedAmount < amount)
-        {
-            float progress =
-                Mathf.Clamp01(
-                    (Time.time - startTime) /
-                    duration);
-
-            int targetAmount =
-                Mathf.FloorToInt(
-                    progress * amount);
-
-            targetAmount =
-                Mathf.Min(
-                    targetAmount,
-                    amount);
-
-            int delta =
-                targetAmount -
-                addedAmount;
-
-            if (delta > 0)
-            {
-                AddCoins(delta);
-
-                addedAmount =
-                    targetAmount;
-            }
-
-            if (addedAmount >= amount)
-                break;
-
-            yield return null;
-        }
-
-        coinsRainRoutine = null;
+        Rain.StartCoinsRain(
+            amount,
+            duration,
+            addCoins);
     }
 
     [ClientRpc]
     private void RpcPlayCoinsRain(
         int count)
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"RpcPlayCoinsRain netId={netId} count={count} visual={(visual != null ? visual.name : "NULL")}");
+
         if (visual == null)
+        {
+            GameLog.Write(
+                "PlayerBank",
+                $"RpcPlayCoinsRain skipped: visual is NULL netId={netId}");
             return;
+        }
 
         visual.PlayCoinsRain(count);
     }
@@ -315,29 +250,9 @@ public class PlayerBank : NetworkBehaviour
         int denomination,
         int amount)
     {
-        if (amount <= 0)
-            return false;
-
-        int index =
-            GetChipIndex(denomination);
-
-        if (index == -1)
-        {
-            Debug.LogWarning(
-                $"Unknown chip denomination: {denomination}");
-
-            return false;
-        }
-
-        ChipAmount chip =
-            chips[index];
-
-        chip.amount += amount;
-
-        chips[index] =
-            chip;
-
-        return true;
+        return ChipOps.AddChips(
+            denomination,
+            amount);
     }
 
     [Server]
@@ -345,58 +260,35 @@ public class PlayerBank : NetworkBehaviour
         int denomination,
         int amount)
     {
-        if (amount <= 0)
-            return false;
-
-        int index =
-            GetChipIndex(denomination);
-
-        if (index == -1)
-            return false;
-
-        ChipAmount chip =
-            chips[index];
-
-        if (chip.amount < amount)
-            return false;
-
-        chip.amount -= amount;
-
-        chips[index] =
-            chip;
-
-        return true;
-    }
-
-    [Server]
-    public bool TrySpendChips(
-        int denomination,
-        int amount)
-    {
-        return RemoveChips(
+        return ChipOps.RemoveChips(
             denomination,
             amount);
     }
 
-    public int GetChips(int denomination)
+    [Server]
+    public bool SpendChips(
+        int denomination,
+        int amount)
     {
-        int index =
-            GetChipIndex(denomination);
+        return ChipOps.SpendChips(
+            denomination,
+            amount);
+    }
 
-        if (index == -1)
-            return 0;
-
-        return chips[index].amount;
+    public int GetChips(
+        int denomination)
+    {
+        return ChipOps.GetChips(
+            denomination);
     }
 
     public bool HasChips(
         int denomination,
         int amount)
     {
-        if (amount < 0)
-            return false;
-
-        return GetChips(denomination) >= amount;
+        return ChipOps.HasChips(
+            denomination,
+            amount);
     }
 
     [Server]
@@ -405,101 +297,27 @@ public class PlayerBank : NetworkBehaviour
         int amount,
         float duration)
     {
-        if (amount <= 0)
-            return;
-
-        if (GetChipIndex(denomination) == -1)
-        {
-            Debug.LogWarning(
-                $"Unknown chip denomination: {denomination}");
-
-            return;
-        }
-
-        if (chipsRainRoutine != null)
-        {
-            StopCoroutine(
-                chipsRainRoutine);
-
-            chipsRainRoutine = null;
-        }
-
-        RpcPlayChipsRain(
-            amount);
-
-        if (duration <= 0f)
-        {
-            AddChips(
-                denomination,
-                amount);
-
-            return;
-        }
-
-        chipsRainRoutine =
-            StartCoroutine(
-                ChipsRainRoutine(
-                    denomination,
-                    amount,
-                    duration));
-    }
-
-    [Server]
-    private IEnumerator ChipsRainRoutine(
-        int denomination,
-        int amount,
-        float duration)
-    {
-        float startTime =
-            Time.time;
-
-        int addedAmount = 0;
-
-        while (addedAmount < amount)
-        {
-            float progress =
-                Mathf.Clamp01(
-                    (Time.time - startTime) /
-                    duration);
-
-            int targetAmount =
-                Mathf.FloorToInt(
-                    progress * amount);
-
-            targetAmount =
-                Mathf.Min(
-                    targetAmount,
-                    amount);
-
-            int delta =
-                targetAmount -
-                addedAmount;
-
-            if (delta > 0)
-            {
-                AddChips(
-                    denomination,
-                    delta);
-
-                addedAmount =
-                    targetAmount;
-            }
-
-            if (addedAmount >= amount)
-                break;
-
-            yield return null;
-        }
-
-        chipsRainRoutine = null;
+        Rain.StartChipsRain(
+            denomination,
+            amount,
+            duration);
     }
 
     [ClientRpc]
     private void RpcPlayChipsRain(
         int count)
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"RpcPlayChipsRain netId={netId} count={count} visual={(visual != null ? visual.name : "NULL")}");
+
         if (visual == null)
+        {
+            GameLog.Write(
+                "PlayerBank",
+                $"RpcPlayChipsRain skipped: visual is NULL netId={netId}");
             return;
+        }
 
         visual.PlayChipsRain(count);
     }
@@ -510,20 +328,14 @@ public class PlayerBank : NetworkBehaviour
 
     public int GetTotalChipValue()
     {
-        int total = 0;
-
-        foreach (ChipAmount chip in chips)
-        {
-            total +=
-                chip.denomination *
-                chip.amount;
-        }
-
-        return total;
+        return ChipOps.GetTotalChipValue();
     }
 
     public int GetTotalCurrencyValue()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"GetTotalCurrencyValue netId={netId} coins={coins}");
         return coins +
                GetTotalChipValue();
     }
@@ -534,14 +346,27 @@ public class PlayerBank : NetworkBehaviour
 
     private void RefreshUI()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"RefreshUI netId={netId}");
+
         RefreshCoinsUI();
         RefreshChipsUI();
     }
 
     private void RefreshCoinsUI()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"RefreshCoinsUI netId={netId} coins={coins} text={(coinsText != null ? "set" : "NULL")}");
+
         if (coinsText == null)
+        {
+            GameLog.Write(
+                "PlayerBank",
+                $"RefreshCoinsUI skipped: coinsText is NULL netId={netId}");
             return;
+        }
 
         coinsText.text =
             coins.ToString();
@@ -549,8 +374,17 @@ public class PlayerBank : NetworkBehaviour
 
     private void RefreshChipsUI()
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"RefreshChipsUI netId={netId} text={(chipsText != null ? "set" : "NULL")}");
+
         if (chipsText == null)
+        {
+            GameLog.Write(
+                "PlayerBank",
+                $"RefreshChipsUI skipped: chipsText is NULL netId={netId}");
             return;
+        }
 
         chipsText.text =
             GetTotalChipValue().ToString();
@@ -563,24 +397,18 @@ public class PlayerBank : NetworkBehaviour
     private int GetChipIndex(
         int denomination)
     {
-        for (int i = 0;
-             i < chips.Count;
-             i++)
-        {
-            if (chips[i].denomination ==
-                denomination)
-            {
-                return i;
-            }
-        }
-
-        return -1;
+        return ChipOps.GetChipIndex(
+            denomination);
     }
 
     private void OnCoinsChanged(
         int oldValue,
         int newValue)
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"OnCoinsChanged netId={netId} old={oldValue} new={newValue}");
+
         RefreshCoinsUI();
 
         CoinsChanged?.Invoke(
@@ -594,9 +422,16 @@ public class PlayerBank : NetworkBehaviour
         ChipAmount oldItem,
         ChipAmount newItem)
     {
+        GameLog.Write(
+            "PlayerBank",
+            $"OnChipsChanged netId={netId} operation={operation} index={index} old={oldItem.denomination}x{oldItem.amount} new={newItem.denomination}x{newItem.amount}");
+
         if (operation !=
             SyncList<ChipAmount>.Operation.OP_SET)
         {
+            GameLog.Write(
+                "PlayerBank",
+                $"OnChipsChanged ignored: operation is not OP_SET netId={netId} operation={operation}");
             return;
         }
 
@@ -609,76 +444,45 @@ public class PlayerBank : NetworkBehaviour
 
     #endregion
 
-    #region Editor
+    uint IMoneyRainContext.NetId =>
+        netId;
 
-    [ContextMenu("Coins Rain 10")]
-    private void TestCoinsRain10()
+    int IMoneyRainContext.MaxCoins =>
+        MaxCoins;
+
+    int IMoneyRainContext.GetChipIndex(
+        int denomination)
     {
-        if (!isServer)
-            return;
-
-        StartCoinsRain(
-            10,
-            moneyRainDuration);
+        return GetChipIndex(
+            denomination);
     }
 
-    [ContextMenu("Coins Rain 50")]
-    private void TestCoinsRain50()
+    void IMoneyRainContext.PlayCoinsRain(
+        int count)
     {
-        if (!isServer)
-            return;
-
-        StartCoinsRain(
-            50,
-            moneyRainDuration);
+        RpcPlayCoinsRain(
+            count);
     }
 
-    [ContextMenu("Coins Rain 100")]
-    private void TestCoinsRain100()
+    void IMoneyRainContext.PlayChipsRain(
+        int count)
     {
-        if (!isServer)
-            return;
-
-        StartCoinsRain(
-            100,
-            moneyRainDuration);
+        RpcPlayChipsRain(
+            count);
     }
 
-    [ContextMenu("Chips Rain 10")]
-    private void TestChipsRain10()
-    {
-        if (!isServer)
-            return;
+    uint IBankStore.NetId =>
+        netId;
 
-        StartChipsRain(
-            1,
-            10,
-            moneyRainDuration);
+    int IBankStore.Coins
+    {
+        get => coins;
+        set => coins = value;
     }
 
-    [ContextMenu("Chips Rain 50")]
-    private void TestChipsRain50()
-    {
-        if (!isServer)
-            return;
+    int IBankStore.MaxCoins =>
+        MaxCoins;
 
-        StartChipsRain(
-            1,
-            50,
-            moneyRainDuration);
-    }
-
-    [ContextMenu("Chips Rain 100")]
-    private void TestChipsRain100()
-    {
-        if (!isServer)
-            return;
-
-        StartChipsRain(
-            1,
-            100,
-            moneyRainDuration);
-    }
-
-    #endregion
+    IList<ChipAmount> IBankStore.Chips =>
+        chips;
 }

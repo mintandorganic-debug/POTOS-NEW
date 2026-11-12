@@ -125,6 +125,10 @@ public class CameraLook : NetworkBehaviour
 
     private void Awake()
     {
+        GameLog.Write(
+            "CameraLook",
+            $"Awake object={gameObject.name} playerCamera={(playerCamera != null ? playerCamera.name : "NULL")}");
+
         if (playerCamera == null)
             playerCamera = GetComponentInChildren<Camera>();
 
@@ -136,10 +140,18 @@ public class CameraLook : NetworkBehaviour
             targetFov =
                 normalFov;
         }
+
+        GameLog.Write(
+            "CameraLook",
+            $"Awake done object={gameObject.name} playerCamera={(playerCamera != null ? playerCamera.name : "NULL")} normalFov={normalFov} targetFov={targetFov}");
     }
 
     private void OnEnable()
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnEnable object={gameObject.name} subscribing to InteractableObject look zoom and camera lock events");
+
         InteractableObject.LookZoomEntered +=
             OnLookZoomEntered;
 
@@ -155,6 +167,10 @@ public class CameraLook : NetworkBehaviour
 
     private void OnDisable()
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnDisable object={gameObject.name} unsubscribing from InteractableObject look zoom and camera lock events");
+
         InteractableObject.LookZoomEntered -=
             OnLookZoomEntered;
 
@@ -170,6 +186,10 @@ public class CameraLook : NetworkBehaviour
 
     private void Start()
     {
+        GameLog.Write(
+            "CameraLook",
+            $"Start netId={netId} isLocal={isLocalPlayer} playerHead={(playerHead != null ? playerHead.name : "NULL")} neck={(neck != null ? neck.name : "NULL")} rightHand={(rightHand != null ? rightHand.name : "NULL")} playerCamera={(playerCamera != null ? playerCamera.name : "NULL")}");
+
         if (isLocalPlayer)
         {
             if (playerHead != null)
@@ -182,6 +202,10 @@ public class CameraLook : NetworkBehaviour
             Cursor.visible = false;
             Cursor.lockState =
                 CursorLockMode.Locked;
+
+            GameLog.Write(
+                "CameraLook",
+                $"Start local player: cursor hidden and locked, head layer set netId={netId}");
         }
 
         if (neck != null)
@@ -206,6 +230,10 @@ public class CameraLook : NetworkBehaviour
             targetFov =
                 normalFov;
         }
+
+        GameLog.Write(
+            "CameraLook",
+            $"Start done netId={netId} normalFov={normalFov} targetFov={targetFov} visualYaw={visualYaw} visualPitch={visualPitch}");
     }
 
     private void Update()
@@ -351,11 +379,31 @@ public class CameraLook : NetworkBehaviour
         uint playerNetId,
         float fov)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnLookZoomEntered netId={netId} eventPlayer={playerNetId} fov={fov} isLocal={isLocalPlayer}");
+
         if (!isLocalPlayer)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnLookZoomEntered ignored: not local player netId={netId}");
+
             return;
+        }
 
         if (netId != playerNetId)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnLookZoomEntered ignored: event for another player netId={netId} eventPlayer={playerNetId}");
+
             return;
+        }
+
+        GameLog.Write(
+            "CameraLook",
+            $"OnLookZoomEntered zoom in netId={netId} targetFov {targetFov} -> {fov} normalFov={normalFov}");
 
         targetFov = fov;
     }
@@ -363,11 +411,31 @@ public class CameraLook : NetworkBehaviour
     private void OnLookZoomExited(
         uint playerNetId)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnLookZoomExited netId={netId} eventPlayer={playerNetId} isLocal={isLocalPlayer}");
+
         if (!isLocalPlayer)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnLookZoomExited ignored: not local player netId={netId}");
+
             return;
+        }
 
         if (netId != playerNetId)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnLookZoomExited ignored: event for another player netId={netId} eventPlayer={playerNetId}");
+
             return;
+        }
+
+        GameLog.Write(
+            "CameraLook",
+            $"OnLookZoomExited zoom out netId={netId} targetFov {targetFov} -> {normalFov}");
 
         targetFov =
             normalFov;
@@ -377,32 +445,78 @@ public class CameraLook : NetworkBehaviour
         uint playerNetId,
         Transform target)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnCameraLockEntered netId={netId} eventPlayer={playerNetId} target={(target != null ? target.name : "NULL")} isLocal={isLocalPlayer} wasLocked={cameraLocked}");
+
         if (!isLocalPlayer)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnCameraLockEntered ignored: not local player netId={netId}");
+
             return;
+        }
 
         if (netId != playerNetId)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnCameraLockEntered ignored: event for another player netId={netId} eventPlayer={playerNetId}");
+
             return;
+        }
 
         if (target == null)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnCameraLockEntered ignored: target is NULL netId={netId}");
+
             return;
+        }
 
         cameraLockTarget =
             target;
 
         cameraLocked = true;
+
+        GameLog.Write(
+            "CameraLook",
+            $"OnCameraLockEntered camera locked netId={netId} target={cameraLockTarget.name}");
     }
 
     private void OnCameraLockExited(
         uint playerNetId)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"OnCameraLockExited netId={netId} eventPlayer={playerNetId} isLocal={isLocalPlayer} wasLocked={cameraLocked}");
+
         if (!isLocalPlayer)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnCameraLockExited ignored: not local player netId={netId}");
+
             return;
+        }
 
         if (netId != playerNetId)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"OnCameraLockExited ignored: event for another player netId={netId} eventPlayer={playerNetId}");
+
             return;
+        }
 
         cameraLocked = false;
         cameraLockTarget = null;
+
+        GameLog.Write(
+            "CameraLook",
+            $"OnCameraLockExited camera unlocked netId={netId}");
     }
 
     [Command(channel = Channels.Unreliable)]
@@ -418,10 +532,24 @@ public class CameraLook : NetworkBehaviour
         float mult,
         float duration)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"ApplyMultiplyer netId={netId} mult={mult} duration={duration} isLocal={isLocalPlayer} oldMult={cameraSensitivityMultiplier}");
+
         if (!isLocalPlayer)
+        {
+            GameLog.Write(
+                "CameraLook",
+                $"ApplyMultiplyer skipped: not local player netId={netId}");
+
             return;
+        }
 
         cameraSensitivityMultiplier = mult;
+
+        GameLog.Write(
+            "CameraLook",
+            $"ApplyMultiplyer sensitivity multiplier set netId={netId} mult={cameraSensitivityMultiplier} restartingCoroutine={cameraMultiplierCoroutine != null}");
 
         if (cameraMultiplierCoroutine != null)
         {
@@ -438,11 +566,19 @@ public class CameraLook : NetworkBehaviour
     private IEnumerator ResetCameraMultiplierAfterDuration(
         float duration)
     {
+        GameLog.Write(
+            "CameraLook",
+            $"ResetCameraMultiplierAfterDuration start netId={netId} duration={duration}");
+
         yield return new WaitForSeconds(
             Mathf.Max(duration, 0f));
 
         cameraSensitivityMultiplier = 1f;
         cameraMultiplierCoroutine = null;
+
+        GameLog.Write(
+            "CameraLook",
+            $"ResetCameraMultiplierAfterDuration end netId={netId} multiplier reset to 1");
     }
 
     private void LateUpdate()

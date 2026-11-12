@@ -11,6 +11,10 @@ public class SpawnpointCalculator : MonoBehaviour
 
     public void CalculateSpawnPoints(int playerCount)
     {
+        GameLog.Write(
+            "SpawnpointCalculator",
+            $"CalculateSpawnPoints playerCount={playerCount} radius={radius} center={transform.position} previousCount={spawnPoints.Count}");
+
         spawnPoints.Clear();
 
         for (int i = 0; i < playerCount; i++)
@@ -27,6 +31,14 @@ public class SpawnpointCalculator : MonoBehaviour
                 Vector3.up);
 
             spawnPoints.Add(new Pose(position, rotation));
+
+            GameLog.Write(
+                "SpawnpointCalculator",
+                $"SpawnPoint added index={i} position={position} rotation={rotation.eulerAngles}");
         }
+
+        GameLog.Write(
+            "SpawnpointCalculator",
+            $"CalculateSpawnPoints done count={spawnPoints.Count}");
     }
 }

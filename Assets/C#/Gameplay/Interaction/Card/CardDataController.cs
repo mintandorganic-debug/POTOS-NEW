@@ -29,9 +29,17 @@ public class CardDataController : NetworkBehaviour
     [Server]
     public void RandomData()
     {
+        GameLog.Write(
+            "CardDataController",
+            $"RandomData begin netId={netId} types={(availableCardTypes == null ? -1 : availableCardTypes.Count)}");
+
         if (availableCardTypes == null ||
             availableCardTypes.Count == 0)
         {
+            GameLog.Write(
+                "CardDataController",
+                $"RandomData failed netId={netId}: availableCardTypes is empty");
+
             Debug.LogError(
                 "CardDataController: availableCardTypes is empty.",
                 this);
@@ -49,6 +57,10 @@ public class CardDataController : NetworkBehaviour
 
         if (selectedData == null)
         {
+            GameLog.Write(
+                "CardDataController",
+                $"RandomData failed netId={netId}: CardData at index {index} is null");
+
             Debug.LogError(
                 $"CardDataController: CardData at index {index} is null.",
                 this);
@@ -58,6 +70,10 @@ public class CardDataController : NetworkBehaviour
 
         cardDataIndex = index;
 
+        GameLog.Write(
+            "CardDataController",
+            $"RandomData netId={netId} index={index}/{availableCardTypes.Count} data={selectedData.name}");
+
         ApplyCardData();
     }
 
@@ -65,6 +81,10 @@ public class CardDataController : NetworkBehaviour
         int oldValue,
         int newValue)
     {
+        GameLog.Write(
+            "CardDataController",
+            $"OnCardDataChanged netId={netId} {oldValue}->{newValue}");
+
         ApplyCardData();
     }
 
@@ -74,6 +94,10 @@ public class CardDataController : NetworkBehaviour
             cardDataIndex < 0 ||
             cardDataIndex >= availableCardTypes.Count)
         {
+            GameLog.Write(
+                "CardDataController",
+                $"ApplyCardData skipped netId={netId} index={cardDataIndex} types={(availableCardTypes == null ? -1 : availableCardTypes.Count)}");
+
             return;
         }
 
@@ -81,9 +105,19 @@ public class CardDataController : NetworkBehaviour
             availableCardTypes[cardDataIndex];
 
         if (newData == null)
+        {
+            GameLog.Write(
+                "CardDataController",
+                $"ApplyCardData skipped netId={netId} index={cardDataIndex}: CardData is NULL");
+
             return;
+        }
 
         cardData = newData;
+
+        GameLog.Write(
+            "CardDataController",
+            $"ApplyCardData netId={netId} index={cardDataIndex} data={cardData.name}");
 
         ApplyCardVisual();
 
@@ -95,6 +129,10 @@ public class CardDataController : NetworkBehaviour
         if (cardData == null ||
             cardMesh == null)
         {
+            GameLog.Write(
+                "CardDataController",
+                $"ApplyCardVisual skipped netId={netId}: data={(cardData == null ? "NULL" : cardData.name)} mesh={(cardMesh == null ? "NULL" : "ok")}");
+
             return;
         }
 
@@ -104,6 +142,10 @@ public class CardDataController : NetworkBehaviour
         if (materials == null ||
             materials.Length <= 1)
         {
+            GameLog.Write(
+                "CardDataController",
+                $"ApplyCardVisual skipped netId={netId}: materials={(materials == null ? -1 : materials.Length)}");
+
             return;
         }
 
@@ -111,7 +153,17 @@ public class CardDataController : NetworkBehaviour
             materials[1];
 
         if (cardData.texture == null)
+        {
+            GameLog.Write(
+                "CardDataController",
+                $"ApplyCardVisual skipped netId={netId}: texture is NULL for data={cardData.name}");
+
             return;
+        }
+
+        GameLog.Write(
+            "CardDataController",
+            $"ApplyCardVisual netId={netId} texture={cardData.texture.name}");
 
         material.SetTexture(
             "_BaseColorMap",
@@ -124,6 +176,10 @@ public class CardDataController : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        GameLog.Write(
+            "CardDataController",
+            $"OnStartClient netId={netId} index={cardDataIndex}");
+
         base.OnStartClient();
 
         ApplyCardData();

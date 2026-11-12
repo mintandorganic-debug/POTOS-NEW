@@ -17,7 +17,6 @@ public class Interactor : NetworkBehaviour
     [SerializeField] private LayerMask interactionMask = ~0;
 
     [Header("Card Info")]
-    [SerializeField] private float cardInfoDelay = 0.5f;
 
     private InteractableObject currentTarget;
 
@@ -26,10 +25,7 @@ public class Interactor : NetworkBehaviour
     private EventSystem eventSystem;
     private HudController hudController;
 
-    private Card hoveredCard;
     private Card selectedCard;
-
-    private Coroutine cardInfoRoutine;
 
     private void Awake()
     {
@@ -37,14 +33,26 @@ public class Interactor : NetworkBehaviour
 
         if (owner == null)
             owner = GetComponent<Player>();
+
+        GameLog.Write(
+            "Interactor",
+            $"Awake object={name} owner={(owner != null ? owner.name : "NULL")} eventSystem={(eventSystem != null ? "ok" : "NULL")} camera={(playerCamera != null ? playerCamera.name : "NULL")}");
     }
 
     public override void OnStartLocalPlayer()
     {
+        GameLog.Write(
+            "Interactor",
+            $"OnStartLocalPlayer netId={netId} owner={(owner != null ? owner.name : "NULL")}");
+
         base.OnStartLocalPlayer();
 
         hudController =
-            FindAnyObjectByType<HudController>();
+            FindFirstObjectByType<HudController>();
+
+        GameLog.Write(
+            "Interactor",
+            $"OnStartLocalPlayer netId={netId} hudController={(hudController != null ? "ok" : "NULL")}");
     }
 
     private void Update()
@@ -132,66 +140,17 @@ public class Interactor : NetworkBehaviour
         if (newTarget == currentTarget)
             return;
 
+        GameLog.Write(
+            "Interactor",
+            $"DetectTarget look target changed: {(currentTarget != null ? currentTarget.name : "NULL")} -> {(newTarget != null ? newTarget.name : "NULL")}");
+
         currentTarget?.OnLookExit();
-
-        StopCardInfoRoutine();
-
-        hoveredCard = null;
 
         currentTarget = newTarget;
 
         currentTarget?.OnLookEnter();
 
         UpdateHint();
-
-        if (currentTarget is Card card &&
-            card.IsAvailable)
-        {
-            hoveredCard = card;
-
-            cardInfoRoutine =
-                StartCoroutine(
-                    ShowCardInfoAfterDelay(card));
-        }
-        else
-        {
-            hudController?.HideCardInfo();
-        }
-    }
-
-    // =========================================================
-    // CARD INFO
-    // =========================================================
-
-    private IEnumerator ShowCardInfoAfterDelay(
-        Card card)
-    {
-        yield return new WaitForSeconds(
-            cardInfoDelay);
-
-        if (currentTarget != card ||
-            hoveredCard != card ||
-            !card.IsAvailable ||
-            card.Data == null)
-        {
-            yield break;
-        }
-
-        hudController?.ShowCardInfo(
-            card.Data);
-
-        cardInfoRoutine = null;
-    }
-
-    private void StopCardInfoRoutine()
-    {
-        if (cardInfoRoutine == null)
-            return;
-
-        StopCoroutine(
-            cardInfoRoutine);
-
-        cardInfoRoutine = null;
     }
 
     // =========================================================
@@ -201,11 +160,21 @@ public class Interactor : NetworkBehaviour
     private void UpdateHint()
     {
         if (hudController == null)
+        {
+            GameLog.Write(
+                "Interactor",
+                $"UpdateHint skipped: hudController is NULL");
+
             return;
+        }
 
         if (currentTarget is Card card &&
             !card.IsAvailable)
         {
+            GameLog.Write(
+                "Interactor",
+                $"UpdateHint: unavailable card netId={card.netId} reason={card.Reason}, showing hint");
+
             hudController.SetHint(
                 GetUnavailableReasonText(
                     card.Reason));
@@ -213,12 +182,20 @@ public class Interactor : NetworkBehaviour
             return;
         }
 
+        GameLog.Write(
+            "Interactor",
+            $"UpdateHint: clearing hint");
+
         hudController.SetHint(null);
     }
 
     private string GetUnavailableReasonText(
         Card.UnavailableReason reason)
     {
+        GameLog.Write(
+            "Interactor",
+            $"GetUnavailableReasonText reason={reason}");
+
         return reason switch
         {
             Card.UnavailableReason.SampleReason =>
@@ -238,11 +215,18 @@ public class Interactor : NetworkBehaviour
 
     private void HandleInteraction()
     {
+        GameLog.Write(
+            "Interactor",
+            $"HandleInteraction target={(currentTarget != null ? currentTarget.name : "NULL")} selectedCard={(selectedCard != null ? selectedCard.name : "NULL")}");
+
         if (currentTarget is Card currentCard)
         {
             if (!currentCard.IsAvailable)
             {
                 GameAudioManager.Instance?.PlayUnavailable();
+                GameLog.Write(
+                    "Interactor",
+                    $"HandleInteraction ignored: card netId={currentCard.netId} is unavailable");
                 return;
             }
 
@@ -250,18 +234,34 @@ public class Interactor : NetworkBehaviour
                 selectedCard != currentCard &&
                 selectedCard.IsZoomed)
             {
+                GameLog.Write(
+                    "Interactor",
+                    $"HandleInteraction: returning previously selected card netId={selectedCard.netId} to owner");
+
                 selectedCard.ReturnToOwner();
                 selectedCard = null;
             }
+
+            GameLog.Write(
+                "Interactor",
+                $"HandleInteraction: interacting with card netId={currentCard.netId}");
 
             currentCard.Interact();
 
             if (currentCard.IsZoomed)
             {
+                GameLog.Write(
+                    "Interactor",
+                    $"HandleInteraction: selectedCard set to netId={currentCard.netId}");
+
                 selectedCard = currentCard;
             }
             else if (selectedCard == currentCard)
             {
+                GameLog.Write(
+                    "Interactor",
+                    $"HandleInteraction: selectedCard cleared (netId={currentCard.netId} not zoomed)");
+
                 selectedCard = null;
             }
 
@@ -271,13 +271,28 @@ public class Interactor : NetworkBehaviour
         if (selectedCard != null &&
             selectedCard.IsZoomed)
         {
+            GameLog.Write(
+                "Interactor",
+                $"HandleInteraction: non-card target, returning selected card netId={selectedCard.netId} to owner");
+
             selectedCard.ReturnToOwner();
             selectedCard = null;
         }
 
         if (currentTarget != null)
         {
+            GameLog.Write(
+                "Interactor",
+                $"HandleInteraction: interacting with target={(currentTarget != null ? currentTarget.name : "NULL")}");
+
             currentTarget.Interact();
+        }
+        else
+        {
+            GameLog.Write(
+                "Interactor",
+                $"HandleInteraction: nothing under look to interact with");
+
         }
     }
 
@@ -287,9 +302,17 @@ public class Interactor : NetworkBehaviour
 
     private void CancelSelection()
     {
+        GameLog.Write(
+            "Interactor",
+            $"CancelSelection target={(currentTarget != null ? currentTarget.name : "NULL")} selectedCard={(selectedCard != null ? selectedCard.name : "NULL")}");
+
         if (selectedCard != null &&
             selectedCard.IsZoomed)
         {
+            GameLog.Write(
+                "Interactor",
+                $"CancelSelection: returning selected card netId={selectedCard.netId} to owner");
+
             selectedCard.ReturnToOwner();
             selectedCard = null;
             return;
@@ -298,12 +321,26 @@ public class Interactor : NetworkBehaviour
         if (currentTarget is Card card &&
             card.IsZoomed)
         {
+            GameLog.Write(
+                "Interactor",
+                $"CancelSelection: returning looked-at zoomed card netId={card.netId} to owner");
+
             card.ReturnToOwner();
             return;
         }
 
         if (AttackSequence.Instance == null)
+        {
+            GameLog.Write(
+                "Interactor",
+                $"CancelSelection skipped: AttackSequence.Instance is NULL");
+
             return;
+        }
+
+        GameLog.Write(
+            "Interactor",
+            $"CancelSelection: sending CmdCancelSequence");
 
         GameAudioManager.Instance?.SuppressHoverFor(0.4f);
         AttackSequence.Instance.CmdCancelSequence();
@@ -355,8 +392,18 @@ public class Interactor : NetworkBehaviour
     private void ClickButton(
         Button button)
     {
+        GameLog.Write(
+            "Interactor",
+            $"ClickButton button={(button != null ? button.name : "NULL")}");
+
         if (button == null)
+        {
+            GameLog.Write(
+                "Interactor",
+                $"ClickButton skipped: button is NULL");
+
             return;
+        }
 
         GameAudioManager.Instance?.PlayMenuPress();
         button.onClick.Invoke();

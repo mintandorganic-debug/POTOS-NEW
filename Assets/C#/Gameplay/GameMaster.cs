@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameMaster : NetworkBehaviour
+public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryTheftContext, ITurnContext, ITurnStageContext, IDiceStageContext
 {
     public enum GamePhase
     {
@@ -14,7 +14,8 @@ public class GameMaster : NetworkBehaviour
         Attack,
         SelectTarget,
         Defense,
-        Steal
+        Steal,
+        Dice
     }
 
     [SerializeField] private SpawnpointCalculator spawnpointCalculator;
@@ -24,6 +25,16 @@ public class GameMaster : NetworkBehaviour
 
     public event Action<GamePhase> GamePhaseChanged;
     public event Action<int> CurrentPlayerChanged;
+    public event Action<TurnStage> StageChanged;
+
+    public static event Action<uint, float> DiceStarted;
+    public static event Action<uint, int, int, int, string, int, int, float> DiceRolled;
+
+    [SyncVar(hook = nameof(OnStageHookChanged))]
+    [SerializeField] private TurnStage currentStage = TurnStage.CardAttack;
+
+    public TurnStage CurrentStage =>
+        currentStage;
 
     [SyncVar(hook = nameof(OnGamePhaseChanged))]
     [SerializeField] private GamePhase currentPhase = GamePhase.Wait;
@@ -38,590 +49,299 @@ public class GameMaster : NetworkBehaviour
         currentPlayerIn;
 
     public Player SelectedTarget =>
-        selectedTarget;
+        selection?.Target;
 
-    private readonly HashSet<int> expectedConnections = new();
-    private readonly HashSet<int> loadedConnections = new();
+    public Card SelectedAttack =>
+        selection != null ? selection.Attack : null;
+
+    public bool IsMatchRunning =>
+        gameStarted;
+
+    public bool HoldStart
+    {
+        get => startup != null && startup.HoldStart;
+        set { if (startup != null) startup.HoldStart = value; }
+    }
+
+    public int TurnNumber { get; private set; }
 
     private readonly List<Player> _players = new();
 
     public IReadOnlyList<Player> Players =>
         _players;
 
-    private Card selectedAttack;
-    private Player selectedTarget;
-    [SyncVar] private NetworkIdentity selectedTargetIdentity;
-
-    private float turnStartTime;
-    private bool lastTurnPressure;
-    [SerializeField] private float turnPressureThreshold = 20f;
+    private AttackSelection selection;
+    private AccessoryTheft theft;
+    private TurnController turns;
+    private TurnStageSequence stages;
+    private IDiceThrowHandler diceThrow;
 
     private bool gameStarted;
-    private bool startupCancelled;
 
-    // ---- test harness support (TestScene) ----
+    private MatchStartup startup;
+    private MatchSetup setup;
 
-    /// <summary>
-    /// While true the match is NOT started automatically when all
-    /// connections have loaded. The test scene starts it by hand.
-    /// </summary>
-    public bool HoldStart { get; set; }
-
-    public bool IsMatchRunning =>
-        gameStarted;
-
-    /// <summary>Increments on every BeginTurn. 0 = no turn yet.</summary>
-    public int TurnNumber { get; private set; }
-
-    public Card SelectedAttack =>
-        selectedAttack;
-
-    private Coroutine timeoutRoutine;
-    private Coroutine startupRoutine;
     private Coroutine idleAudioRoutine;
+    [SerializeField] private float turnPressureThreshold = 20f;
+    private float turnStartTime;
+    private bool lastTurnPressure;
 
     private void Awake()
     {
+        GameLog.Write(
+            "GameMaster",
+            $"Awake instanceExists={Instance != null} isDuplicate={Instance != null && Instance != this}");
+
         if (Instance != null &&
             Instance != this)
         {
+            GameLog.Write(
+                "GameMaster",
+                "Awake duplicate instance, destroying gameObject");
+
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
+
+        gameObject.AddComponent<DiceStageView>();
+
+        GameLog.Write(
+            "GameMaster",
+            $"Awake Instance set loadTimeout={loadTimeout}");
     }
 
     private void SetGamePhase(
         GamePhase phase)
     {
+        GameLog.Write(
+            "GameMaster",
+            $"SetGamePhase requested={phase} current={currentPhase} isServer={isServer}");
+
         if (!isServer)
+        {
+            GameLog.Write(
+                "GameMaster",
+                "SetGamePhase ignored: not server");
+
             return;
+        }
 
         if (currentPhase == phase)
-            return;
+        {
+            GameLog.Write(
+                "GameMaster",
+                $"SetGamePhase ignored: phase unchanged phase={phase}");
 
-        GameLog.Event(
-            LogCat.Phase,
-            $"{currentPhase} -> {phase}");
+            return;
+        }
+
+        GameLog.Write(
+            "GameMaster",
+            $"SetGamePhase changing {currentPhase} -> {phase}");
 
         currentPhase = phase;
-    }
-
-    private void Update()
-    {
-        UpdateMusicTension();
-    }
-
-    private void UpdateMusicTension()
-    {
-        if (!gameStarted || GameAudioManager.Instance == null)
-            return;
-
-        if (currentPhase == GamePhase.Attack)
-        {
-            bool isLowHp = IsAnyPlayerLowHealth();
-            bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
-            bool shouldPressure = isLowHp || isThinkingTooLong;
-
-            if (shouldPressure != lastTurnPressure)
-            {
-                lastTurnPressure = shouldPressure;
-                GameAudioManager.Instance.SetGameStateAudio(currentPhase, false, shouldPressure);
-            }
-        }
-        else
-        {
-            lastTurnPressure = false;
-        }
-    }
-
-    public bool IsAnyPlayerLowHealth()
-    {
-        if (_players == null || _players.Count == 0)
-            return false;
-
-        for (int i = 0; i < _players.Count; i++)
-        {
-            Player p = _players[i];
-            if (p != null && !p.HasAnyAccessory)
-                return true;
-        }
-        return false;
     }
 
     private void OnGamePhaseChanged(
         GamePhase oldPhase,
         GamePhase newPhase)
     {
+        GameLog.Write(
+            "GameMaster",
+            $"OnGamePhaseChanged hook {oldPhase} -> {newPhase} isServer={isServer} isClient={isClient}");
+
         GamePhaseChanged?.Invoke(
             newPhase);
 
-        bool isLowHp = IsAnyPlayerLowHealth();
-        bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
-        bool shouldPressure = isLowHp || isThinkingTooLong;
-
+        float elapsed = Time.time - turnStartTime;
+        bool shouldPressure = elapsed >= turnPressureThreshold;
         GameAudioManager.Instance?.SetGameStateAudio(newPhase, IsLocalPlayerTargeted(), shouldPressure);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        GameAudioManager.Instance?.StopAllMusic();
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        GameAudioManager.Instance?.StopAllMusic();
+    }
+
+    private void Update()
+    {
+        UpdateTurnAudio();
+    }
+
+    private void UpdateTurnAudio()
+    {
+        if (!gameStarted || GameAudioManager.Instance == null)
+            return;
+
+        if (currentPhase == GamePhase.Wait)
+            return;
+
+        float elapsed = Time.time - turnStartTime;
+        bool shouldPressure = elapsed >= turnPressureThreshold;
+
+        if (shouldPressure != lastTurnPressure)
+        {
+            lastTurnPressure = shouldPressure;
+            GameAudioManager.Instance.SetGameStateAudio(currentPhase, IsLocalPlayerTargeted(), shouldPressure);
+        }
+    }
+
+    private bool IsLocalPlayerTargeted()
+    {
+        Player target = SelectedTarget;
+        if (target == null)
+            return false;
+
+        Player local = Player.LocalPlayer;
+        if (local == null)
+            return false;
+
+        return target == local;
     }
 
     private void OnCurrentPlayerChanged(
         int oldPlayerIndex,
         int newPlayerIndex)
     {
+        GameLog.Write(
+            "GameMaster",
+            $"OnCurrentPlayerChanged hook {oldPlayerIndex} -> {newPlayerIndex} isServer={isServer} isClient={isClient}");
+
         CurrentPlayerChanged?.Invoke(
             newPlayerIndex);
-        // next_sound & coin_toss disabled (misc / coin)
-        // coin_toss disabled
-    }
-
-    public bool IsLocalPlayerTargeted()
-    {
-        if (NetworkClient.localPlayer == null)
-            return false;
-
-        if (selectedTargetIdentity != null)
-            return selectedTargetIdentity == NetworkClient.localPlayer;
-
-        if (selectedTarget != null && selectedTarget.netIdentity != null)
-            return selectedTarget.netIdentity == NetworkClient.localPlayer;
-
-        return false;
-    }
-
-    [ClientRpc]
-    private void RpcOnGameStarted()
-    {
-        bool isLowHp = IsAnyPlayerLowHealth();
-        bool isThinkingTooLong = turnStartTime > 0f && (Time.time - turnStartTime) >= turnPressureThreshold;
-        bool shouldPressure = isLowHp || isThinkingTooLong;
-
-        GameAudioManager.Instance?.SetGameStateAudio(currentPhase, IsLocalPlayerTargeted(), shouldPressure);
-        // cards_shuffle disabled (misc)
-        // next_stage disabled until stage transitions exist in scene
-    }
-
-    [ClientRpc]
-    private void RpcPlayPlayerReaction(
-        NetworkIdentity speakerIdentity,
-        int reactionType,
-        float delay)
-    {
-        GameAudioManager.Instance?.PlayPlayerReactionClip(
-            speakerIdentity,
-            (GameAudioManager.ReactionClipType)reactionType,
-            delay);
-    }
-
-    [Server]
-    private IEnumerator IdleAudioRoutine()
-    {
-        GameAudioManager.ReactionClipType[] idleClips =
-        {
-            GameAudioManager.ReactionClipType.Burp,
-            GameAudioManager.ReactionClipType.Caugh,
-            GameAudioManager.ReactionClipType.CreakingChair,
-            GameAudioManager.ReactionClipType.Exhale
-        };
-
-        while (gameStarted && !startupCancelled)
-        {
-            yield return new WaitForSeconds(30f);
-
-            if (!gameStarted || startupCancelled || _players.Count == 0)
-                continue;
-
-            if (Random.value > 0.33f)
-                continue;
-
-            List<Player> validPlayers = _players.Where(p => p != null && p.netIdentity != null).ToList();
-            if (validPlayers.Count == 0)
-                continue;
-
-            Player speaker = validPlayers[Random.Range(0, validPlayers.Count)];
-            GameAudioManager.ReactionClipType chosenClip = idleClips[Random.Range(0, idleClips.Length)];
-            RpcPlayPlayerReaction(speaker.netIdentity, (int)chosenClip, 0f);
-        }
-
-        idleAudioRoutine = null;
-    }
-
-    [Server]
-    public void TryTriggerGoodReaction(Player player, float delay = 0.5f)
-    {
-        if (player == null || player.netIdentity == null)
-            return;
-
-        if (Random.value > 0.30f)
-            return;
-
-        GameAudioManager.ReactionClipType[] goodClips =
-        {
-            GameAudioManager.ReactionClipType.Joyful,
-            GameAudioManager.ReactionClipType.Whistle,
-            GameAudioManager.ReactionClipType.Wonderment
-        };
-
-        GameAudioManager.ReactionClipType chosen = goodClips[Random.Range(0, goodClips.Length)];
-        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
-        RpcPlayPlayerReaction(player.netIdentity, (int)chosen, actualDelay);
-    }
-
-    [Server]
-    public void TryTriggerBadReaction(Player player, float delay = 0.5f)
-    {
-        if (player == null || player.netIdentity == null)
-            return;
-
-        if (Random.value > 0.33f)
-            return;
-
-        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
-        RpcPlayPlayerReaction(
-            player.netIdentity,
-            (int)GameAudioManager.ReactionClipType.Disappointment,
-            actualDelay);
-    }
-
-    [Server]
-    public void TryTriggerOtherPlayerScoff(Player failedPlayer, float delay = 0.5f)
-    {
-        if (failedPlayer == null || _players.Count <= 1)
-            return;
-
-        if (Random.value > 0.33f)
-            return;
-
-        List<Player> otherPlayers = _players
-            .Where(p => p != null && p != failedPlayer && p.netIdentity != null)
-            .ToList();
-
-        if (otherPlayers.Count == 0)
-            return;
-
-        Player scoffer = otherPlayers[Random.Range(0, otherPlayers.Count)];
-        float actualDelay = Mathf.Max(0.1f, delay + Random.Range(-0.05f, 0.05f));
-        RpcPlayPlayerReaction(
-            scoffer.netIdentity,
-            (int)GameAudioManager.ReactionClipType.Scoff,
-            actualDelay);
-    }
-
-    private void UnusedMarker()
-    {
-    }
-
-    public override void OnStopClient()
-    {
-        GameAudioManager.Instance?.StopAllMusic();
-        base.OnStopClient();
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            GameAudioManager.Instance?.StopAllMusic();
-            Instance = null;
-        }
     }
 
     public override void OnStartServer()
     {
+        GameLog.Write(
+            "GameMaster",
+            "OnStartServer");
+
         base.OnStartServer();
 
-        expectedConnections.Clear();
-        loadedConnections.Clear();
         _players.Clear();
 
         gameStarted = false;
-        startupCancelled = false;
         currentPlayerIn = -1;
 
-        selectedAttack = null;
-        selectedTarget = null;
-        selectedTargetIdentity = null;
-        turnStartTime = Time.time;
-        lastTurnPressure = false;
+        selection =
+            new AttackSelection(
+                this);
+
+        theft =
+            new AccessoryTheft(
+                this,
+                selection);
+
+        turns =
+            new TurnController(
+                this,
+                selection);
+
+        DiceStage dice =
+            new DiceStage(
+                this,
+                this,
+                DiceCombinationEvaluator.CreateDefault(),
+                new PlayerBankPayout(),
+                5f,
+                3f);
+
+        diceThrow = dice;
+
+        stages =
+            new TurnStageSequence(
+                this,
+                new ITurnStage[]
+                {
+                    new CardAttackStage(),
+                    dice,
+                    new SlotStage()
+                });
+
+        turns.TurnBegan +=
+            player =>
+            {
+                stages.Begin(
+                    player);
+
+                turnStartTime = Time.time;
+                lastTurnPressure = false;
+                TurnNumber++;
+                GameLog.Turn = TurnNumber;
+
+                if (idleAudioRoutine == null)
+                    idleAudioRoutine = StartCoroutine(IdleAudioRoutine());
+            };
 
         currentPhase = GamePhase.Wait;
 
-        StartCoroutine(
-            InitializeLobbyConnections());
-    }
+        startup =
+            new MatchStartup(
+                this,
+                loadTimeout,
+                () => gameStarted,
+                StartGame);
 
-    [Server]
-    private IEnumerator InitializeLobbyConnections()
-    {
-        yield return null;
+        setup =
+            new MatchSetup(
+                spawnpointCalculator);
 
-        while (!gameStarted &&
-               !startupCancelled)
-        {
-            CaptureLobbyConnections();
+        GameLog.Write(
+            "GameMaster",
+            "OnStartServer state reset gameStarted=false currentPlayerIn=-1 phase=Wait, MatchStartup created, starting it");
 
-            if (expectedConnections.Count > 0)
-                break;
-
-            yield return null;
-        }
-
-        timeoutRoutine =
-            StartCoroutine(
-                LoadTimeoutRoutine());
-
-        TryStartGame();
-    }
-
-    [Server]
-    private void CaptureLobbyConnections()
-    {
-        expectedConnections.Clear();
-
-        foreach (NetworkConnectionToClient conn
-                 in NetworkServer.connections.Values)
-        {
-            if (conn == null)
-                continue;
-
-            expectedConnections.Add(
-                conn.connectionId);
-        }
+        startup.Begin();
     }
 
     [Server]
     public void PlayerLoaded(
         NetworkConnectionToClient conn)
     {
-        if (startupCancelled ||
-            gameStarted)
-        {
-            return;
-        }
+        GameLog.Write(
+            "GameMaster",
+            $"PlayerLoaded forwarded to MatchStartup conn={(conn != null ? conn.connectionId.ToString() : "NULL")} startupExists={startup != null}");
 
-        if (conn == null)
-        {
-            Debug.LogError(
-                "GameMaster.PlayerLoaded: connection is null.");
-
-            return;
-        }
-
-        int connectionId =
-            conn.connectionId;
-
-        if (!expectedConnections.Contains(
-                connectionId))
-        {
-            Debug.LogWarning(
-                $"GameMaster.PlayerLoaded: connection {connectionId} is not part of the captured lobby.");
-
-            return;
-        }
-
-        loadedConnections.Add(
-            connectionId);
-
-        TryStartGame();
+        startup?.PlayerLoaded(
+            conn);
     }
 
-    [Server]
-    private void TryStartGame()
-    {
-        if (gameStarted ||
-            startupCancelled)
-        {
-            return;
-        }
-
-        if (expectedConnections.Count == 0)
-            return;
-
-        if (loadedConnections.Count !=
-            expectedConnections.Count)
-        {
-            return;
-        }
-
-        foreach (int connectionId
-                 in expectedConnections)
-        {
-            if (!loadedConnections.Contains(
-                    connectionId))
-            {
-                return;
-            }
-
-            if (!NetworkServer.connections.TryGetValue(
-                    connectionId,
-                    out NetworkConnectionToClient conn))
-            {
-                return;
-            }
-
-            if (conn == null ||
-                conn.identity == null)
-            {
-                return;
-            }
-
-            if (!conn.identity.TryGetComponent<Player>(
-                    out Player player))
-            {
-                return;
-            }
-
-            if (player == null)
-                return;
-        }
-
-        if (startupRoutine != null)
-            return;
-
-        startupRoutine =
-            StartCoroutine(
-                StartGameRoutine());
-    }
-
-    [Server]
-    private IEnumerator StartGameRoutine()
-    {
-        startupRoutine = null;
-
-        yield return null;
-
-        if (gameStarted ||
-            startupCancelled)
-        {
-            yield break;
-        }
-
-        List<Player> players =
-            BuildPlayerList();
-
-        if (players == null ||
-            players.Count == 0)
-        {
-            yield break;
-        }
-
-        if (players.Count !=
-            expectedConnections.Count)
-        {
-            Debug.LogWarning(
-                "GameMaster: player count changed before startup.");
-
-            yield break;
-        }
-
-        if (!AreAllExpectedPlayersPresent(
-                players))
-        {
-            yield break;
-        }
-
-        StartGame(
-            players);
-    }
-
-    [Server]
-    private List<Player> BuildPlayerList()
-    {
-        List<Player> players =
-            new List<Player>();
-
-        foreach (int connectionId
-                 in expectedConnections.OrderBy(
-                     id => id))
-        {
-            if (!NetworkServer.connections.TryGetValue(
-                    connectionId,
-                    out NetworkConnectionToClient conn))
-            {
-                return null;
-            }
-
-            if (conn == null ||
-                conn.identity == null)
-            {
-                return null;
-            }
-
-            if (!conn.identity.TryGetComponent<Player>(
-                    out Player player))
-            {
-                return null;
-            }
-
-            if (player == null)
-                return null;
-
-            players.Add(player);
-        }
-
-        return players;
-    }
-
-    [Server]
-    private bool AreAllExpectedPlayersPresent(
-        List<Player> players)
-    {
-        if (players == null)
-            return false;
-
-        if (players.Count !=
-            expectedConnections.Count)
-        {
-            return false;
-        }
-
-        if (players.Any(
-                player => player == null))
-        {
-            return false;
-        }
-
-        if (players.Distinct().Count() !=
-            players.Count)
-        {
-            return false;
-        }
-
-        HashSet<int> playerConnections =
-            new HashSet<int>();
-
-        foreach (Player player in players)
-        {
-            if (player.netIdentity == null)
-                return false;
-
-            NetworkConnectionToClient conn =
-                player.netIdentity.connectionToClient;
-
-            if (conn == null)
-                return false;
-
-            playerConnections.Add(
-                conn.connectionId);
-        }
-
-        return playerConnections.SetEquals(
-            expectedConnections);
-    }
 
     [Server]
     private void StartGame(
         List<Player> players)
     {
+        GameLog.Write(
+            "GameMaster",
+            $"StartGame players={(players != null ? players.Count.ToString() : "NULL")} gameStarted={gameStarted} startupCancelled={startup.IsCancelled}");
+
         if (gameStarted ||
-            startupCancelled)
+            startup.IsCancelled)
         {
+            GameLog.Write(
+                "GameMaster",
+                "StartGame skipped: game already started or startup cancelled");
+
             return;
         }
 
         if (players == null ||
             players.Count == 0)
         {
-            CancelStartup(
+            GameLog.Write(
+                "GameMaster",
+                "StartGame failed: no players found");
+
+            startup.Cancel(
                 "No players found.");
 
             return;
@@ -629,61 +349,38 @@ public class GameMaster : NetworkBehaviour
 
         if (players.Count > 5)
         {
-            CancelStartup(
+            GameLog.Write(
+                "GameMaster",
+                $"StartGame failed: too many players count={players.Count}");
+
+            startup.Cancel(
                 "More than 5 players were captured.");
 
             return;
         }
 
-        if (!AreAllExpectedPlayersPresent(
+        if (!startup.AreAllExpectedPlayersPresent(
                 players))
         {
-            return;
-        }
-
-        if (spawnpointCalculator == null)
-        {
-            CancelStartup(
-                "SpawnpointCalculator missing.");
+            GameLog.Write(
+                "GameMaster",
+                "StartGame skipped: not all expected players present");
 
             return;
         }
 
-        spawnpointCalculator.CalculateSpawnPoints(
-            players.Count);
+        string setupFailure =
+            setup.Prepare(
+                players.Count);
 
-        if (spawnpointCalculator.SpawnPoints.Count <
-            players.Count)
+        if (setupFailure != null)
         {
-            CancelStartup(
-                "Not enough spawn points.");
+            GameLog.Write(
+                "GameMaster",
+                $"StartGame failed: setup preparation reason={setupFailure}");
 
-            return;
-        }
-
-        InitializeMatch(
-            players);
-    }
-
-    [Server]
-    private void InitializeMatch(
-        List<Player> players)
-    {
-        List<int> accessoryPool =
-            new List<int>
-            {
-                0,
-                1,
-                2,
-                3,
-                4
-            };
-
-        if (accessoryPool.Count <
-            players.Count)
-        {
-            CancelStartup(
-                "Not enough accessories for all players.");
+            startup.Cancel(
+                setupFailure);
 
             return;
         }
@@ -693,53 +390,22 @@ public class GameMaster : NetworkBehaviour
 
         gameStarted = true;
 
-        if (timeoutRoutine != null)
-        {
-            StopCoroutine(
-                timeoutRoutine);
+        GameLog.Write(
+            "GameMaster",
+            $"StartGame gameStarted=true players={_players.Count}");
 
-            timeoutRoutine = null;
-        }
+        GameLog.Write(
+            "GameMaster",
+            "StartGame stopping load timeout timer");
 
-        for (int i = 0;
-             i < _players.Count;
-             i++)
-        {
-            Player player =
-                _players[i];
+        startup.StopLoadTimeout();
 
-            Pose pose =
-                spawnpointCalculator.SpawnPoints[i];
+        setup.SeatPlayers(
+            _players);
 
-            player.SetSeat(i);
-
-            player.SummonCards();
-
-            int accessoryIndex =
-                Random.Range(
-                    0,
-                    accessoryPool.Count);
-
-            for (int j = 0;
-                 j < 5;
-                 j++)
-            {
-                player.SetAccesory(
-                    j,
-                    false);
-            }
-
-            player.SetAccesory(
-                accessoryIndex,
-                true);
-
-            accessoryPool.Remove(
-                accessoryIndex);
-
-            player.transform.SetPositionAndRotation(
-                pose.position,
-                pose.rotation);
-        }
+        GameLog.Write(
+            "GameMaster",
+            "StartGame players set up, calling BeginTurn with random first player");
 
         BeginTurn(
             Random.Range(
@@ -751,79 +417,28 @@ public class GameMaster : NetworkBehaviour
     private void BeginTurn(
         int playerIndex)
     {
-        if (!gameStarted)
-            return;
-
-        if (playerIndex < 0 ||
-            playerIndex >= _players.Count)
-        {
-            Debug.LogError(
-                $"GameMaster: invalid player index {playerIndex}.");
-
-            return;
-        }
-
-        currentPlayerIn =
-            playerIndex;
-
-        TurnNumber++;
-        GameLog.Turn = TurnNumber;
-
-        GameLog.Event(
-            LogCat.Turn,
-            $"TURN {TurnNumber} BEGIN: current = " +
-            GameLog.P(_players[playerIndex]));
-
-        selectedAttack = null;
-        selectedTarget = null;
-        selectedTargetIdentity = null;
-        turnStartTime = Time.time;
-        lastTurnPressure = false;
-
-        SetGamePhase(
-            GamePhase.Attack);
-
-        _players[currentPlayerIn].OnTurnStart();
-        RpcOnGameStarted();
-        if (idleAudioRoutine == null)
-            idleAudioRoutine = StartCoroutine(IdleAudioRoutine());
+        turns.BeginTurn(
+            playerIndex);
     }
 
     [Server]
-    public void EndTurn(
-        [System.Runtime.CompilerServices.CallerMemberName] string caller = "",
-        [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
+    public void EndTurn()
     {
-        if (!gameStarted)
-            return;
-
-        GameLog.Event(
-            LogCat.Turn,
-            $"TURN {TurnNumber} END requested by {caller}:{line}");
-
-        if (_players.Count == 0)
-            return;
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
+        if (idleAudioRoutine != null)
         {
-            Debug.LogError(
-                $"GameMaster: invalid currentPlayerIn {currentPlayerIn}.");
+            StopCoroutine(idleAudioRoutine);
+            idleAudioRoutine = null;
+        }
+
+        if (stages != null &&
+            stages.IsActive)
+        {
+            stages.TrySkipCurrent();
 
             return;
         }
 
-        selectedAttack = null;
-        selectedTarget = null;
-        selectedTargetIdentity = null;
-        turnStartTime = Time.time;
-        lastTurnPressure = false;
-
-        _players[currentPlayerIn].OnTurnEnd();
-
-        BeginTurn(
-            (currentPlayerIn + 1) %
-            _players.Count);
+        turns.EndTurn();
     }
 
     [Server]
@@ -831,96 +446,17 @@ public class GameMaster : NetworkBehaviour
         Card card,
         Player player)
     {
-        if (!gameStarted)
-            return false;
-
-        if (currentPhase !=
-            GamePhase.Attack)
-        {
-            return false;
-        }
-
-        if (card == null ||
-            player == null)
-        {
-            return false;
-        }
-
-        if (!IsCurrentPlayer(player))
-            return false;
-
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            return false;
-        }
-
-        if (card.OwnerNetId !=
-            player.netId)
-        {
-            return false;
-        }
-
-        if (card.Data == null)
-            return false;
-
-        if (card.Data.CardClass !=
-                Card.CardClass.AttackLight &&
-            card.Data.CardClass !=
-                Card.CardClass.AttackSteal)
-        {
-            return false;
-        }
-
-        selectedAttack = card;
-
-        SetGamePhase(
-            GamePhase.SelectTarget);
-
-        return true;
+        return selection.SelectAttack(
+            card,
+            player);
     }
 
     [Server]
     public bool SelectTarget(
         Player player)
     {
-        if (!gameStarted)
-            return false;
-
-        if (currentPhase !=
-            GamePhase.SelectTarget)
-        {
-            return false;
-        }
-
-        if (selectedAttack == null ||
-            player == null)
-        {
-            return false;
-        }
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            return false;
-        }
-
-        Player attacker =
-            _players[currentPlayerIn];
-
-        if (player == attacker)
-            return false;
-
-        if (!_players.Contains(player))
-            return false;
-
-        selectedTarget = player;
-        selectedTargetIdentity = player != null ? player.netIdentity : null;
-
-        SetGamePhase(
-            GamePhase.Defense);
-
-        return true;
+        return selection.SelectTarget(
+            player);
     }
 
     [Server]
@@ -928,110 +464,27 @@ public class GameMaster : NetworkBehaviour
         Card card,
         Player player)
     {
-        if (!gameStarted)
-            return false;
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            return false;
-        }
-
-        if (selectedAttack == null ||
-            selectedTarget == null)
-        {
-            return false;
-        }
-
-        if (player == null ||
-            player != selectedTarget)
-        {
-            return false;
-        }
-
-        if (card == null)
-            return false;
-
-        if (card.OwnerNetId !=
-            player.netId)
-        {
-            return false;
-        }
-
-        if (card.IsInRoulette ||
-            !card.IsAvailable)
-        {
-            return false;
-        }
-
-        if (card.Data == null ||
-            card.Data.CardClass !=
-                Card.CardClass.Defence)
-        {
-            return false;
-        }
-
-        return true;
+        return selection.SelectDefense(
+            card,
+            player);
     }
 
     [Server]
     public bool SkipDefense(
         Player player)
     {
-        if (!gameStarted)
-            return false;
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            return false;
-        }
-
-        if (selectedTarget == null ||
-            player == null)
-        {
-            return false;
-        }
-
-        if (player != selectedTarget)
-            return false;
-
-        return true;
+        return selection.SkipDefense(
+            player);
     }
 
     [Server]
     public bool BeginStealPhase()
     {
-        if (!gameStarted)
-            return false;
-
-        if (currentPhase !=
-            GamePhase.Defense)
-        {
-            return false;
-        }
-
-        if (selectedAttack == null ||
-            selectedTarget == null)
-        {
-            return false;
-        }
-
-        if (selectedAttack.Data == null ||
-            selectedAttack.Data.CardClass !=
-                Card.CardClass.AttackSteal)
-        {
-            return false;
-        }
-
-        SetGamePhase(
-            GamePhase.Steal);
-
-        return true;
+        return theft.BeginStealPhase();
     }
 
     [Server]
-    public bool TryStealAccesory(
+    public bool StealAccesory(
         Player target,
         int index,
         NetworkConnectionToClient sender)
@@ -1052,308 +505,299 @@ public class GameMaster : NetworkBehaviour
         if (!gameStarted)
             return false;
 
-        if (currentPhase !=
-            GamePhase.Steal)
-        {
-            return false;
-        }
-
-        if (requester == null)
+        if (currentPhase != GamePhase.Steal)
             return false;
 
-        if (selectedTarget == null ||
-            target == null ||
-            target != selectedTarget)
-        {
+        if (requester == null || target == null || target != SelectedTarget)
             return false;
-        }
 
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
+        if (currentPlayerIn < 0 || currentPlayerIn >= _players.Count)
             return false;
-        }
 
-        Player thief =
-            _players[currentPlayerIn];
-
-        if (thief == null ||
-            thief == target)
-        {
+        Player thief = _players[currentPlayerIn];
+        if (thief == null || thief != requester || thief == target)
             return false;
-        }
-
-        if (thief != requester)
-        {
-            return false;
-        }
 
         if (!target.HasAccessory(index))
             return false;
 
-        if (!target.SetAccesory(
-                index,
-                false))
+        if (!target.SetAccesory(index, false))
+            return false;
+
+        if (!thief.SetAccesory(index, true))
         {
+            target.SetAccesory(index, true);
             return false;
         }
-
-        if (!thief.SetAccesory(
-                index,
-                true))
-        {
-            target.SetAccesory(
-                index,
-                true);
-
-            return false;
-        }
-
-        GameLog.Event(
-            LogCat.Steal,
-            $"STEAL OK: accessory {index} " +
-            $"{GameLog.P(target)} -> {GameLog.P(thief)}");
 
         TryTriggerGoodReaction(thief, 0.5f);
         TryTriggerBadReaction(target, 0.65f);
-        EndTurn();
 
+        EndTurn();
         return true;
     }
 
-    // =========================================================
-    // TEST SCENE API
-    // =========================================================
-
-    /// <summary>
-    /// Starts a match with exactly these players (humans and bots),
-    /// ignoring network connections. Used by the test scene.
-    /// </summary>
-    [Server]
-    public bool StartTestGame(
-        IList<Player> players)
+    [ClientRpc]
+    private void RpcPlayPlayerReaction(
+        NetworkIdentity playerNetIdentity,
+        int reactionType,
+        float delay)
     {
-        if (gameStarted)
-        {
-            GameLog.Warn(
-                LogCat.Match,
-                "StartTestGame: a match is already running.");
+        GameAudioManager.Instance?.PlayPlayerReactionClip(
+            (GameAudioManager.ReactionClipType)reactionType,
+            playerNetIdentity,
+            delay);
+    }
 
-            return false;
+    private IEnumerator IdleAudioRoutine()
+    {
+        GameAudioManager.ReactionClipType[] idleClips = new[]
+        {
+            GameAudioManager.ReactionClipType.Burp,
+            GameAudioManager.ReactionClipType.Caugh,
+            GameAudioManager.ReactionClipType.CreakingChair,
+            GameAudioManager.ReactionClipType.Exhale
+        };
+
+        while (gameStarted)
+        {
+            yield return new WaitForSeconds(Random.Range(20f, 40f));
+
+            if (!gameStarted || _players.Count == 0)
+                break;
+
+            Player speaker = _players[Random.Range(0, _players.Count)];
+            if (speaker != null && speaker.netIdentity != null)
+            {
+                GameAudioManager.ReactionClipType chosenClip = idleClips[Random.Range(0, idleClips.Length)];
+                RpcPlayPlayerReaction(speaker.netIdentity, (int)chosenClip, 0f);
+            }
         }
 
-        if (players == null ||
-            players.Count == 0 ||
-            players.Count > 5 ||
-            players.Any(p => p == null))
+        idleAudioRoutine = null;
+    }
+
+    public void TryTriggerGoodReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null) return;
+        GameAudioManager.ReactionClipType[] goodClips = new[]
         {
-            GameLog.Warn(
-                LogCat.Match,
-                "StartTestGame: need 1..5 valid players.");
+            GameAudioManager.ReactionClipType.Joyful,
+            GameAudioManager.ReactionClipType.Whistle,
+            GameAudioManager.ReactionClipType.Wonderment
+        };
+        GameAudioManager.ReactionClipType chosen = goodClips[Random.Range(0, goodClips.Length)];
+        RpcPlayPlayerReaction(player.netIdentity, (int)chosen, delay);
+    }
 
-            return false;
-        }
+    public void TryTriggerBadReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null) return;
+        RpcPlayPlayerReaction(player.netIdentity, (int)GameAudioManager.ReactionClipType.Disappointment, delay);
+    }
 
-        if (spawnpointCalculator == null)
-        {
-            GameLog.Error(
-                LogCat.Match,
-                "StartTestGame: SpawnpointCalculator missing.");
+    public void TryTriggerOtherPlayerScoff(Player failedPlayer, float delay = 0.5f)
+    {
+        if (_players.Count <= 1) return;
+        List<Player> otherPlayers = _players.Where(p => p != null && p != failedPlayer && p.netIdentity != null).ToList();
+        if (otherPlayers.Count == 0) return;
+        Player scoffer = otherPlayers[Random.Range(0, otherPlayers.Count)];
+        RpcPlayPlayerReaction(scoffer.netIdentity, (int)GameAudioManager.ReactionClipType.Scoff, delay);
+    }
 
-            return false;
-        }
+    public void TryTriggerDisappointmentSound(Player player, float delay = 0.5f)
+    {
+        TryTriggerBadReaction(player, delay);
+    }
 
-        spawnpointCalculator.CalculateSpawnPoints(
-            players.Count);
+    // =========================================================
+    // TEST HARNESS / BOT METHODS
+    // =========================================================
 
-        if (spawnpointCalculator.SpawnPoints.Count <
-            players.Count)
-        {
-            GameLog.Error(
-                LogCat.Match,
-                "StartTestGame: not enough spawn points.");
-
-            return false;
-        }
-
-        startupCancelled = false;
-
-        InitializeMatch(
-            new List<Player>(players));
-
+    [Server]
+    public bool StartTestGame(List<Player> players)
+    {
+        if (gameStarted) return false;
+        StartGame(players);
         return gameStarted;
     }
 
-    /// <summary>Stops the match and destroys all cards.</summary>
+    [Server]
+    public void DebugForcePhase(GamePhase phase)
+    {
+        SetGamePhase(phase);
+    }
+
     [Server]
     public void ResetMatch()
     {
-        GameLog.Event(
-            LogCat.Match,
-            "RESET MATCH");
-
+        gameStarted = false;
+        currentPlayerIn = -1;
+        currentPhase = GamePhase.Wait;
         if (idleAudioRoutine != null)
         {
             StopCoroutine(idleAudioRoutine);
             idleAudioRoutine = null;
         }
-
-        if (AttackSequence.Instance != null)
-            AttackSequence.Instance.ServerForceReset();
-
-        foreach (Card card
-                 in FindObjectsByType<Card>())
-        {
-            if (card != null)
-                NetworkServer.Destroy(card.gameObject);
-        }
-
-        foreach (Player player in _players)
-        {
-            if (player != null)
-                player.OnTurnEnd();
-        }
-
-        _players.Clear();
-
-        gameStarted = false;
-        currentPlayerIn = -1;
-
-        selectedAttack = null;
-        selectedTarget = null;
-        selectedTargetIdentity = null;
-        turnStartTime = Time.time;
-        lastTurnPressure = false;
-
-        TurnNumber = 0;
-        GameLog.Turn = 0;
-
-        SetGamePhase(
-            GamePhase.Wait);
     }
 
-    /// <summary>Test only: jump to any phase.</summary>
-    [Server]
-    public void DebugForcePhase(
+    bool IAttackSelectionContext.GameStarted =>
+        gameStarted;
+
+    GamePhase IAttackSelectionContext.Phase =>
+        currentPhase;
+
+    bool IAttackSelectionContext.IsCurrentPlayer(
+        Player player)
+    {
+        return turns.IsCurrentPlayer(
+            player);
+    }
+
+    void IAttackSelectionContext.SetPhase(
         GamePhase phase)
     {
-        GameLog.Warn(
-            LogCat.Test,
-            $"DebugForcePhase -> {phase}");
-
         SetGamePhase(
             phase);
     }
 
-    [Server]
-    private bool IsCurrentPlayer(
-        Player player)
+    void ITurnContext.SetCurrentPlayer(
+        int index)
     {
-        if (player == null)
-            return false;
-
-        if (currentPlayerIn < 0 ||
-            currentPlayerIn >= _players.Count)
-        {
-            return false;
-        }
-
-        return _players[currentPlayerIn] ==
-               player;
+        currentPlayerIn = index;
     }
 
-    [Server]
-    private IEnumerator LoadTimeoutRoutine()
+    private void OnStageHookChanged(
+        TurnStage oldStage,
+        TurnStage newStage)
     {
-        yield return new WaitForSeconds(
-            loadTimeout);
+        GameLog.Write(
+            "GameMaster",
+            $"OnStageHookChanged {oldStage} -> {newStage} isServer={isServer} isClient={isClient}");
 
-        timeoutRoutine = null;
-
-        if (HoldStart)
-            yield break;
-
-        if (gameStarted ||
-            startupCancelled)
-        {
-            yield break;
-        }
-
-        List<int> missing =
-            expectedConnections
-                .Where(
-                    id => !loadedConnections.Contains(id))
-                .ToList();
-
-        if (missing.Count > 0)
-        {
-            CancelStartup(
-                $"Loading timeout. Missing connections: {string.Join(", ", missing)}");
-
-            yield break;
-        }
-
-        TryStartGame();
-
-        yield return null;
-
-        if (!gameStarted &&
-            !startupCancelled)
-        {
-            CancelStartup(
-                "All players reported loaded, but their Player objects were not ready.");
-        }
+        StageChanged?.Invoke(
+            newStage);
     }
 
-    [Server]
-    private void CancelStartup(
-        string reason)
+    [Command(requiresAuthority = false)]
+    public void CmdThrowDice(
+        float power,
+        NetworkConnectionToClient sender = null)
     {
-        if (startupCancelled)
+        GameLog.Write(
+            "GameMaster",
+            $"CmdThrowDice sender={(sender != null ? sender.connectionId : -1)} power={power}");
+
+        if (sender == null ||
+            diceThrow == null)
+        {
             return;
-
-        startupCancelled = true;
-
-        if (timeoutRoutine != null)
-        {
-            StopCoroutine(
-                timeoutRoutine);
-
-            timeoutRoutine = null;
         }
 
-        if (startupRoutine != null)
-        {
-            StopCoroutine(
-                startupRoutine);
+        Player thrower = null;
 
-            startupRoutine = null;
+        foreach (Player player in _players)
+        {
+            if (player != null &&
+                player.netIdentity != null &&
+                player.netIdentity.connectionToClient == sender)
+            {
+                thrower = player;
+                break;
+            }
         }
 
-        Debug.LogError(
-            $"Game startup cancelled: {reason}");
+        if (thrower == null)
+        {
+            GameLog.Write(
+                "GameMaster",
+                $"CmdThrowDice rejected: no player for connection={sender.connectionId}");
 
-        if (NetworkManager.singleton == null)
             return;
+        }
 
-        if (NetworkManager.singleton.mode ==
-            NetworkManagerMode.Host)
-        {
-            NetworkManager.singleton.StopHost();
-        }
-        else
-        {
-            NetworkManager.singleton.StopServer();
-        }
+        diceThrow.RequestThrow(
+            thrower,
+            power);
     }
 
-    [Server]
-    private void ClearTurnState()
+    [ClientRpc]
+    private void RpcDiceStarted(
+        uint playerNetId,
+        float duration)
     {
-        selectedAttack = null;
-        selectedTarget = null;
-        selectedTargetIdentity = null;
-        turnStartTime = Time.time;
-        lastTurnPressure = false;
+        DiceStarted?.Invoke(
+            playerNetId,
+            duration);
+    }
+
+    [ClientRpc]
+    private void RpcDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        string combination,
+        int chips,
+        int coins,
+        float power)
+    {
+        DiceRolled?.Invoke(
+            playerNetId,
+            first,
+            second,
+            third,
+            combination,
+            chips,
+            coins,
+            power);
+    }
+
+    void ITurnStageContext.SetStage(
+        TurnStage stage)
+    {
+        currentStage = stage;
+    }
+
+    void ITurnStageContext.AdvanceTurn()
+    {
+        turns.EndTurn();
+    }
+
+    void IDiceStageContext.SetPhase(
+        GamePhase phase)
+    {
+        SetGamePhase(
+            phase);
+    }
+
+    void IDiceStageContext.NotifyDiceStarted(
+        uint playerNetId,
+        float duration)
+    {
+        RpcDiceStarted(
+            playerNetId,
+            duration);
+    }
+
+    void IDiceStageContext.NotifyDiceRolled(
+        uint playerNetId,
+        int first,
+        int second,
+        int third,
+        string combination,
+        int chips,
+        int coins,
+        float power)
+    {
+        RpcDiceRolled(
+            playerNetId,
+            first,
+            second,
+            third,
+            combination,
+            chips,
+            coins,
+            power);
     }
 }

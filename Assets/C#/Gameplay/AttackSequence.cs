@@ -2,7 +2,7 @@ using Mirror;
 using System.Collections;
 using UnityEngine;
 
-public class AttackSequence : NetworkBehaviour
+public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext, IAttackLifecycleContext, IAttackCommandContext, IAttackTargetingContext
 {
     public static AttackSequence Instance { get; private set; }
 
@@ -15,27 +15,37 @@ public class AttackSequence : NetworkBehaviour
     [SerializeField] private int stealCoinsAmount = 5;
     [SerializeField] private float stealCoinsRainDuration = 5f;
 
-    private Card selectedCard;
-    private Player attacker;
-    private PlayerInteractable target;
-
-    private bool isActive;
+    private readonly AttackState state = new();
 
     private Coroutine attackRoutine;
-    private Coroutine targetSelectionRoutine;
-    private Coroutine stealRoutine;
+    private TargetSelectionTimer targetTimer;
+    private AttackResolver resolver;
+    private AttackVortexFlow vortex;
+    private AttackLifecycle lifecycle;
+    private AttackCommandHandler commands;
+    private AttackTargeting targeting;
+
+    private StealPhase steal;
 
     public bool IsActive =>
-        isActive;
+        state.IsActive;
 
     public Card SelectedCard =>
-        selectedCard;
+        state.Card;
 
     public PlayerInteractable Target =>
-        target;
+        state.Target;
 
     public Player Attacker =>
-        attacker;
+        state.Attacker;
+
+    public static string GetCardAudioKey(Card card)
+    {
+        if (card == null || card.Data == null)
+            return string.Empty;
+
+        return $"{card.Data.ActionId} {card.Data.CardName} {card.Data.name}";
+    }
 
     // =========================================================
     // LIFECYCLE
@@ -43,18 +53,87 @@ public class AttackSequence : NetworkBehaviour
 
     private void Awake()
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"Awake instanceExists={Instance != null} isDuplicate={Instance != null && Instance != this}");
+
         if (Instance != null &&
             Instance != this)
         {
+            GameLog.Write(
+                "AttackSequence",
+                "Awake duplicate instance, destroying gameObject");
+
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
+
+        GameLog.Write(
+            "AttackSequence",
+            $"Awake Instance set timing: targetSelectionTime={targetSelectionTime} targetActionTime={targetActionTime} stealActionTime={stealActionTime} stealCoinsAmount={stealCoinsAmount} stealCoinsRainDuration={stealCoinsRainDuration}");
+
+        steal =
+            new StealPhase(
+                this,
+                stealActionTime,
+                stealCoinsAmount,
+                stealCoinsRainDuration,
+                () => state.IsActive,
+                FinishSequence);
+
+        targetTimer =
+            new TargetSelectionTimer(
+                this,
+                state,
+                targetSelectionTime,
+                CancelSequence);
+
+        resolver =
+            new AttackResolver(
+                this,
+                state,
+                targetActionTime);
+
+        vortex =
+            new AttackVortexFlow(
+                this,
+                state,
+                steal,
+                targetTimer);
+
+        lifecycle =
+            new AttackLifecycle(
+                this,
+                this,
+                state,
+                steal,
+                targetTimer,
+                vortex);
+
+        commands =
+            new AttackCommandHandler(
+                this,
+                state);
+
+        targeting =
+            new AttackTargeting(
+                this,
+                state,
+                targetTimer);
+
+        GameLog.Write(
+            "AttackSequence",
+            "Awake StealPhase created");
     }
 
     private void OnDestroy()
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"OnDestroy wasInstance={Instance == this} isActive={state.IsActive}");
+
         if (Instance == this)
             Instance = null;
     }
@@ -68,30 +147,22 @@ public class AttackSequence : NetworkBehaviour
         NetworkIdentity cardIdentity,
         NetworkConnectionToClient sender = null)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"CmdStartSequence cardNetId={(cardIdentity != null ? cardIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
+
         if (!isServer)
-            return;
-
-        if (cardIdentity == null ||
-            sender == null)
         {
+            GameLog.Write(
+                "AttackSequence",
+                "CmdStartSequence rejected: not server");
+
             return;
         }
 
-        if (!cardIdentity.TryGetComponent(
-                out Card card))
-        {
-            return;
-        }
-
-        Player cardOwner =
-            FindPlayerByConnection(sender);
-
-        if (cardOwner == null)
-            return;
-
-        ServerPlayCard(
-            card,
-            cardOwner);
+        commands.StartRequested(
+            cardIdentity,
+            sender);
     }
 
     [Command(requiresAuthority = false)]
@@ -99,321 +170,45 @@ public class AttackSequence : NetworkBehaviour
         NetworkIdentity targetIdentity,
         NetworkConnectionToClient sender = null)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"CmdSetTarget targetNetId={(targetIdentity != null ? targetIdentity.netId.ToString() : "NULL")} senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
+
         if (!isServer)
-            return;
-
-        if (targetIdentity == null ||
-            sender == null)
         {
+            GameLog.Write(
+                "AttackSequence",
+                "CmdSetTarget rejected: not server");
+
             return;
         }
 
-        Player requester =
-            FindPlayerByConnection(sender);
-
-        if (requester == null)
-            return;
-
-        if (!targetIdentity.TryGetComponent(
-                out PlayerInteractable playerTarget))
-        {
-            return;
-        }
-
-        ServerSetTarget(
-            requester,
-            playerTarget);
+        commands.SetTargetRequested(
+            targetIdentity,
+            sender);
     }
 
     [Command(requiresAuthority = false)]
     public void CmdCancelSequence(
         NetworkConnectionToClient sender = null)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"CmdCancelSequence senderConn={(sender != null ? sender.connectionId.ToString() : "NULL")} isServer={isServer} isActive={state.IsActive}");
+
         if (!isServer ||
             sender == null)
         {
+            GameLog.Write(
+                "AttackSequence",
+                "CmdCancelSequence rejected: not server or sender is null");
+
             return;
         }
 
-        ServerCancel(
-            FindPlayerByConnection(sender));
+        commands.CancelRequested(
+            sender);
     }
-
-    // =========================================================
-    // SERVER ENTRY POINTS
-    // (used by the Cmd* above, by bots and by the test scene)
-    // =========================================================
-
-    private static bool Reject(string reason)
-    {
-        GameLog.Warn(LogCat.Attack, "REJECTED: " + reason);
-        return false;
-    }
-
-    /// <summary>
-    /// 'cardOwner' plays 'card': an attack card starts a sequence,
-    /// a defence card answers the running attack.
-    /// </summary>
-    [Server]
-    public bool ServerPlayCard(
-        Card card,
-        Player cardOwner)
-    {
-        if (card == null ||
-            cardOwner == null)
-        {
-            return Reject(
-                "PlayCard: card or player is null");
-        }
-
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            return Reject(
-                $"PlayCard: {GameLog.C(card)} is not available " +
-                $"(available={card.IsAvailable}, " +
-                $"inRoulette={card.IsInRoulette}, " +
-                $"reason={card.Reason})");
-        }
-
-        if (!IsCardOwnedByPlayer(
-                card,
-                cardOwner))
-        {
-            return Reject(
-                $"PlayCard: {GameLog.C(card)} is not owned by " +
-                GameLog.P(cardOwner));
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-            return Reject("PlayCard: no GameMaster");
-
-        // -----------------------------------------------------
-        // DEFENSE CARD
-        // -----------------------------------------------------
-
-        if (card.Data != null &&
-            card.Data.CardClass == Card.CardClass.Defence)
-        {
-            if (!isActive ||
-                attacker == null ||
-                target == null)
-            {
-                return Reject(
-                    $"PlayCard: defence {GameLog.C(card)} but no " +
-                    "attack is waiting for a defence");
-            }
-
-            Player targetPlayer =
-                target.GetComponentInParent<Player>();
-
-            if (targetPlayer == null ||
-                targetPlayer != cardOwner)
-            {
-                return Reject(
-                    $"PlayCard: defence by {GameLog.P(cardOwner)} " +
-                    "who is not the target");
-            }
-
-            if (!gameMaster.SelectDefense(
-                    card,
-                    targetPlayer))
-            {
-                return Reject(
-                    $"PlayCard: GameMaster refused defence " +
-                    $"(phase={gameMaster.CurrentPhase})");
-            }
-
-            StartDefenseSequence(
-                card,
-                targetPlayer);
-
-            return true;
-        }
-
-        // -----------------------------------------------------
-        // ATTACK CARD
-        // -----------------------------------------------------
-
-        if (!gameMaster.SelectAttack(
-                card,
-                cardOwner))
-        {
-            return Reject(
-                $"PlayCard: GameMaster refused attack " +
-                $"{GameLog.C(card)} by {GameLog.P(cardOwner)} " +
-                $"(phase={gameMaster.CurrentPhase}, " +
-                $"current={gameMaster.CurrentPlayerIndex})");
-        }
-
-        StartSequence(
-            card,
-            cardOwner);
-
-        return isActive;
-    }
-
-    /// <summary>The attacker picks 'playerTarget'.</summary>
-    [Server]
-    public bool ServerSetTarget(
-        Player requester,
-        PlayerInteractable playerTarget)
-    {
-        if (playerTarget == null ||
-            requester == null)
-        {
-            return Reject(
-                "SetTarget: target or requester is null");
-        }
-
-        if (!isActive ||
-            attacker == null ||
-            selectedCard == null)
-        {
-            return Reject(
-                "SetTarget: no attack sequence is active");
-        }
-
-        Player targetPlayer =
-            playerTarget.GetComponentInParent<Player>();
-
-        if (targetPlayer == null)
-            return Reject("SetTarget: target has no Player");
-
-        if (targetPlayer == attacker)
-        {
-            return Reject(
-                "SetTarget: attacker targeted himself");
-        }
-
-        if (attacker != requester)
-        {
-            return Reject(
-                $"SetTarget: {GameLog.P(requester)} is not the " +
-                $"attacker ({GameLog.P(attacker)})");
-        }
-
-        if (GameMaster.Instance == null)
-            return Reject("SetTarget: no GameMaster");
-
-        SetTarget(
-            playerTarget);
-
-        return target == playerTarget;
-    }
-
-    /// <summary>The attacker cancels the running sequence.</summary>
-    [Server]
-    public bool ServerCancel(
-        Player requester)
-    {
-        if (!isActive ||
-            attacker == null)
-        {
-            return Reject(
-                "Cancel: no attack sequence is active");
-        }
-
-        if (requester == null ||
-            attacker != requester)
-        {
-            return Reject(
-                $"Cancel: {GameLog.P(requester)} is not the " +
-                $"attacker ({GameLog.P(attacker)})");
-        }
-
-        CancelSequence();
-
-        return true;
-    }
-
-    /// <summary>Test only: drop everything without side effects.</summary>
-    [Server]
-    public void ServerForceReset()
-    {
-        GameLog.Event(
-            LogCat.Attack,
-            "FORCE RESET AttackSequence");
-
-        StopTargetSelectionTimer();
-
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-
-            stealRoutine = null;
-        }
-
-        if (attackRoutine != null)
-        {
-            StopCoroutine(
-                attackRoutine);
-
-            attackRoutine = null;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (selectedCard != null)
-        {
-            selectedCard.SetInRoulette(false);
-        }
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-
-            if (selectedCard != null)
-            {
-                roulette.DetachCard(
-                    selectedCard.transform);
-            }
-        }
-
-        if (attacker != null)
-        {
-            RpcCancelAttackAnimation(
-                attacker.netIdentity,
-                string.Empty);
-        }
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-    }
-
-    /// <summary>Test only: shorten / lengthen the windows.</summary>
-    public void ConfigureTimers(
-        float selection,
-        float defense,
-        float steal)
-    {
-        targetSelectionTime = Mathf.Max(0.5f, selection);
-        targetActionTime = Mathf.Max(0.5f, defense);
-        stealActionTime = Mathf.Max(0.5f, steal);
-
-        GameLog.Event(
-            LogCat.Test,
-            $"Timers: select={targetSelectionTime:0.0}s " +
-            $"defense={targetActionTime:0.0}s " +
-            $"steal={stealActionTime:0.0}s");
-    }
-
-    public float TargetSelectionTime =>
-        targetSelectionTime;
-
-    public float DefenseWindowTime =>
-        targetActionTime;
-
-    public float StealWindowTime =>
-        stealActionTime;
 
     // =========================================================
     // SERVER
@@ -424,65 +219,12 @@ public class AttackSequence : NetworkBehaviour
         Card card,
         Player attacker)
     {
-        if (card == null ||
-            attacker == null)
-        {
-            return;
-        }
+        lifecycle.StartSequence(
+            card,
+            attacker);
 
-        if (!card.IsAvailable ||
-            card.IsInRoulette)
-        {
-            return;
-        }
-
-        if (!IsCardOwnedByPlayer(
-                card,
-                attacker))
-        {
-            return;
-        }
-
-        CancelSequence();
-
-        selectedCard = card;
-        this.attacker = attacker;
-        target = null;
-
-        isActive = true;
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            Debug.LogError(
-                "AttackSequence: RouletteRotator.Instance not found.",
-                this);
-
-            CancelSequence();
-            return;
-        }
-
-        card.SetInRoulette(true);
-
-        roulette.AttachCard(
-            card.transform);
-
-        roulette.StartRoulette(
-            attacker.transform,
-            RouletteRotator.Pattern.Direct);
-
-        RpcStartAttackPreparation(
-            attacker.netIdentity,
-            card.Data != null
-                ? card.Data.ActionId
-                : string.Empty);
-
-        StartTargetSelectionTimer();
         RpcPlaySequenceAudio(GetCardAudioKey(card), 0, attacker != null ? attacker.netIdentity : null);
     }
-
     // =========================================================
     // TARGET SELECTION TIMER
     // =========================================================
@@ -490,60 +232,13 @@ public class AttackSequence : NetworkBehaviour
     [Server]
     private void StartTargetSelectionTimer()
     {
-        StopTargetSelectionTimer();
-
-        targetSelectionRoutine =
-            StartCoroutine(
-                TargetSelectionRoutine());
+        targetTimer.Start();
     }
 
     [Server]
     private void StopTargetSelectionTimer()
     {
-        if (targetSelectionRoutine != null)
-        {
-            StopCoroutine(
-                targetSelectionRoutine);
-
-            targetSelectionRoutine = null;
-        }
-    }
-
-    [Server]
-    private IEnumerator TargetSelectionRoutine()
-    {
-        float remainingTime =
-            targetSelectionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!isActive ||
-                selectedCard == null ||
-                attacker == null)
-            {
-                targetSelectionRoutine = null;
-                yield break;
-            }
-
-            if (target != null)
-            {
-                targetSelectionRoutine = null;
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            yield return null;
-        }
-
-        targetSelectionRoutine = null;
-
-        if (isActive &&
-            target == null)
-        {
-            CancelSequence();
-        }
+        targetTimer.Stop();
     }
 
     // =========================================================
@@ -555,85 +250,10 @@ public class AttackSequence : NetworkBehaviour
         Card defenseCard,
         Player defensePlayer)
     {
-        if (defenseCard == null ||
-            defensePlayer == null)
-        {
-            return;
-        }
-
-        if (!defenseCard.IsAvailable ||
-            defenseCard.IsInRoulette)
-        {
-            return;
-        }
-
-        if (defenseCard.Data == null ||
-            defenseCard.Data.CardClass !=
-                Card.CardClass.Defence)
-        {
-            return;
-        }
-
-        if (!IsCardOwnedByPlayer(
-                defenseCard,
-                defensePlayer))
-        {
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            Debug.LogError(
-                "AttackSequence: RouletteRotator.Instance not found.",
-                this);
-
-            return;
-        }
-
-        StopTargetSelectionTimer();
-
-        if (attackRoutine != null)
-        {
-            StopCoroutine(
-                attackRoutine);
-
-            attackRoutine = null;
-        }
-
-        string attackCardKey = GetCardAudioKey(selectedCard);
-        selectedCard = defenseCard;
-
-        defenseCard.SetInRoulette(true);
-
-        roulette.StopRoulette();
-
-        roulette.AttachDefenseCard(
-            defenseCard.transform);
-
-        roulette.StartRoulette(
-            attacker.transform,
-            RouletteRotator.Pattern.Vortex,
-            () => OnDefenseVortexCompleted(defenseCard));
-        RpcPlaySequenceAudio(attackCardKey, 2, attacker != null ? attacker.netIdentity : null);
-        GameMaster.Instance?.TryTriggerGoodReaction(defensePlayer, 0.5f);
-        GameMaster.Instance?.TryTriggerOtherPlayerScoff(attacker, 0.55f);
-        GameMaster.Instance?.TryTriggerBadReaction(attacker, 0.65f);
-
-        if (attacker != null)
-        {
-            RpcTriggerAttackAnimation(
-                attacker.netIdentity,
-                attackCardKey);
-        }
-
-        RpcStartAttackPreparation(
-            defensePlayer.netIdentity,
-            defenseCard.Data.ActionId);
+        lifecycle.StartDefenseSequence(
+            defenseCard,
+            defensePlayer);
     }
-
     // =========================================================
     // TARGET
     // =========================================================
@@ -642,294 +262,17 @@ public class AttackSequence : NetworkBehaviour
     private void SetTarget(
         PlayerInteractable target)
     {
-        if (!isActive)
-            return;
-
-        if (selectedCard == null ||
-            attacker == null)
-        {
-            return;
-        }
-
-        if (target == null)
-            return;
-
-        if (this.target != null)
-            return;
-
-        Player targetPlayer =
-            target.GetComponentInParent<Player>();
-
-        if (targetPlayer == null ||
-            targetPlayer == attacker)
-        {
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null ||
-            !roulette.IsRunning)
-        {
-            return;
-        }
-
-        if (selectedCard.Data != null &&
-            selectedCard.Data.CardClass ==
-                Card.CardClass.Defence)
-        {
-            return;
-        }
-
-        this.target = target;
-
-        StopTargetSelectionTimer();
-
-        roulette.SetTarget(
-            target.EnemyCardMarker,
-            OnRouletteReachedTarget);
+        targeting.SetTarget(
+            target);
     }
 
     // =========================================================
     // ATTACK ROULETTE CALLBACK
     // =========================================================
 
-    [Server]
-    private void OnRouletteReachedTarget()
-    {
-        if (!isActive ||
-            selectedCard == null ||
-            attacker == null ||
-            target == null)
-        {
-            return;
-        }
-
-        Player victim =
-            target.GetComponentInParent<Player>();
-
-        if (victim == null)
-        {
-            CancelSequence();
-            return;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            CancelSequence();
-            return;
-        }
-
-        // The target becomes the actual game target only after
-        // the roulette has reached and stopped at the target.
-        if (!gameMaster.SelectTarget(
-                victim))
-        {
-            CancelSequence();
-            return;
-        }
-
-        if (attackRoutine != null)
-        {
-            StopCoroutine(
-                attackRoutine);
-        }
-
-        attackRoutine =
-            StartCoroutine(
-                AttackDelayRoutine());
-    }
-
     // =========================================================
     // ATTACK TIMER
     // =========================================================
-
-    [Server]
-    private IEnumerator AttackDelayRoutine()
-    {
-        Player victim =
-            target != null
-                ? target.GetComponentInParent<Player>()
-                : null;
-
-        if (victim == null)
-        {
-            CancelSequence();
-            yield break;
-        }
-
-        NetworkConnectionToClient victimConnection =
-            victim.netIdentity.connectionToClient;
-
-        if (victimConnection != null)
-        {
-            TargetShowDefenseTimer(
-                victimConnection,
-                targetActionTime);
-        }
-
-        float remainingTime =
-            targetActionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!isActive ||
-                selectedCard == null ||
-                attacker == null ||
-                target == null)
-            {
-                if (victimConnection != null)
-                {
-                    TargetHideDefenseTimer(
-                        victimConnection);
-                }
-
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            if (victimConnection != null)
-            {
-                TargetSetDefenseTimer(
-                    victimConnection,
-                    remainingTime);
-            }
-
-            yield return null;
-        }
-
-        if (victimConnection != null)
-        {
-            TargetHideDefenseTimer(
-                victimConnection);
-        }
-
-        if (!isActive ||
-            selectedCard == null ||
-            attacker == null ||
-            target == null)
-        {
-            yield break;
-        }
-
-        Card card =
-            selectedCard;
-
-        Player attackPlayer =
-            attacker;
-
-        PlayerInteractable attackTarget =
-            target;
-
-        Player targetPlayer =
-            attackTarget.GetComponentInParent<Player>();
-
-        if (targetPlayer == null)
-        {
-            CancelSequence();
-            yield break;
-        }
-
-        GameMaster gameMaster =
-            GameMaster.Instance;
-
-        if (gameMaster == null)
-        {
-            CancelSequence();
-            yield break;
-        }
-
-        if (!gameMaster.SkipDefense(
-                targetPlayer))
-        {
-            CancelSequence();
-            yield break;
-        }
-
-        RpcTriggerAttackAnimation(
-            attackPlayer.netIdentity,
-            GetCardAudioKey(card));
-
-        attackTarget.Attack(
-            card,
-            attackPlayer);
-
-        if (card.Data != null &&
-            card.Data.CardClass !=
-                Card.CardClass.AttackSteal &&
-            card.Data.cardEffect != null)
-        {
-            card.Data.cardEffect.ApplyEffectToTarget(
-                targetPlayer);
-        }
-
-        if (victimConnection != null)
-        {
-            TargetStartDamagePass(
-                victimConnection,
-                targetPlayer.netIdentity);
-        }
-
-        RpcPlaySequenceAudio(GetCardAudioKey(card), 1, attackPlayer != null ? attackPlayer.netIdentity : null);
-        gameMaster.TryTriggerGoodReaction(attackPlayer, 0.5f);
-        gameMaster.TryTriggerBadReaction(targetPlayer, 0.65f);
-        StartAttackVortex(
-            card,
-            attackPlayer);
-
-        attackRoutine = null;
-
-        yield break;
-    }
-
-    [Server]
-    private void StealCoins(
-        Player attackPlayer,
-        Player victim)
-    {
-        if (attackPlayer == null ||
-            victim == null ||
-            attackPlayer == victim ||
-            stealCoinsAmount <= 0)
-        {
-            return;
-        }
-
-        PlayerBank attackerBank =
-            attackPlayer.GetComponentInChildren<PlayerBank>(true);
-
-        PlayerBank victimBank =
-            victim.GetComponentInChildren<PlayerBank>(true);
-
-        if (attackerBank == null ||
-            victimBank == null)
-        {
-            Debug.LogWarning(
-                "AttackSequence: PlayerBank is missing on attacker or victim.",
-                this);
-
-            return;
-        }
-
-        int amount =
-            Mathf.Min(
-                stealCoinsAmount,
-                victimBank.Coins);
-
-        if (amount <= 0)
-            return;
-
-        victimBank.TryStealCoinsTo(
-            attackerBank,
-            amount,
-            stealCoinsRainDuration);
-    }
 
     // =========================================================
     // ATTACK VORTEX
@@ -940,259 +283,17 @@ public class AttackSequence : NetworkBehaviour
         Card card,
         Player attackPlayer)
     {
-        if (card == null ||
-            attackPlayer == null)
-        {
-            FinishSequence();
-            return;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette == null)
-        {
-            RpcPlaySequenceAudio(GetCardAudioKey(card), 3, null);
-        DestroyCard(
-                card);
-
-            if (GameMaster.Instance != null)
-            {
-                GameMaster.Instance.EndTurn();
-            }
-
-            return;
-        }
-
-        card.SetInRoulette(true);
-
-        roulette.StopRoulette();
-
-        roulette.AttachCard(
-            card.transform);
-
-        bool isStealCard =
-            card.Data != null &&
-            card.Data.CardClass ==
-                Card.CardClass.AttackSteal;
-
-        if (isStealCard)
-        {
-            Player victim =
-                target != null
-                    ? target.GetComponentInParent<Player>()
-                    : null;
-
-            StealCoins(
-                attackPlayer,
-                victim);
-        }
-
-        roulette.StartRoulette(
-            attackPlayer.transform,
-            RouletteRotator.Pattern.Vortex,
-            () => OnAttackVortexCompleted(card));
+        vortex.StartAttackVortex(
+            card,
+            attackPlayer);
     }
-
-    [Server]
-    private void OnAttackVortexCompleted(
-        Card card)
-    {
-        bool isStealCard =
-            card != null &&
-            card.Data != null &&
-            card.Data.CardClass ==
-                Card.CardClass.AttackSteal;
-
-        RpcPlaySequenceAudio(GetCardAudioKey(card), 3, null);
-        DestroyCard(
-            card);
-
-        if (isStealCard)
-        {
-            if (GameMaster.Instance == null ||
-                !GameMaster.Instance.BeginStealPhase())
-            {
-                FinishSequence();
-                return;
-            }
-
-            StartStealPhase();
-            return;
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-        }
-
-        FinishSequence();
-    }
-
-    // =========================================================
-    // STEAL PHASE
-    // =========================================================
-
-    [Server]
-    private void StartStealPhase()
-    {
-        if (GameMaster.Instance == null ||
-            GameMaster.Instance.CurrentPhase !=
-                GameMaster.GamePhase.Steal)
-        {
-            FinishSequence();
-            return;
-        }
-
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-        }
-
-        stealRoutine =
-            StartCoroutine(
-                StealRoutine());
-    }
-
-    [Server]
-    private IEnumerator StealRoutine()
-    {
-        float remainingTime =
-            stealActionTime;
-
-        while (remainingTime > 0f)
-        {
-            if (!isActive)
-            {
-                stealRoutine = null;
-                yield break;
-            }
-
-            if (GameMaster.Instance == null ||
-                GameMaster.Instance.CurrentPhase !=
-                    GameMaster.GamePhase.Steal)
-            {
-                stealRoutine = null;
-                FinishSequence();
-                yield break;
-            }
-
-            remainingTime -=
-                Time.deltaTime;
-
-            yield return null;
-        }
-
-        stealRoutine = null;
-
-        if (GameMaster.Instance != null &&
-            GameMaster.Instance.CurrentPhase ==
-                GameMaster.GamePhase.Steal)
-        {
-            GameMaster.Instance.EndTurn();
-        }
-
-        FinishSequence();
-    }
-
-    // =========================================================
-    // DEFENSE VORTEX
-    // =========================================================
 
     [Server]
     private void OnDefenseVortexCompleted(
         Card card)
     {
-        if (card == null)
-        {
-            FinishDefenseSequence();
-            return;
-        }
-
-        card.SetInRoulette(false);
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.DetachCard(
-                card.transform);
-        }
-
-        if (card.gameObject != null)
-        {
-            NetworkServer.Destroy(
-                card.gameObject);
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-        }
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-        attackRoutine = null;
-        targetSelectionRoutine = null;
-    }
-
-    [Server]
-    private void FinishDefenseSequence()
-    {
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-        }
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-        }
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-        attackRoutine = null;
-        targetSelectionRoutine = null;
-    }
-
-    // =========================================================
-    // DESTROY CARD
-    // =========================================================
-
-    [Server]
-    private void DestroyCard(
-        Card card)
-    {
-        if (card == null)
-            return;
-
-        card.SetInRoulette(false);
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (roulette != null)
-        {
-            roulette.DetachCard(
-                card.transform);
-        }
-
-        if (card.gameObject != null)
-        {
-            NetworkServer.Destroy(
-                card.gameObject);
-        }
+        vortex.OnDefenseVortexCompleted(
+            card);
     }
 
     // =========================================================
@@ -1204,8 +305,18 @@ public class AttackSequence : NetworkBehaviour
         NetworkIdentity attackerIdentity,
         string actionId)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcStartAttackPreparation attackerNetId={(attackerIdentity != null ? attackerIdentity.netId.ToString() : "NULL")} actionId={actionId}");
+
         if (attackerIdentity == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                "RpcStartAttackPreparation skipped: attackerIdentity is null");
+
             return;
+        }
 
         Player player =
             attackerIdentity.GetComponent<Player>();
@@ -1213,8 +324,16 @@ public class AttackSequence : NetworkBehaviour
         if (player == null ||
             player.animator == null)
         {
+            GameLog.Write(
+                "AttackSequence",
+                $"RpcStartAttackPreparation skipped: playerNull={player == null} animatorNull={player == null || player.animator == null}");
+
             return;
         }
+
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcStartAttackPreparation starting attack animation player={player.netId} actionId={actionId}");
 
         player.animator.StartAttackAnimation(
             actionId);
@@ -1222,11 +341,20 @@ public class AttackSequence : NetworkBehaviour
 
     [ClientRpc]
     private void RpcTriggerAttackAnimation(
-        NetworkIdentity attackerIdentity,
-        string cardAudioKey)
+        NetworkIdentity attackerIdentity)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcTriggerAttackAnimation attackerNetId={(attackerIdentity != null ? attackerIdentity.netId.ToString() : "NULL")}");
+
         if (attackerIdentity == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                "RpcTriggerAttackAnimation skipped: attackerIdentity is null");
+
             return;
+        }
 
         Player player =
             attackerIdentity.GetComponent<Player>();
@@ -1234,10 +362,18 @@ public class AttackSequence : NetworkBehaviour
         if (player == null ||
             player.animator == null)
         {
+            GameLog.Write(
+                "AttackSequence",
+                $"RpcTriggerAttackAnimation skipped: playerNull={player == null} animatorNull={player == null || player.animator == null}");
+
             return;
         }
 
-        player.animator.TriggerAttack(cardAudioKey);
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcTriggerAttackAnimation triggering attack player={player.netId}");
+
+        player.animator.TriggerAttack();
     }
 
     // =========================================================
@@ -1249,6 +385,10 @@ public class AttackSequence : NetworkBehaviour
         NetworkConnectionToClient connection,
         float time)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"TargetShowDefenseTimer time={time} hudExists={HudController.Instance != null}");
+
         GameAudioManager.Instance?.PlayHeartbeat();
         HudController.Instance?.ShowDefenseTimer(
             time);
@@ -1267,6 +407,10 @@ public class AttackSequence : NetworkBehaviour
     private void TargetHideDefenseTimer(
         NetworkConnectionToClient connection)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"TargetHideDefenseTimer hudExists={HudController.Instance != null}");
+
         GameAudioManager.Instance?.StopHeartbeat();
         HudController.Instance?.HideDefenseTimer();
     }
@@ -1276,14 +420,34 @@ public class AttackSequence : NetworkBehaviour
         NetworkConnectionToClient connection,
         NetworkIdentity victimIdentity)
     {
+        GameLog.Write(
+            "AttackSequence",
+            $"TargetStartDamagePass victimNetId={(victimIdentity != null ? victimIdentity.netId.ToString() : "NULL")}");
+
         if (victimIdentity == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                "TargetStartDamagePass skipped: victimIdentity is null");
+
             return;
+        }
 
         Player victim =
             victimIdentity.GetComponent<Player>();
 
         if (victim == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                "TargetStartDamagePass skipped: victim Player not found");
+
             return;
+        }
+
+        GameLog.Write(
+            "AttackSequence",
+            $"TargetStartDamagePass starting damage pass victim={victim.netId}");
 
         victim.StartDamagePass();
     }
@@ -1293,115 +457,19 @@ public class AttackSequence : NetworkBehaviour
     // =========================================================
 
     [Server]
-    private void CancelSequence(
-        [System.Runtime.CompilerServices.CallerMemberName] string caller = "",
-        [System.Runtime.CompilerServices.CallerLineNumber] int line = 0)
+    private void CancelSequence()
     {
-        if (!isActive)
-            return;
+        string cancelledCardKey = GetCardAudioKey(state.Card);
+        Player prevAttacker = state.Attacker;
 
-        GameLog.Event(
-            LogCat.Attack,
-            $"CANCEL SEQUENCE (called from {caller}:{line}): " +
-            $"attacker={GameLog.P(attacker)}, " +
-            $"card={GameLog.C(selectedCard)}, " +
-            $"target={(target != null ? GameLog.P(target.GetComponentInParent<Player>()) : "none")}");
+        lifecycle.CancelSequence();
 
-        StopTargetSelectionTimer();
-
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-
-            stealRoutine = null;
-        }
-
-        if (attackRoutine != null)
-        {
-            StopCoroutine(
-                attackRoutine);
-
-            attackRoutine = null;
-        }
-
-        Player previousAttacker =
-            attacker;
-
-        Card previousCard =
-            selectedCard;
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (previousCard != null)
-        {
-            previousCard.SetInRoulette(false);
-        }
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-
-            if (previousCard != null)
-            {
-                roulette.DetachCard(
-                    previousCard.transform);
-            }
-        }
-
-        if (previousCard != null)
-        {
-            previousCard.ReturnToOwner();
-        }
-
-        string cancelledCardKey = GetCardAudioKey(previousCard);
-
-        if (previousAttacker != null)
-        {
-            RpcCancelAttackAnimation(
-                previousAttacker.netIdentity,
-                cancelledCardKey);
-        }
-
-        RpcPlaySequenceAudio(cancelledCardKey, 4, previousAttacker != null ? previousAttacker.netIdentity : null);
-        GameMaster.Instance?.TryTriggerOtherPlayerScoff(previousAttacker, 0.5f);
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-
-        if (GameMaster.Instance != null)
-        {
-            GameMaster.Instance.EndTurn();
-        }
+        RpcPlaySequenceAudio(cancelledCardKey, 4, prevAttacker != null ? prevAttacker.netIdentity : null);
+        GameMaster.Instance?.TryTriggerOtherPlayerScoff(prevAttacker, 0.5f);
     }
 
     [ClientRpc]
-    private void RpcCancelAttackAnimation(
-        NetworkIdentity attackerIdentity,
-        string cardOrActionName)
-    {
-        if (attackerIdentity == null)
-            return;
-
-        Player player =
-            attackerIdentity.GetComponent<Player>();
-
-        if (player == null ||
-            player.animator == null)
-        {
-            return;
-        }
-
-        player.animator.CancelAttackAnimation(
-            cardOrActionName);
-    }
-
-    [ClientRpc]
-    private void RpcPlaySequenceAudio(string cardName, int eventType, NetworkIdentity attackerIdentity)
+    public void RpcPlaySequenceAudio(string cardName, int eventType, NetworkIdentity attackerIdentity)
     {
         if (GameAudioManager.Instance == null)
             return;
@@ -1421,7 +489,6 @@ public class AttackSequence : NetworkBehaviour
                 break;
             case 3:
                 GameAudioManager.Instance.PlayCardBurn();
-                // card_destroy disabled (misc)
                 break;
             case 4:
                 GameAudioManager.Instance.SuppressHoverFor(0.4f);
@@ -1431,99 +498,264 @@ public class AttackSequence : NetworkBehaviour
     }
 
     // =========================================================
+    // TESTING / BOT SERVER ENTRY POINTS
+    // =========================================================
+
+    [Server]
+    public bool ServerPlayCard(Card card, Player cardOwner)
+    {
+        if (card == null || cardOwner == null) return false;
+        if (!card.IsAvailable || card.IsInRoulette) return false;
+
+        if (card.Data != null && card.Data.CardClass == Card.CardClass.Defence)
+        {
+            if (!state.IsActive || state.Attacker == null || state.Target == null) return false;
+            StartDefenseSequence(card, cardOwner);
+            return true;
+        }
+
+        StartSequence(card, cardOwner);
+        return true;
+    }
+
+    [Server]
+    public bool ServerSetTarget(Player requester, PlayerInteractable playerTarget)
+    {
+        if (requester == null || playerTarget == null) return false;
+        if (!state.IsActive || state.Attacker == null || state.Card == null) return false;
+        SetTarget(playerTarget);
+        return true;
+    }
+
+    [Server]
+    public void ServerCancel(Player requester)
+    {
+        CancelSequence();
+    }
+
+    [Server]
+    public void ServerForceReset()
+    {
+        CancelSequence();
+    }
+
+    public void ConfigureTimers(float selectTime, float actionTime, float stealTime)
+    {
+        targetSelectionTime = selectTime;
+        targetActionTime = actionTime;
+        stealActionTime = stealTime;
+    }
+    [ClientRpc]
+    private void RpcCancelAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcCancelAttackAnimation attackerNetId={(attackerIdentity != null ? attackerIdentity.netId.ToString() : "NULL")}");
+
+        if (attackerIdentity == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                "RpcCancelAttackAnimation skipped: attackerIdentity is null");
+
+            return;
+        }
+
+        Player player =
+            attackerIdentity.GetComponent<Player>();
+
+        if (player == null ||
+            player.animator == null)
+        {
+            GameLog.Write(
+                "AttackSequence",
+                $"RpcCancelAttackAnimation skipped: playerNull={player == null} animatorNull={player == null || player.animator == null}");
+
+            return;
+        }
+
+        GameLog.Write(
+            "AttackSequence",
+            $"RpcCancelAttackAnimation cancelling attack animation player={player.netId}");
+
+        player.animator.CancelAttackAnimation(
+            string.Empty);
+    }
+
+    // =========================================================
     // FINISH
     // =========================================================
 
     [Server]
     private void FinishSequence()
     {
-        GameLog.Event(
-            LogCat.Attack,
-            "SEQUENCE FINISH");
-
-        StopTargetSelectionTimer();
-
-        if (stealRoutine != null)
-        {
-            StopCoroutine(
-                stealRoutine);
-
-            stealRoutine = null;
-        }
-
-        RouletteRotator roulette =
-            RouletteRotator.Instance;
-
-        if (selectedCard != null)
-        {
-            selectedCard.SetInRoulette(false);
-        }
-
-        if (roulette != null)
-        {
-            roulette.StopRoulette();
-
-            if (selectedCard != null)
-            {
-                roulette.DetachCard(
-                    selectedCard.transform);
-            }
-        }
-
-        selectedCard = null;
-        attacker = null;
-        target = null;
-
-        isActive = false;
-        attackRoutine = null;
+        lifecycle.FinishSequence();
     }
-
     // =========================================================
     // VALIDATION
     // =========================================================
 
-    private static string GetCardAudioKey(Card card)
+    void IAttackResolverContext.ShowDefenseTimer(
+        NetworkConnectionToClient connection,
+        float time)
     {
-        if (card == null || card.Data == null)
-            return string.Empty;
-
-        return $"{card.Data.ActionId} {card.Data.CardName} {card.Data.name}";
+        TargetShowDefenseTimer(
+            connection,
+            time);
     }
 
-    [Server]
-    private bool IsCardOwnedByPlayer(
-        Card card,
-        Player player)
+    void IAttackResolverContext.SetDefenseTimer(
+        NetworkConnectionToClient connection,
+        float time)
     {
-        if (card == null ||
-            player == null)
-        {
-            return false;
-        }
-
-        // Bots have no connection: compare the owner id directly.
-        if (card.OwnerNetId == player.netId)
-            return true;
-
-        if (player.netIdentity != null && player.netIdentity.connectionToClient != null)
-        {
-            return card.IsOwnedByLocalConnection(
-                player.netIdentity.connectionToClient);
-        }
-
-        return false;
+        TargetSetDefenseTimer(
+            connection,
+            time);
     }
 
-    [Server]
-    private Player FindPlayerByConnection(
+    void IAttackResolverContext.HideDefenseTimer(
         NetworkConnectionToClient connection)
     {
-        if (connection == null)
-            return null;
+        TargetHideDefenseTimer(
+            connection);
+    }
 
-        if (connection.identity == null)
-            return null;
+    void IAttackResolverContext.TriggerAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcTriggerAttackAnimation(
+            attackerIdentity);
+    }
 
-        return connection.identity.GetComponent<Player>();
+    void IAttackResolverContext.StartDamagePass(
+        NetworkConnectionToClient connection,
+        NetworkIdentity victimIdentity)
+    {
+        TargetStartDamagePass(
+            connection,
+            victimIdentity);
+    }
+
+    void IAttackResolverContext.StartAttackVortex(
+        Card card,
+        Player attackPlayer)
+    {
+        StartAttackVortex(
+            card,
+            attackPlayer);
+    }
+
+    void IAttackResolverContext.CancelSequence()
+    {
+        CancelSequence();
+    }
+
+    void IAttackResolverContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
+
+    void IAttackVortexContext.FinishSequence()
+    {
+        FinishSequence();
+    }
+
+    void IAttackVortexContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
+
+    bool IAttackLifecycleContext.HasAttackRoutine =>
+        attackRoutine != null;
+
+    void IAttackLifecycleContext.StopAttackRoutine()
+    {
+        if (attackRoutine != null)
+        {
+            StopCoroutine(
+                attackRoutine);
+
+            attackRoutine = null;
+        }
+    }
+
+    void IAttackLifecycleContext.ReleaseAttackRoutine()
+    {
+        attackRoutine = null;
+    }
+
+    void IAttackLifecycleContext.StartAttackPreparation(
+        NetworkIdentity attackerIdentity,
+        string actionId)
+    {
+        RpcStartAttackPreparation(
+            attackerIdentity,
+            actionId);
+    }
+
+    void IAttackLifecycleContext.TriggerAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcTriggerAttackAnimation(
+            attackerIdentity);
+    }
+
+    void IAttackLifecycleContext.CancelAttackAnimation(
+        NetworkIdentity attackerIdentity)
+    {
+        RpcCancelAttackAnimation(
+            attackerIdentity);
+    }
+
+    void IAttackCommandContext.StartSequence(
+        Card card,
+        Player attacker)
+    {
+        StartSequence(
+            card,
+            attacker);
+    }
+
+    void IAttackCommandContext.StartDefenseSequence(
+        Card defenseCard,
+        Player defensePlayer)
+    {
+        StartDefenseSequence(
+            defenseCard,
+            defensePlayer);
+    }
+
+    void IAttackCommandContext.SetTarget(
+        PlayerInteractable target)
+    {
+        SetTarget(
+            target);
+    }
+
+    void IAttackCommandContext.CancelSequence()
+    {
+        CancelSequence();
+    }
+
+    void IAttackTargetingContext.CancelSequence()
+    {
+        CancelSequence();
+    }
+
+    bool IAttackTargetingContext.HasAttackRoutine =>
+        attackRoutine != null;
+
+    void IAttackTargetingContext.StopAttackRoutine()
+    {
+        StopCoroutine(
+            attackRoutine);
+    }
+
+    void IAttackTargetingContext.StartAttackRoutine()
+    {
+        attackRoutine =
+            StartCoroutine(
+                resolver.Run());
     }
 }

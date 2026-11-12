@@ -15,6 +15,10 @@ namespace CardCarouselUI
 
         public void Initialize(CanvasGroup group, RectTransform content)
         {
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Initialize group={(group != null ? group.name : "NULL")} content={(content != null ? content.name : "NULL")}");
+
             this.group = group;
             this.content = content;
 
@@ -25,12 +29,20 @@ namespace CardCarouselUI
 
         public void Show()
         {
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Show wasVisible={IsVisible}");
+
             IsVisible = true;
             Play(0f);
         }
 
         public void Hide()
         {
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Hide wasVisible={IsVisible}");
+
             IsVisible = false;
             if (group != null) group.blocksRaycasts = false;
             Play(HiddenY);
@@ -40,6 +52,10 @@ namespace CardCarouselUI
 
         private void Play(float targetY)
         {
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Play targetY={targetY} restartingRunningAnimation={animation != null} groupActive={(group != null ? group.gameObject.activeSelf.ToString() : "NULL")}");
+
             if (animation != null)
                 StopCoroutine(animation);
 
@@ -57,6 +73,10 @@ namespace CardCarouselUI
 
         private IEnumerator Animate(float startY, float targetY)
         {
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Animate started startY={startY} targetY={targetY} duration={duration}");
+
             float elapsed = 0f;
 
             while (elapsed < duration)
@@ -72,9 +92,18 @@ namespace CardCarouselUI
 
             Apply(targetY);
 
+            global::GameLog.Write(
+                "BottomSlidePopup",
+                $"Animate finished targetY={targetY} visible={IsVisible}");
+
             if (!IsVisible)
             {
                 if (group != null) group.blocksRaycasts = false;
+
+                global::GameLog.Write(
+                    "BottomSlidePopup",
+                    "Animate popup hidden, content group deactivated");
+
                 group.gameObject.SetActive(false);
             }
             else

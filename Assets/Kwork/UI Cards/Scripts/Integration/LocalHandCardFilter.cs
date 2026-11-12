@@ -19,7 +19,7 @@ namespace CardCarouselUI
         {
             return card.Data != null &&
                    !card.IsInRoulette &&
-                   card.TryGetOwner(out global::Player owner) &&
+                   card.GetOwner(out global::Player owner) &&
                    owner.isOwned;
         }
     }

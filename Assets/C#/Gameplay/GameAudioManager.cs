@@ -919,6 +919,8 @@ public class GameAudioManager : MonoBehaviour
         PlaySoundAtPlayer(player != null ? player.netIdentity : null, clip, volumeScale, isAftermath, delay, isVoice);
     }
 
+    private readonly Dictionary<(uint, int), float> lastPlayedClipTimes = new();
+
     public void PlaySoundAtPlayer(
         NetworkIdentity speakerIdentity,
         AudioClip clip,
@@ -929,6 +931,17 @@ public class GameAudioManager : MonoBehaviour
     {
         if (clip == null)
             return;
+
+        uint netId = speakerIdentity != null ? speakerIdentity.netId : 0;
+        int clipId = clip.GetInstanceID();
+        if (lastPlayedClipTimes.TryGetValue((netId, clipId), out float lastTime))
+        {
+            if (Time.unscaledTime - lastTime < 0.25f)
+            {
+                return;
+            }
+        }
+        lastPlayedClipTimes[(netId, clipId)] = Time.unscaledTime;
 
         StartCoroutine(PlaySoundAtPlayerRoutine(speakerIdentity, clip, volumeScale, isAftermath, delay, isVoice));
     }
@@ -1056,7 +1069,7 @@ public class GameAudioManager : MonoBehaviour
             "grenade" => grenadeReady,
             "shotgun" => shotgunReady,
             "whiskey" => whiskeyReady,
-            "flame" => atkFlamePrepSound,
+            "flame" => null, // Flame prep sound (ATK_FLAME_ATK_PREP_SOUND) is already played by Blowtorch_Prep StateMachineBehaviour
             _ => pistolReady
         };
 

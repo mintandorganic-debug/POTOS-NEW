@@ -2,14 +2,41 @@
 using System.Collections;
 using UnityEngine;
 
-public class DiceLiftTest : MonoBehaviour
+// Independent lift control: anyone can call Raise / Lower.
+public class LiftAnimation : MonoBehaviour
 {
     private const string LiftControllerName = "Lift_AC";
 
     private Animator animator;
-    private Transform plate;
     private bool raised;
     private bool platformLowered;
+
+    public Animator Animator
+    {
+        get
+        {
+            Find();
+
+            return animator;
+        }
+    }
+
+    public bool IsInState(
+        string stateName)
+    {
+        if (!Find())
+        {
+            return false;
+        }
+
+        int layer =
+            animator.GetLayerIndex(
+                "Lift");
+
+        return
+            !animator.IsInTransition(layer) &&
+            animator.GetCurrentAnimatorStateInfo(layer).IsName(stateName);
+    }
 
     public Transform PlatformPart
     {
@@ -35,19 +62,6 @@ public class DiceLiftTest : MonoBehaviour
         }
     }
 
-    public bool IsRaised =>
-        raised;
-
-    public Transform Plate
-    {
-        get
-        {
-            Find();
-
-            return plate;
-        }
-    }
-
     public float RiseDuration
     {
         get
@@ -70,79 +84,13 @@ public class DiceLiftTest : MonoBehaviour
         }
     }
 
-    public void LogPlateRenderer()
-    {
-        if (!Find())
-        {
-            return;
-        }
-
-        foreach (SkinnedMeshRenderer renderer in
-                 animator.GetComponentsInChildren<SkinnedMeshRenderer>(true))
-        {
-            string bones = string.Empty;
-
-            for (int i = 0;
-                 i < renderer.bones.Length && i < 4;
-                 i++)
-            {
-                bones += $" {renderer.bones[i].name}={renderer.bones[i].position.ToString("F2")}";
-            }
-
-            Mesh baked =
-                new Mesh();
-
-            renderer.BakeMesh(
-                baked);
-
-            Vector3 bakedCenter =
-                renderer.transform.TransformPoint(
-                    baked.bounds.center);
-
-            GameLog.Write(
-                "DiceLiftTest",
-                $"Renderer {renderer.name} bakedWorldCenter={bakedCenter.ToString("F2")} bakedSize={baked.bounds.size.ToString("F2")} isVisible={renderer.isVisible} enabled={renderer.enabled} layer={LayerMask.LayerToName(renderer.gameObject.layer)}");
-
-            Destroy(
-                baked);
-
-            GameLog.Write(
-                "DiceLiftTest",
-                $"Renderer {renderer.name} root={(renderer.rootBone != null ? renderer.rootBone.name + renderer.rootBone.position.ToString("F2") : "NULL")} bones={renderer.bones.Length}{bones} bounds={renderer.bounds.center.ToString("F2")}/{renderer.bounds.size.ToString("F2")} local={renderer.localBounds.center.ToString("F2")}/{renderer.localBounds.size.ToString("F2")}");
-        }
-    }
-
-    public bool TryGetPlateBounds(
-        out Bounds bounds)
-    {
-        bounds = default;
-
-        if (!Find())
-        {
-            return false;
-        }
-
-        foreach (SkinnedMeshRenderer renderer in
-                 animator.GetComponentsInChildren<SkinnedMeshRenderer>(true))
-        {
-            if (renderer.name == "Plate")
-            {
-                bounds = renderer.bounds;
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public void Raise()
     {
         if (!Find() ||
             !HasParameter("PlateUp"))
         {
             GameLog.Write(
-                "DiceLiftTest",
+                "LiftAnimation",
                 "Raise skipped: Lift_AC has no PlateUp trigger, wait for the editor setup");
 
             return;
@@ -163,12 +111,13 @@ public class DiceLiftTest : MonoBehaviour
         raised = true;
         platformLowered = false;
 
-        GameLog.Write(
-            "DiceLiftTest",
-            "Raise: platform and plate up");
+        LogState(
+            "key3",
+            3f);
 
-        StartCoroutine(
-            Probe());
+        GameLog.Write(
+            "LiftAnimation",
+            "Raise: platform and plate up");
     }
 
     public void Lower()
@@ -191,7 +140,7 @@ public class DiceLiftTest : MonoBehaviour
             platformLowered = true;
 
             GameLog.Write(
-                "DiceLiftTest",
+                "LiftAnimation",
                 "Lower: plate and platform down");
 
             return;
@@ -206,32 +155,76 @@ public class DiceLiftTest : MonoBehaviour
         }
     }
 
-    private IEnumerator Probe()
+    public void LogState(
+        string source,
+        float seconds)
     {
-        Transform platformBone = null;
-
-        foreach (Transform child in
-                 animator.GetComponentsInChildren<Transform>(true))
+        if (Find())
         {
-            if (child.name == "platform" &&
-                child.childCount >= 0 &&
-                child.GetComponent<Renderer>() == null)
-            {
-                platformBone = child;
-                break;
-            }
+            StartCoroutine(
+                LogStateRoutine(
+                    source,
+                    seconds));
         }
+    }
 
-        for (int i = 0;
-             i < 20;
-             i++)
+    private IEnumerator LogStateRoutine(
+        string source,
+        float seconds)
+    {
+        int layer =
+            animator.GetLayerIndex(
+                "Lift");
+
+        string[] states =
         {
+            "Idle",
+            "PlatformHide",
+            "DiceAppear",
+            "DiceHide"
+        };
+
+        float time = 0f;
+
+        while (time < seconds)
+        {
+            string current = "?";
+
+            AnimatorStateInfo info =
+                animator.GetCurrentAnimatorStateInfo(
+                    layer);
+
+            foreach (string state in states)
+            {
+                if (info.IsName(state))
+                {
+                    current = state;
+                }
+            }
+
+            AnimatorStateInfo baseInfo =
+                animator.GetCurrentAnimatorStateInfo(
+                    0);
+
+            SkinnedMeshRenderer plateMesh = null;
+
+            foreach (SkinnedMeshRenderer renderer in
+                     animator.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                if (renderer.name == "Plate")
+                {
+                    plateMesh = renderer;
+                }
+            }
+
             GameLog.Write(
-                "DiceLiftTest",
-                $"Probe t={i * 0.2f:0.0} platformBone={(platformBone != null ? platformBone.position.ToString("F2") : "NULL")} plateBone={(plate != null ? plate.position.ToString("F2") : "NULL")}");
+                "LiftAnimation",
+                $"[{source}] t={time:0.0} liftLayer={current} n={info.normalizedTime:0.00} weight={animator.GetLayerWeight(layer):0.0} inTransition={animator.IsInTransition(layer)} baseLayerHash={baseInfo.shortNameHash} speed={animator.speed:0.0} mode={animator.updateMode} plateMesh={(plateMesh != null ? plateMesh.enabled + "/visible=" + plateMesh.isVisible + "/layer=" + LayerMask.LayerToName(plateMesh.gameObject.layer) : "none")}");
 
             yield return new WaitForSeconds(
-                0.2f);
+                0.25f);
+
+            time += 0.25f;
         }
     }
 
@@ -270,6 +263,8 @@ public class DiceLiftTest : MonoBehaviour
 
             animator = candidate;
 
+            animator.updateMode = AnimatorUpdateMode.Fixed;
+
             SkinnedMeshRenderer[] renderers =
                 candidate.GetComponentsInChildren<SkinnedMeshRenderer>(true);
 
@@ -283,19 +278,9 @@ public class DiceLiftTest : MonoBehaviour
                         Vector3.one * 40f);
             }
 
-            foreach (Transform child in
-                     candidate.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.name == "plate")
-                {
-                    plate = child;
-                    break;
-                }
-            }
-
             GameLog.Write(
-                "DiceLiftTest",
-                $"Find animator={candidate.name} skinnedRenderers={renderers.Length} plate={(plate != null)}");
+                "LiftAnimation",
+                $"Find animator={candidate.name} skinnedRenderers={renderers.Length}");
 
             return true;
         }

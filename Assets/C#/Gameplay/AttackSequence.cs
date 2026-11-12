@@ -39,6 +39,15 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     public Player Attacker =>
         state.Attacker;
 
+    public float TargetSelectionTime =>
+        targetSelectionTime;
+
+    public float DefenseWindowTime =>
+        targetActionTime;
+
+    public float StealWindowTime =>
+        stealActionTime;
+
     public static string GetCardAudioKey(Card card)
     {
         if (card == null || card.Data == null)
@@ -528,9 +537,16 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     }
 
     [Server]
-    public void ServerCancel(Player requester)
+    public bool ServerCancel(Player requester)
     {
+        if (!state.IsActive || state.Attacker == null)
+            return false;
+
+        if (requester == null || requester != state.Attacker)
+            return false;
+
         CancelSequence();
+        return true;
     }
 
     [Server]

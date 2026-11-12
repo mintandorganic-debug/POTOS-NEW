@@ -63,9 +63,6 @@ public class MatchStartup
                 timeoutRoutine);
 
             timeoutRoutine = null;
-
-        if (HoldStart)
-            yield break;
         }
     }
 
@@ -612,9 +609,6 @@ public class MatchStartup
                 timeoutRoutine);
 
             timeoutRoutine = null;
-
-        if (HoldStart)
-            yield break;
         }
 
         if (startupRoutine != null)

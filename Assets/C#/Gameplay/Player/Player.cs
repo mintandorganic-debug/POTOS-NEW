@@ -47,6 +47,11 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnAccessoryMaskChanged))]
     private int accessoryMask;
 
+    public static Player LocalPlayer =>
+        NetworkClient.localPlayer != null
+            ? NetworkClient.localPlayer.GetComponent<Player>()
+            : null;
+
     public int AccessoryMask => accessoryMask;
     public bool HasAnyAccessory => accessoryMask != 0;
 

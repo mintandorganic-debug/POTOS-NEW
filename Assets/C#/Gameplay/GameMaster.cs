@@ -544,8 +544,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         float delay)
     {
         GameAudioManager.Instance?.PlayPlayerReactionClip(
-            (GameAudioManager.ReactionClipType)reactionType,
             playerNetIdentity,
+            (GameAudioManager.ReactionClipType)reactionType,
             delay);
     }
 

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Preparation : StateMachineBehaviour
 {
-    [SerializeField] int index;
-
+    [SerializeField] int itemIndex;
+    [SerializeField] int soundIndex = -1;
     private bool hasFinished;
 
     public override void OnStateEnter(
@@ -13,9 +13,13 @@ public class Preparation : StateMachineBehaviour
     {
         GameLog.Write(
             "Preparation",
-            $"OnStateEnter index={index} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
+            $"OnStateEnter index={itemIndex} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
 
         hasFinished = false;
+
+        NetworkSound soundController =
+           animator.GetComponentInParent<NetworkSound>();
+        soundController.Play(soundIndex);
     }
 
     public override void OnStateUpdate(
@@ -33,7 +37,7 @@ public class Preparation : StateMachineBehaviour
 
         GameLog.Write(
             "Preparation",
-            $"OnStateUpdate preparation state finished index={index} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
+            $"OnStateUpdate preparation state finished index={itemIndex} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
 
         PlayerAnimator playerAnimator =
             animator.GetComponentInParent<PlayerAnimator>();
@@ -42,11 +46,11 @@ public class Preparation : StateMachineBehaviour
         {
             GameLog.Write(
                 "Preparation",
-                $"OnStateUpdate PlayerAnimator not found index={index}");
+                $"OnStateUpdate PlayerAnimator not found index={itemIndex}");
 
             return;
         }
 
-        playerAnimator.PreparationFinished(index);
+        playerAnimator.PreparationFinished(itemIndex);
     }
 }

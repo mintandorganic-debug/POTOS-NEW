@@ -15,7 +15,7 @@ public class DiceAimLine
         Build();
 
         Vector3 origin =
-            DiceSpawner.HoldPosition(
+            DiceRollRig.HoldPosition(
                 wrist,
                 1);
 

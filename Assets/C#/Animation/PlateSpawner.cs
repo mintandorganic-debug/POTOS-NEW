@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlateSpawner
 {
-    private const float PlateLift = 0.07f;
+    private const float PlateLift = 0f;
 
     private readonly LiftAnimation lift;
 

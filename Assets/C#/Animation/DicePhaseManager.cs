@@ -17,14 +17,12 @@ public class DicePhaseManager : MonoBehaviour
     private const float LiftStateWaitLimit = 1f;
     private const bool ShowAimLine = false;
 
-    private static readonly Vector3 DiceLanding =
-        new Vector3(-0.013f, 0.15f, -0.001f);
-
     private LiftAnimation lift;
     private DiceResultDisplay resultDisplay;
     private DiceChargeBar chargeBar;
     private PlateSpawner plate;
-    private DiceSpawner dice;
+    private DiceRollRig dice;
+    private CardHandVisibility cards;
     private DiceAimLine aimLine;
     private HandsRollAnimation hands;
     private bool busy;
@@ -59,7 +57,10 @@ public class DicePhaseManager : MonoBehaviour
                 lift);
 
         dice =
-            new DiceSpawner();
+            new DiceRollRig();
+
+        cards =
+            new CardHandVisibility();
 
         aimLine =
             new DiceAimLine();
@@ -98,6 +99,8 @@ public class DicePhaseManager : MonoBehaviour
         aimLine.Hide();
         chargeBar.Hide();
         resultDisplay.Hide();
+        dice.Dispose();
+        cards.Show();
 
         ResetAll();
 
@@ -109,6 +112,7 @@ public class DicePhaseManager : MonoBehaviour
         busy = true;
 
         resultDisplay.Hide();
+        dice.Dispose();
 
         hands =
             HandsRollAnimation.Find();
@@ -125,6 +129,8 @@ public class DicePhaseManager : MonoBehaviour
             "3 step 1: pedestal and plate up");
 
         DiceCollisionLayers.Apply();
+
+        cards.Hide();
 
         lift.Raise();
 
@@ -206,7 +212,7 @@ public class DicePhaseManager : MonoBehaviour
             {
                 aimLine.Draw(
                     hands.Wrist,
-                    DiceLanding,
+                    DiceRollRig.PlateCenter,
                     charge);
             }
 
@@ -220,7 +226,13 @@ public class DicePhaseManager : MonoBehaviour
             "DicePhaseManager",
             "LMB released: throw, dice appear in the hand");
 
-        dice.Spawn();
+        dice.Build(
+            RandomScore());
+
+        dice.State.IsCharging = true;
+        dice.State.IsAttackOrReady = false;
+
+        yield return null;
 
         time = ThrowStart;
 
@@ -231,7 +243,7 @@ public class DicePhaseManager : MonoBehaviour
             hands.Scrub(
                 time);
 
-            dice.Hold(
+            dice.HoldBones(
                 hands.Wrist);
 
             yield return null;
@@ -245,14 +257,13 @@ public class DicePhaseManager : MonoBehaviour
             "DicePhaseManager",
             $"Throw power={power:0.00} (LMB held {phase:0.00}s, full power at {FullPowerTime}s)");
 
-        DiceThrower.Release(
-            dice.Bodies,
-            DiceLanding,
-            ThrowPower);
+        StartCoroutine(
+            dice.FlyBones(
+                DiceRollRig.PlateCenter,
+                ThrowPower));
 
         StartCoroutine(
-            ShowResultWhenStopped(
-                power));
+            ShowResultWhenStopped());
 
         while (time < hands.Length)
         {
@@ -270,13 +281,12 @@ public class DicePhaseManager : MonoBehaviour
         yield return new WaitForSeconds(
             ResetDelay);
 
-        ResetAll();
-
-        busy = false;
+        // The lift, the plate, the dice and the result stay until 3 is pressed again.
+        hands.SetWeight(
+            0f);
     }
 
-    private IEnumerator ShowResultWhenStopped(
-        float chargePower)
+    private IEnumerator ShowResultWhenStopped()
     {
         yield return new WaitForSeconds(
             DiceThrower.FlightTime);
@@ -284,7 +294,7 @@ public class DicePhaseManager : MonoBehaviour
         float waited = 0f;
 
         while (waited < StopWaitLimit &&
-               !DiceThrower.AllStopped(dice.Bodies))
+               !dice.AllStopped())
         {
             waited += Time.deltaTime;
 
@@ -292,8 +302,17 @@ public class DicePhaseManager : MonoBehaviour
         }
 
         resultDisplay.Show(
-            dice.Bodies,
-            chargePower);
+            dice.Controller.Score);
+    }
+
+    private static int[] RandomScore()
+    {
+        return new[]
+        {
+            Random.Range(1, 7),
+            Random.Range(1, 7),
+            Random.Range(1, 7)
+        };
     }
 
     private void ResetAll()
@@ -308,7 +327,6 @@ public class DicePhaseManager : MonoBehaviour
                 0f);
         }
 
-        dice.Clear();
         plate.Remove();
 
         lift.Lower();

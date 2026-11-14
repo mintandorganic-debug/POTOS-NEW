@@ -5,16 +5,6 @@ using UnityEngine;
 
 public static class DiceRollEvaluation
 {
-    public static int[] ReadValues(
-        IList<Rigidbody> dice)
-    {
-        return
-            dice
-                .Where(d => d != null)
-                .Select(d => DiceFaces.ReadValue(d.transform))
-                .ToArray();
-    }
-
     public static string Describe(
         int[] values)
     {

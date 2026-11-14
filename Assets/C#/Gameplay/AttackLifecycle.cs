@@ -202,8 +202,18 @@ public class AttackLifecycle
             context.StopAttackRoutine();
         }
 
+        Card attackCard = state.Card;
+        string attackCardKey = AttackSequence.GetCardAudioKey(attackCard);
+        Player attacker = state.Attacker;
+
         state.Card =
             defenseCard;
+
+        if (attacker != null)
+        {
+            AttackSequence.Instance?.RpcPlaySequenceAudio(attackCardKey, 2, attacker.netIdentity);
+            GameMaster.Instance?.TryTriggerDisappointmentSound(attacker, 0.5f);
+        }
 
         GameLog.Write(
             "AttackLifecycle",

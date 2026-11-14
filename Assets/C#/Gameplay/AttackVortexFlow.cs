@@ -119,6 +119,11 @@ public class AttackVortexFlow
             "AttackVortexFlow",
             $"OnAttackVortexCompleted card={(card != null && card.Data != null ? card.Data.name : "NULL")} isStealCard={isStealCard}");
 
+        AttackSequence.Instance?.RpcPlaySequenceAudio(
+            AttackSequence.GetCardAudioKey(card),
+            3,
+            null);
+
         RouletteCardReleaser.Destroy(
             card);
 
@@ -183,6 +188,11 @@ public class AttackVortexFlow
         GameLog.Write(
             "AttackVortexFlow",
             $"OnDefenseVortexCompleted destroying defense card={(card.Data != null ? card.Data.name : "NULL")}");
+
+        AttackSequence.Instance?.RpcPlaySequenceAudio(
+            AttackSequence.GetCardAudioKey(card),
+            3,
+            null);
 
         RouletteCardReleaser.Destroy(
             card);

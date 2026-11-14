@@ -22,7 +22,7 @@ public class LobbyMenu : MonoBehaviour
 
         instance = this;
 
-        if (!NetworkServer.active);
+        if (!NetworkServer.active)
             startButton.GetComponentInChildren<TMP_Text>().text = "READY";
     }
 
@@ -82,10 +82,10 @@ public class LobbyMenu : MonoBehaviour
 
             UIplayer_Data.kickBtn.GetComponent<Button>().onClick.AddListener(() =>
             {
+                GameAudioManager.Instance?.PlayCancel();
                 GameLog.Write(
                     "LobbyMenu",
                     $"Kick button clicked nickname={lobbyPlayer.Nickname} index={lobbyPlayer.index} serverActive={NetworkServer.active}");
-
                 if (NetworkServer.active)
                     lobbyPlayer.Kick();
             });
@@ -111,10 +111,10 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartSession()
     {
+        GameAudioManager.Instance?.PlayAccept();
         GameLog.Write(
             "LobbyMenu",
             $"StartSession button pressed serverActive={NetworkServer.active}");
-
         NetworkClient.localPlayer.GetComponent<LobbyPlayer>().ToggleReady();
 
         if (NetworkServer.active)

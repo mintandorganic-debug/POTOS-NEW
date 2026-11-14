@@ -36,6 +36,26 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     public PlayerInteractable Target =>
         state.Target;
 
+    public Player Attacker =>
+        state.Attacker;
+
+    public float TargetSelectionTime =>
+        targetSelectionTime;
+
+    public float DefenseWindowTime =>
+        targetActionTime;
+
+    public float StealWindowTime =>
+        stealActionTime;
+
+    public static string GetCardAudioKey(Card card)
+    {
+        if (card == null || card.Data == null)
+            return string.Empty;
+
+        return $"{card.Data.ActionId} {card.Data.CardName} {card.Data.name}";
+    }
+
     // =========================================================
     // LIFECYCLE
     // =========================================================
@@ -211,6 +231,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
         lifecycle.StartSequence(
             card,
             attacker);
+
+        RpcPlaySequenceAudio(GetCardAudioKey(card), 0, attacker != null ? attacker.netIdentity : null);
     }
     // =========================================================
     // TARGET SELECTION TIMER
@@ -376,6 +398,7 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             "AttackSequence",
             $"TargetShowDefenseTimer time={time} hudExists={HudController.Instance != null}");
 
+        GameAudioManager.Instance?.PlayHeartbeat();
         HudController.Instance?.ShowDefenseTimer(
             time);
     }
@@ -397,6 +420,7 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             "AttackSequence",
             $"TargetHideDefenseTimer hudExists={HudController.Instance != null}");
 
+        GameAudioManager.Instance?.StopHeartbeat();
         HudController.Instance?.HideDefenseTimer();
     }
 
@@ -444,7 +468,98 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [Server]
     private void CancelSequence()
     {
+        string cancelledCardKey = GetCardAudioKey(state.Card);
+        Player prevAttacker = state.Attacker;
+
         lifecycle.CancelSequence();
+
+        RpcPlaySequenceAudio(cancelledCardKey, 4, prevAttacker != null ? prevAttacker.netIdentity : null);
+        GameMaster.Instance?.TryTriggerOtherPlayerScoff(prevAttacker, 0.5f);
+    }
+
+    [ClientRpc]
+    public void RpcPlaySequenceAudio(string cardName, int eventType, NetworkIdentity attackerIdentity)
+    {
+        if (GameAudioManager.Instance == null)
+            return;
+
+        switch (eventType)
+        {
+            case 0:
+                GameAudioManager.Instance.PlayWeaponReady(cardName, attackerIdentity);
+                break;
+            case 1:
+                GameAudioManager.Instance.PlayWeaponAttackAndHit(cardName, true, attackerIdentity);
+                GameAudioManager.Instance.PlayAttackSuccessful(0.5f);
+                break;
+            case 2:
+                GameAudioManager.Instance.PlayWeaponAttackAndHit(cardName, false, attackerIdentity);
+                GameAudioManager.Instance.PlayAttackUnsuccessful(0.5f);
+                break;
+            case 3:
+                GameAudioManager.Instance.PlayCardBurn();
+                break;
+            case 4:
+                GameAudioManager.Instance.SuppressHoverFor(0.4f);
+                GameAudioManager.Instance.PlayWeaponCancel(cardName, attackerIdentity);
+                break;
+        }
+    }
+
+    // =========================================================
+    // TESTING / BOT SERVER ENTRY POINTS
+    // =========================================================
+
+    [Server]
+    public bool ServerPlayCard(Card card, Player cardOwner)
+    {
+        if (card == null || cardOwner == null) return false;
+        if (!card.IsAvailable || card.IsInRoulette) return false;
+
+        if (card.Data != null && card.Data.CardClass == Card.CardClass.Defence)
+        {
+            if (!state.IsActive || state.Attacker == null || state.Target == null) return false;
+            StartDefenseSequence(card, cardOwner);
+            return true;
+        }
+
+        StartSequence(card, cardOwner);
+        return true;
+    }
+
+    [Server]
+    public bool ServerSetTarget(Player requester, PlayerInteractable playerTarget)
+    {
+        if (requester == null || playerTarget == null) return false;
+        if (!state.IsActive || state.Attacker == null || state.Card == null) return false;
+        SetTarget(playerTarget);
+        return true;
+    }
+
+    [Server]
+    public bool ServerCancel(Player requester)
+    {
+        if (!state.IsActive || state.Attacker == null)
+            return false;
+
+        if (requester == null || requester != state.Attacker)
+            return false;
+
+        CancelSequence();
+        return true;
+    }
+
+    [Server]
+    public void ServerForceReset()
+    {
+        CancelSequence();
+    }
+
+    public void ConfigureTimers(float selectTime, float actionTime, float stealTime)
+    {
+        targetSelectionTime = selectTime;
+        targetActionTime = actionTime;
+        stealActionTime = stealTime;
     }
     [ClientRpc]
     private void RpcCancelAttackAnimation(

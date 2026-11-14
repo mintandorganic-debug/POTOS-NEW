@@ -121,19 +121,33 @@ namespace CardCarouselUI
             }
         }
 
+        private float enabledTime;
+
+        private void OnEnable()
+        {
+            enabledTime = Time.unscaledTime;
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (isMissingCard) StartShake();
         
             if (!isInteractable) return;
 
+            if (Time.unscaledTime - enabledTime >= 0.25f)
+            {
+                GameAudioManager.Instance?.PlayHover();
+            }
             SetHover(true);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                GameAudioManager.Instance?.PlayAccept();
                 Clicked?.Invoke();
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)

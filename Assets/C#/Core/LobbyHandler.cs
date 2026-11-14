@@ -26,6 +26,7 @@ public class LobbyHandler : NetworkBehaviour
 
     public void Disconnect()
     {
+        GameAudioManager.Instance?.PlayCancel();
         GameLog.Write(
             "LobbyHandler",
             $"Disconnect serverActive={NetworkServer.active} clientConnected={NetworkClient.isConnected}");

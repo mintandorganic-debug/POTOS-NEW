@@ -184,6 +184,11 @@ public class AttackResolver
             card,
             attackPlayer);
 
+        AttackSequence.Instance?.RpcPlaySequenceAudio(
+            AttackSequence.GetCardAudioKey(card),
+            1,
+            attackPlayer != null ? attackPlayer.netIdentity : null);
+
         if (card.Data != null &&
             card.Data.CardClass !=
                 Card.CardClass.AttackSteal &&

@@ -56,6 +56,7 @@ namespace CardCarouselUI
                     out GameObject resultCardPrefab,
                     out GameObject craftVFXPrefab)) return;
 
+            GameAudioManager.Instance?.PlayAccept();
             ShowCraftResult(
                 resultCardPrefab,
                 craftVFXPrefab
@@ -191,6 +192,7 @@ namespace CardCarouselUI
 
             if (backgroundTint != null)
                 backgroundTint.gameObject.SetActive(false);
+            GameAudioManager.Instance?.PlayMenuClose();
         }
     }
 }

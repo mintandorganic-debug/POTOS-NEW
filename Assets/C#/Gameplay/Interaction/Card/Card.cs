@@ -78,6 +78,43 @@ public class Card : InteractableObject
     public uint OwnerNetId =>
         ownerNetId;
 
+    public int SocketIndex =>
+        socketIndex;
+
+    /// <summary>All card types this card can become (test scene).</summary>
+    public IReadOnlyList<CardData> AvailableTypes =>
+        avalaibleCardTypes;
+
+    /// <summary>Test only: force a concrete card type.</summary>
+    [Server]
+    public bool SetDataByIndex(
+        int index)
+    {
+        if (avalaibleCardTypes == null ||
+            index < 0 ||
+            index >= avalaibleCardTypes.Count ||
+            avalaibleCardTypes[index] == null)
+        {
+            return false;
+        }
+
+        cardDataIndex = index;
+
+        ApplyCardData();
+
+        GameLog.Event(
+            LogCat.Card,
+            $"SetDataByIndex: card {netId} -> {avalaibleCardTypes[index].name}");
+
+        if (GameMaster.Instance != null)
+        {
+            OnGamePhaseChanged(
+                GameMaster.Instance.CurrentPhase);
+        }
+
+        return true;
+    }
+
     private void OnEnable()
     {
         GameLog.Write(

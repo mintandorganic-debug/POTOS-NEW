@@ -7,10 +7,10 @@ public class DealerToken : InteractableObject
 
     public override void Interact()
     {
+        GameAudioManager.Instance?.PlayAccept();
         GameLog.Write(
             "DealerToken",
             $"Interact netId={netId}: requesting end turn");
-
         CmdEndTurn();
     }
 
@@ -71,6 +71,7 @@ public class DealerToken : InteractableObject
 
         if (highlight != null)
             highlight.enabled = true;
+        GameAudioManager.Instance?.PlayHover();
     }
 
     public override void OnLookExit()

@@ -15,6 +15,8 @@ public class MatchStartup
     private readonly HashSet<int> expectedConnections = new();
     private readonly HashSet<int> loadedConnections = new();
 
+    public bool HoldStart { get; set; }
+
     private bool startupCancelled;
 
     private Coroutine timeoutRoutine;
@@ -181,6 +183,14 @@ public class MatchStartup
 
     private void StartWhenReady()
     {
+        if (HoldStart)
+        {
+            GameLog.Write(
+                "MatchStartup",
+                "StartWhenReady skipped: HoldStart is true");
+            return;
+        }
+
         GameLog.Write(
             "MatchStartup",
             $"StartWhenReady gameStarted={isGameStarted()} startupCancelled={startupCancelled} expected={expectedConnections.Count} loaded={loadedConnections.Count} startupRoutineRunning={startupRoutine != null}");
@@ -511,6 +521,9 @@ public class MatchStartup
             loadTimeout);
 
         timeoutRoutine = null;
+
+        if (HoldStart)
+            yield break;
 
         GameLog.Write(
             "MatchStartup",

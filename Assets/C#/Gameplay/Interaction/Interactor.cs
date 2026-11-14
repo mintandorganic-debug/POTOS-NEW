@@ -48,7 +48,7 @@ public class Interactor : NetworkBehaviour
         base.OnStartLocalPlayer();
 
         hudController =
-            FindFirstObjectByType<HudController>();
+            FindAnyObjectByType<HudController>();
 
         GameLog.Write(
             "Interactor",
@@ -223,10 +223,10 @@ public class Interactor : NetworkBehaviour
         {
             if (!currentCard.IsAvailable)
             {
+                GameAudioManager.Instance?.PlayUnavailable();
                 GameLog.Write(
                     "Interactor",
                     $"HandleInteraction ignored: card netId={currentCard.netId} is unavailable");
-
                 return;
             }
 
@@ -342,6 +342,7 @@ public class Interactor : NetworkBehaviour
             "Interactor",
             $"CancelSelection: sending CmdCancelSequence");
 
+        GameAudioManager.Instance?.SuppressHoverFor(0.4f);
         AttackSequence.Instance.CmdCancelSequence();
     }
 
@@ -404,6 +405,7 @@ public class Interactor : NetworkBehaviour
             return;
         }
 
+        GameAudioManager.Instance?.PlayMenuPress();
         button.onClick.Invoke();
     }
 }

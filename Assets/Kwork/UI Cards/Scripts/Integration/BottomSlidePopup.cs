@@ -23,6 +23,7 @@ namespace CardCarouselUI
             this.content = content;
 
             group.alpha = 0f;
+            group.blocksRaycasts = false;
             group.gameObject.SetActive(false);
         }
 
@@ -43,6 +44,7 @@ namespace CardCarouselUI
                 $"Hide wasVisible={IsVisible}");
 
             IsVisible = false;
+            if (group != null) group.blocksRaycasts = false;
             Play(HiddenY);
         }
 
@@ -56,6 +58,9 @@ namespace CardCarouselUI
 
             if (animation != null)
                 StopCoroutine(animation);
+
+            if (group != null)
+                group.blocksRaycasts = false;
 
             float startY = group.gameObject.activeSelf
                 ? content.anchoredPosition.y
@@ -93,11 +98,17 @@ namespace CardCarouselUI
 
             if (!IsVisible)
             {
+                if (group != null) group.blocksRaycasts = false;
+
                 global::GameLog.Write(
                     "BottomSlidePopup",
                     "Animate popup hidden, content group deactivated");
 
                 group.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (group != null) group.blocksRaycasts = true;
             }
         }
 

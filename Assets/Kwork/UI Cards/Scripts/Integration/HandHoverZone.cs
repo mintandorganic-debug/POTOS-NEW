@@ -25,7 +25,7 @@ namespace CardCarouselUI
             bool found = false;
             Bounds bounds = default;
 
-            foreach (global::Card card in Object.FindObjectsByType<global::Card>(FindObjectsSortMode.None))
+            foreach (global::Card card in Object.FindObjectsByType<global::Card>())
             {
                 if (!LocalHandCardFilter.IsInLocalHand(card))
                     continue;

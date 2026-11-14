@@ -12,11 +12,13 @@ public class UIWindow : MonoBehaviour
         if (isShown)
         {
             isShown = false;
+            GameAudioManager.Instance?.PlayMenuClose();
             gameObject.SetActive(false);
         }
         else
         {
             isShown = true;
+            GameAudioManager.Instance?.PlayMenuOpen();
             gameObject.SetActive(true);
         }
     }
@@ -27,6 +29,7 @@ public class UIWindow : MonoBehaviour
             $"Hide window={name} wasShown={isShown}");
 
         isShown = false;
+        GameAudioManager.Instance?.PlayMenuClose();
         gameObject.SetActive(false);
     }
     public virtual void Show()
@@ -36,6 +39,7 @@ public class UIWindow : MonoBehaviour
             $"Show window={name} wasShown={isShown}");
 
         isShown = true;
+        GameAudioManager.Instance?.PlayMenuOpen();
         gameObject.SetActive(true);
     }
 }

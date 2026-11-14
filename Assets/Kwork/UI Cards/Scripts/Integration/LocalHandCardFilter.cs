@@ -6,7 +6,7 @@ namespace CardCarouselUI
     {
         public static bool IsAnyCardSelected()
         {
-            foreach (global::Card card in Object.FindObjectsByType<global::Card>(FindObjectsSortMode.None))
+            foreach (global::Card card in Object.FindObjectsByType<global::Card>())
             {
                 if (IsInLocalHand(card) && card.IsZoomed)
                     return true;

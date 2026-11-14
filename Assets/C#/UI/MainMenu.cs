@@ -48,6 +48,7 @@ public class MainMenu : MonoBehaviour
 
         if (!NetTransportSelector.Set(NetTransportSelector.GetSteam()))
         {
+            GameAudioManager.Instance?.PlayUnavailable();
             GameLog.Write(
                 "MainMenu",
                 "HostSteam aborted: Steam transport could not be set");
@@ -55,6 +56,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
+        GameAudioManager.Instance?.PlayAccept();
         steamSession.CreateLobby();
     }
 
@@ -66,6 +68,7 @@ public class MainMenu : MonoBehaviour
 
         if (!NetTransportSelector.Set(NetTransportSelector.GetIp()))
         {
+            GameAudioManager.Instance?.PlayUnavailable();
             GameLog.Write(
                 "MainMenu",
                 "HostIp aborted: IP transport could not be set");
@@ -73,6 +76,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
+        GameAudioManager.Instance?.PlayAccept();
         GameLog.Write(
             "MainMenu",
             "HostIp StartHost");
@@ -88,6 +92,7 @@ public class MainMenu : MonoBehaviour
 
         if (!NetTransportSelector.Set(NetTransportSelector.GetIp()))
         {
+            GameAudioManager.Instance?.PlayUnavailable();
             GameLog.Write(
                 "MainMenu",
                 "Client aborted: IP transport could not be set");
@@ -95,6 +100,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
+        GameAudioManager.Instance?.PlayAccept();
         NetworkManager.singleton.networkAddress = ipInput.text;
 
         GameLog.Write(
@@ -106,6 +112,7 @@ public class MainMenu : MonoBehaviour
 
     public void Server()
     {
+        GameAudioManager.Instance?.PlayAccept();
         GameLog.Write(
             "MainMenu",
             "Server button pressed, StartServer");
@@ -115,6 +122,7 @@ public class MainMenu : MonoBehaviour
 
     public void Stop()
     {
+        GameAudioManager.Instance?.PlayCancel();
         GameLog.Write(
             "MainMenu",
             $"Stop button pressed serverActive={NetworkServer.active} clientConnected={NetworkClient.isConnected}");
@@ -153,6 +161,7 @@ public class MainMenu : MonoBehaviour
 
     public void CloseApp()
     {
+        GameAudioManager.Instance?.PlayCancel();
         GameLog.Write(
             "MainMenu",
             "CloseApp Application.Quit");

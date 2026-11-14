@@ -28,6 +28,9 @@ public class PlayerAnimator : MonoBehaviour
     private Dictionary<string, int> actionIds;
     private Dictionary<int, AnimatorOverrider> overriders;
 
+    private string currentAttackWeapon;
+    private bool pendingAttackAftermath;
+
     private void Awake()
     {
         GameLog.Write(
@@ -110,6 +113,8 @@ public class PlayerAnimator : MonoBehaviour
 
     public void StartAttackAnimation(string actionId)
     {
+        currentAttackWeapon = actionId;
+
         GameLog.Write(
             "PlayerAnimator",
             $"StartAttackAnimation actionId={actionId} animator={(animator != null ? animator.name : "NULL")}");
@@ -139,22 +144,37 @@ public class PlayerAnimator : MonoBehaviour
     }
 
     public void CancelAttackAnimation(
-        string actionId)
+        string actionId = "")
     {
         GameLog.Write(
             "PlayerAnimator",
             $"CancelAttackAnimation actionId={actionId} animator={(animator != null ? animator.name : "NULL")} ActionId reset to 0");
 
+        if (!string.IsNullOrEmpty(actionId))
+            currentAttackWeapon = actionId;
+
+        pendingAttackAftermath = false;
+
         animator.SetInteger(
             "ActionId",
             0);
+
+        if (!string.IsNullOrEmpty(currentAttackWeapon))
+        {
+            StartCoroutine(AttackAftermathDelayRoutine(currentAttackWeapon));
+        }
     }
 
-    public void TriggerAttack()
+    public void TriggerAttack(string weaponKey = "")
     {
         GameLog.Write(
             "PlayerAnimator",
             $"TriggerAttack animator={(animator != null ? animator.name : "NULL")} Attack trigger set, ActionId reset to 0");
+
+        if (!string.IsNullOrEmpty(weaponKey))
+            currentAttackWeapon = weaponKey;
+
+        pendingAttackAftermath = true;
 
         animator.SetTrigger(
             "Attack");
@@ -162,6 +182,28 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetInteger(
             "ActionId",
             0);
+    }
+
+    public void DiscardAnimationStarted()
+    {
+        if (pendingAttackAftermath)
+        {
+            pendingAttackAftermath = false;
+            StartCoroutine(AttackAftermathDelayRoutine(currentAttackWeapon));
+        }
+    }
+
+    private System.Collections.IEnumerator AttackAftermathDelayRoutine(string weaponKey)
+    {
+        // 300 ms delay after the discard animation starts
+        yield return new WaitForSeconds(0.3f);
+
+        if (GameAudioManager.Instance != null)
+        {
+            Player p = GetComponentInParent<Player>();
+            Mirror.NetworkIdentity netId = p != null ? p.netIdentity : GetComponent<Mirror.NetworkIdentity>();
+            GameAudioManager.Instance.PlayWeaponAftermath(weaponKey, netId);
+        }
     }
 
     public void EnableCardLift()

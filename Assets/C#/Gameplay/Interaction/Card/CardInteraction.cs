@@ -64,6 +64,7 @@ public class CardInteraction : MonoBehaviour
             $"OnLookEnter card={card.netId}: hover on");
 
         visual?.SetHover(true);
+        GameAudioManager.Instance?.PlayHover();
     }
 
     public void OnLookExit()
@@ -156,10 +157,10 @@ public class CardInteraction : MonoBehaviour
 
         ResetState();
 
+        GameAudioManager.Instance?.PlayAccept();
         GameLog.Write(
             "CardInteraction",
             $"Interact card={card.netId}: sending CmdStartSequence");
-
         AttackSequence.Instance.CmdStartSequence(
             card.netIdentity);
 

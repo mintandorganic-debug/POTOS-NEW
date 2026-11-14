@@ -51,6 +51,20 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     public Player SelectedTarget =>
         selection?.Target;
 
+    public Card SelectedAttack =>
+        selection != null ? selection.Attack : null;
+
+    public bool IsMatchRunning =>
+        gameStarted;
+
+    public bool HoldStart
+    {
+        get => startup != null && startup.HoldStart;
+        set { if (startup != null) startup.HoldStart = value; }
+    }
+
+    public int TurnNumber { get; private set; }
+
     private readonly List<Player> _players = new();
 
     public IReadOnlyList<Player> Players =>
@@ -66,6 +80,11 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
     private MatchStartup startup;
     private MatchSetup setup;
+
+    private Coroutine idleAudioRoutine;
+    [SerializeField] private float turnPressureThreshold = 20f;
+    private float turnStartTime;
+    private bool lastTurnPressure;
 
     private void Awake()
     {
@@ -135,6 +154,58 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
 
         GamePhaseChanged?.Invoke(
             newPhase);
+
+        float elapsed = Time.time - turnStartTime;
+        bool shouldPressure = elapsed >= turnPressureThreshold;
+        GameAudioManager.Instance?.SetGameStateAudio(newPhase, IsLocalPlayerTargeted(), shouldPressure);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        GameAudioManager.Instance?.StopAllMusic();
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        GameAudioManager.Instance?.StopAllMusic();
+    }
+
+    private void Update()
+    {
+        UpdateTurnAudio();
+    }
+
+    private void UpdateTurnAudio()
+    {
+        if (!gameStarted || GameAudioManager.Instance == null)
+            return;
+
+        if (currentPhase == GamePhase.Wait)
+            return;
+
+        float elapsed = Time.time - turnStartTime;
+        bool shouldPressure = elapsed >= turnPressureThreshold;
+
+        if (shouldPressure != lastTurnPressure)
+        {
+            lastTurnPressure = shouldPressure;
+            GameAudioManager.Instance.SetGameStateAudio(currentPhase, IsLocalPlayerTargeted(), shouldPressure);
+        }
+    }
+
+    private bool IsLocalPlayerTargeted()
+    {
+        Player target = SelectedTarget;
+        if (target == null)
+            return false;
+
+        Player local = Player.LocalPlayer;
+        if (local == null)
+            return false;
+
+        return target == local;
     }
 
     private void OnCurrentPlayerChanged(
@@ -198,8 +269,19 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
                 });
 
         turns.TurnBegan +=
-            player => stages.Begin(
-                player);
+            player =>
+            {
+                stages.Begin(
+                    player);
+
+                turnStartTime = Time.time;
+                lastTurnPressure = false;
+                TurnNumber++;
+                GameLog.Turn = TurnNumber;
+
+                if (idleAudioRoutine == null)
+                    idleAudioRoutine = StartCoroutine(IdleAudioRoutine());
+            };
 
         currentPhase = GamePhase.Wait;
 
@@ -342,6 +424,12 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     [Server]
     public void EndTurn()
     {
+        if (idleAudioRoutine != null)
+        {
+            StopCoroutine(idleAudioRoutine);
+            idleAudioRoutine = null;
+        }
+
         if (stages != null &&
             stages.IsActive)
         {
@@ -401,10 +489,156 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
         int index,
         NetworkConnectionToClient sender)
     {
-        return theft.StealAccesory(
-            target,
-            index,
-            sender);
+        if (sender == null || sender.identity == null)
+            return false;
+
+        Player requester = sender.identity.GetComponent<Player>();
+        return TryStealAccesory(target, index, requester);
+    }
+
+    [Server]
+    public bool TryStealAccesory(
+        Player target,
+        int index,
+        Player requester)
+    {
+        if (!gameStarted)
+            return false;
+
+        if (currentPhase != GamePhase.Steal)
+            return false;
+
+        if (requester == null || target == null || target != SelectedTarget)
+            return false;
+
+        if (currentPlayerIn < 0 || currentPlayerIn >= _players.Count)
+            return false;
+
+        Player thief = _players[currentPlayerIn];
+        if (thief == null || thief != requester || thief == target)
+            return false;
+
+        if (!target.HasAccessory(index))
+            return false;
+
+        if (!target.SetAccesory(index, false))
+            return false;
+
+        if (!thief.SetAccesory(index, true))
+        {
+            target.SetAccesory(index, true);
+            return false;
+        }
+
+        TryTriggerGoodReaction(thief, 0.5f);
+        TryTriggerBadReaction(target, 0.65f);
+
+        EndTurn();
+        return true;
+    }
+
+    [ClientRpc]
+    private void RpcPlayPlayerReaction(
+        NetworkIdentity playerNetIdentity,
+        int reactionType,
+        float delay)
+    {
+        GameAudioManager.Instance?.PlayPlayerReactionClip(
+            playerNetIdentity,
+            (GameAudioManager.ReactionClipType)reactionType,
+            delay);
+    }
+
+    private IEnumerator IdleAudioRoutine()
+    {
+        GameAudioManager.ReactionClipType[] idleClips = new[]
+        {
+            GameAudioManager.ReactionClipType.Burp,
+            GameAudioManager.ReactionClipType.Caugh,
+            GameAudioManager.ReactionClipType.CreakingChair,
+            GameAudioManager.ReactionClipType.Exhale
+        };
+
+        while (gameStarted)
+        {
+            yield return new WaitForSeconds(Random.Range(20f, 40f));
+
+            if (!gameStarted || _players.Count == 0)
+                break;
+
+            Player speaker = _players[Random.Range(0, _players.Count)];
+            if (speaker != null && speaker.netIdentity != null)
+            {
+                GameAudioManager.ReactionClipType chosenClip = idleClips[Random.Range(0, idleClips.Length)];
+                RpcPlayPlayerReaction(speaker.netIdentity, (int)chosenClip, 0f);
+            }
+        }
+
+        idleAudioRoutine = null;
+    }
+
+    public void TryTriggerGoodReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null) return;
+        GameAudioManager.ReactionClipType[] goodClips = new[]
+        {
+            GameAudioManager.ReactionClipType.Joyful,
+            GameAudioManager.ReactionClipType.Whistle,
+            GameAudioManager.ReactionClipType.Wonderment
+        };
+        GameAudioManager.ReactionClipType chosen = goodClips[Random.Range(0, goodClips.Length)];
+        RpcPlayPlayerReaction(player.netIdentity, (int)chosen, delay);
+    }
+
+    public void TryTriggerBadReaction(Player player, float delay = 0.5f)
+    {
+        if (player == null || player.netIdentity == null) return;
+        RpcPlayPlayerReaction(player.netIdentity, (int)GameAudioManager.ReactionClipType.Disappointment, delay);
+    }
+
+    public void TryTriggerOtherPlayerScoff(Player failedPlayer, float delay = 0.5f)
+    {
+        if (_players.Count <= 1) return;
+        List<Player> otherPlayers = _players.Where(p => p != null && p != failedPlayer && p.netIdentity != null).ToList();
+        if (otherPlayers.Count == 0) return;
+        Player scoffer = otherPlayers[Random.Range(0, otherPlayers.Count)];
+        RpcPlayPlayerReaction(scoffer.netIdentity, (int)GameAudioManager.ReactionClipType.Scoff, delay);
+    }
+
+    public void TryTriggerDisappointmentSound(Player player, float delay = 0.5f)
+    {
+        TryTriggerBadReaction(player, delay);
+    }
+
+    // =========================================================
+    // TEST HARNESS / BOT METHODS
+    // =========================================================
+
+    [Server]
+    public bool StartTestGame(List<Player> players)
+    {
+        if (gameStarted) return false;
+        StartGame(players);
+        return gameStarted;
+    }
+
+    [Server]
+    public void DebugForcePhase(GamePhase phase)
+    {
+        SetGamePhase(phase);
+    }
+
+    [Server]
+    public void ResetMatch()
+    {
+        gameStarted = false;
+        currentPlayerIn = -1;
+        currentPhase = GamePhase.Wait;
+        if (idleAudioRoutine != null)
+        {
+            StopCoroutine(idleAudioRoutine);
+            idleAudioRoutine = null;
+        }
     }
 
     bool IAttackSelectionContext.GameStarted =>

@@ -16,10 +16,17 @@ public class Cancelation : StateMachineBehaviour
 
         PlayerAnimator playerAnimator =
             animator.GetComponentInParent<PlayerAnimator>();
-        playerAnimator.AttackStartedOrCanceled(itemIndex);
+        if (playerAnimator != null)
+        {
+            playerAnimator.AttackStartedOrCanceled(itemIndex);
+            playerAnimator.DiscardAnimationStarted();
+        }
 
         NetworkSound soundController =
           animator.GetComponentInParent<NetworkSound>();
-        soundController.Play(soundIndex);
+        if (soundController != null && soundIndex >= 0)
+        {
+            soundController.Play(soundIndex);
+        }
     }
 }

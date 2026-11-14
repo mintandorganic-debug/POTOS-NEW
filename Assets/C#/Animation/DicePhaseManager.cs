@@ -22,6 +22,7 @@ public class DicePhaseManager : MonoBehaviour
     private DiceChargeBar chargeBar;
     private PlateSpawner plate;
     private DiceRollRig dice;
+    private CardHandVisibility cards;
     private DiceAimLine aimLine;
     private HandsRollAnimation hands;
     private bool busy;
@@ -57,6 +58,9 @@ public class DicePhaseManager : MonoBehaviour
 
         dice =
             new DiceRollRig();
+
+        cards =
+            new CardHandVisibility();
 
         aimLine =
             new DiceAimLine();
@@ -96,6 +100,7 @@ public class DicePhaseManager : MonoBehaviour
         chargeBar.Hide();
         resultDisplay.Hide();
         dice.Dispose();
+        cards.Show();
 
         ResetAll();
 
@@ -124,6 +129,8 @@ public class DicePhaseManager : MonoBehaviour
             "3 step 1: pedestal and plate up");
 
         DiceCollisionLayers.Apply();
+
+        cards.Hide();
 
         lift.Raise();
 
@@ -274,9 +281,9 @@ public class DicePhaseManager : MonoBehaviour
         yield return new WaitForSeconds(
             ResetDelay);
 
-        ResetAll();
-
-        busy = false;
+        // The lift, the plate, the dice and the result stay until 3 is pressed again.
+        hands.SetWeight(
+            0f);
     }
 
     private IEnumerator ShowResultWhenStopped()

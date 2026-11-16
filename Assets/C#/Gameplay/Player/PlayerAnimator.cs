@@ -143,6 +143,32 @@ public class PlayerAnimator : MonoBehaviour
             $"StartAttackAnimation applied actionId={actionId} animatorId={animatorId} Attack=false");
     }
 
+    public void StartReactionAnimation(string actionId)
+    {
+        GameLog.Write(
+            "PlayerAnimator",
+            $"StartReactionAnimation actionId={actionId} animator={(animator != null ? animator.name : "NULL")}");
+
+        if (!GetAnimatorId(
+                actionId,
+                out int animatorId))
+        {
+            GameLog.Write(
+                "PlayerAnimator",
+                $"StartReactionAnimation aborted: animator id not found actionId={actionId}");
+
+            return;
+        }
+
+        animator.SetInteger(
+            "ReactionId",
+            animatorId);
+
+        GameLog.Write(
+            "PlayerAnimator",
+            $"StartReactionAnimation applied actionId={actionId} animatorId={animatorId}");
+    }
+
     public void CancelAttackAnimation(
         string actionId = "")
     {

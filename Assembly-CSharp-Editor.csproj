@@ -67,6 +67,10 @@
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\ScriptTemplates\Editor\MoveToAssetsFolder.cs" />
+    <Compile Include="Assets\Editor\DiceUiPrefabExtractor.cs" />
+    <Compile Include="Assets\Editor\DiceLiftSetup.cs" />
+    <Compile Include="Assets\C#\Testing\Editor\TestSceneBuilder.cs" />
+    <Compile Include="Assets\Editor\DiceAnimatorSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

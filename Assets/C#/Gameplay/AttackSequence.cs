@@ -15,6 +15,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [SerializeField] private int stealCoinsAmount = 5;
     [SerializeField] private float stealCoinsRainDuration = 5f;
 
+    [SerializeField] public Animator Lamp;
+
     private readonly AttackState state = new();
 
     private Coroutine attackRoutine;

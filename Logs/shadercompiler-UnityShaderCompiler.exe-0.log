@@ -1,3 +1,17 @@
 Base path: 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Data', plugins path 'C:/Program Files/Unity/Hub/Editor/6000.5.2f1/Editor/Data/PlaybackEngines', jobs: y
 Cmd: initializeCompiler
 
+Cmd: compileComputeKernel
+  insize=16656 file=Assets/Shaders/Shower.vfx kernel=CSMain ppOnly=0 stripLineD=0 buildPlatform=2 km=<UNITY_VERSION=60050002> pKW=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING UNITY_ENABLE_DETAIL_NORMALMAP SHADER_API_DESKTOP UNITY_LIGHT_PROBE_PROXY_VOLUME UNITY_LIGHTMAP_FULL_HDR UNITY_PLATFORM_SUPPORTS_DEPTH_FETCH uKW=SHADER_STAGE_COMPUTE platform=d3d11 flags=32 reqs=50241 forceDXC=0 forceFXC=0
+RunExternalCompiler: begin name=FXC
+RunExternalCompiler: end
+compilerComputeKernel complete
+ ok=1 outsize=6978
+
+Cmd: compileComputeKernel
+  insize=20408 file=Assets/Shaders/Shower.vfx kernel=CSMain ppOnly=0 stripLineD=0 buildPlatform=2 km=<UNITY_VERSION=60050002> pKW=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING UNITY_ENABLE_DETAIL_NORMALMAP SHADER_API_DESKTOP UNITY_LIGHT_PROBE_PROXY_VOLUME UNITY_LIGHTMAP_FULL_HDR UNITY_PLATFORM_SUPPORTS_DEPTH_FETCH uKW=SHADER_STAGE_COMPUTE platform=d3d11 flags=32 reqs=50241 forceDXC=0 forceFXC=0
+RunExternalCompiler: begin name=FXC
+RunExternalCompiler: end
+compilerComputeKernel complete
+ ok=1 outsize=5179
+

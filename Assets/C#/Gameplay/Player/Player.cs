@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.VFX;
 using UnityEngine.Rendering.HighDefinition;
 
@@ -34,6 +35,9 @@ public class Player : NetworkBehaviour
     [Header("Passes")]
     [SerializeField] public CustomPassVolume DamagePass;
     [SerializeField] float damageDuration;
+    [SerializeField] private SpriteRenderer whiskeyOverlayGraphic;
+
+    private Material whiskeyOverlayInstance;
 
     [SyncVar]
     private int seatIndex = -1;
@@ -104,6 +108,19 @@ public class Player : NetworkBehaviour
         GameLog.Write(
             "Player",
             $"Awake done damagePass and dealerToken set inactive object={gameObject.name}");
+    }
+
+    private void OnDestroy()
+    {
+        if (whiskeyOverlayInstance != null)
+        {
+            Destroy(whiskeyOverlayInstance);
+            whiskeyOverlayInstance = null;
+
+            GameLog.Write(
+                "Player",
+                $"OnDestroy whiskeyOverlayInstance destroyed player={netId}");
+        }
     }
 
     public override void OnStartServer()
@@ -204,6 +221,25 @@ public class Player : NetworkBehaviour
             $"OnStartLocalPlayer local setup applied player={netId} camera on, enemyCanvas off, ownCollider off");
 
         dealerTokenText.text = "NEXT";
+
+        if (whiskeyOverlayGraphic != null)
+        {
+            whiskeyOverlayInstance =
+                new Material(whiskeyOverlayGraphic.sharedMaterial);
+
+            whiskeyOverlayGraphic.sharedMaterial =
+                whiskeyOverlayInstance;
+
+            GameLog.Write(
+                "Player",
+                $"OnStartLocalPlayer whiskeyOverlayInstance created player={netId}");
+        }
+        else
+        {
+            GameLog.Write(
+                "Player",
+                $"OnStartLocalPlayer whiskeyOverlayGraphic is NULL, instance not created player={netId}");
+        }
 
         GameLog.Write(
             "Player",
@@ -586,7 +622,6 @@ public class Player : NetworkBehaviour
         }
         else
         {
-
             if (index >= accesoryVfxes.Count)
             {
                 GameLog.Write(
@@ -614,7 +649,11 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void StartDamagePass()
+    // =========================================================
+    // PASSES
+    // =========================================================
+
+    public void StartDamagePass(int shaderIn)
     {
         GameLog.Write(
             "Player",
@@ -632,8 +671,14 @@ public class Player : NetworkBehaviour
         if (damagePassCoroutine != null)
             StopCoroutine(damagePassCoroutine);
 
-        damagePassCoroutine =
-            StartCoroutine(DamagePassRoutine());
+        if (shaderIn == 0)
+        {
+            damagePassCoroutine = StartCoroutine(DamagePassRoutine());
+        }
+        else if (shaderIn == 1)
+        {
+            StartWiskeyPass();
+        }
     }
 
     private IEnumerator DamagePassRoutine()
@@ -653,6 +698,51 @@ public class Player : NetworkBehaviour
         GameLog.Write(
             "Player",
             $"DamagePassRoutine end player={netId}");
+    }
+
+    [Server]
+    public void StartWiskeyPass()
+    {
+        GameLog.Write(
+            "Player",
+            $"StartWiskeyPass server player={netId} connectionToClient={(connectionToClient != null ? connectionToClient.connectionId.ToString() : "NULL")}");
+
+        if (connectionToClient == null)
+        {
+            GameLog.Write(
+                "Player",
+                $"StartWiskeyPass skipped: connectionToClient is NULL player={netId}");
+
+            return;
+        }
+
+        TargetStartWiskeyPass(connectionToClient);
+    }
+
+    [TargetRpc]
+    private void TargetStartWiskeyPass(
+        NetworkConnectionToClient conn)
+    {
+        GameLog.Write(
+            "Player",
+            $"TargetStartWiskeyPass client player={netId} instance={(whiskeyOverlayInstance != null ? "OK" : "NULL")}");
+
+        if (whiskeyOverlayInstance == null)
+        {
+            GameLog.Write(
+                "Player",
+                $"TargetStartWiskeyPass skipped: whiskeyOverlayInstance is NULL player={netId}");
+
+            return;
+        }
+
+        whiskeyOverlayInstance.SetFloat(
+            "_FadeStart",
+            Time.time);
+
+        GameLog.Write(
+            "Player",
+            $"TargetStartWiskeyPass applied player={netId} _FadeStart={Time.time}");
     }
 
     // =========================================================

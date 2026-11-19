@@ -88,6 +88,7 @@
     <Compile Include="Assets\C#\Gameplay\Stages\TurnStage.cs" />
     <Compile Include="Assets\C#\Gameplay\Interaction\Card\CardInteraction.cs" />
     <Compile Include="Assets\Kwork\UI Cards\VFX\Bloom Effect\ParticleAttractor.cs" />
+    <Compile Include="Assets\C#\UI\WiskeyOverlayController.cs" />
     <Compile Include="Assets\C#\Gameplay\DiceRoll\IDiceCharge.cs" />
     <Compile Include="Assets\C#\Gameplay\AttackSelection.cs" />
     <Compile Include="Assets\C#\UI\SteamLobbySession.cs" />

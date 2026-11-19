@@ -1088,9 +1088,6 @@ public class TestSceneController : MonoBehaviour
             }
         }
 
-        if (GUILayout.Button("damage pass (red flash)"))
-            actor.StartDamagePass();
-
         // ---------------- accessories
         GUILayout.BeginHorizontal();
         GUILayout.Label("accessories:", GUILayout.Width(90));

@@ -81,6 +81,15 @@ public class ReactionInvoker : StateMachineBehaviour
 
         GameLog.Write("ReactionInvoker", $"Triggering victim reaction: victim={victim.netId} frame={targetFrame} id={id}");
 
+        switch (id)
+        {
+            case "WISKEY":
+                victim.StartDamagePass(1);
+                break;
+            default:
+                victim.StartDamagePass(0);
+                break;
+        }
         victim.animator.StartReactionAnimation(id);
 
         

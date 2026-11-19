@@ -459,8 +459,6 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
         GameLog.Write(
             "AttackSequence",
             $"TargetStartDamagePass starting damage pass victim={victim.netId}");
-
-        victim.StartDamagePass();
     }
 
     // =========================================================

@@ -197,7 +197,7 @@ Material:
     - _EnergyConservingSpecularColor: 1
     - _ExcludeFromTUAndAA: 0
     - _FadeDuration: 4
-    - _FadeStart: 0
+    - _FadeStart: -1
     - _FlowDistortion: 0.9
     - _FlowNoiseScale: 46.1
     - _FlowOffset: 0

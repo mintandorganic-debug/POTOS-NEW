@@ -52,8 +52,19 @@ namespace CardCarouselUI
                         "TemplateHandCardFactory",
                         $"Card clicked in carousel id={info.Id} category={info.Category}");
 
-                    afterActivation();
-                    info.Activated?.Invoke();
+                    bool played = info.Activated != null && info.Activated();
+
+                    if (!played)
+                    {
+                        global::GameLog.Write(
+                            "TemplateHandCardFactory",
+                            $"Card play rejected id={info.Id}, card stays in carousel");
+
+                        hover.Shake();
+                        return;
+                    }
+
+                    carousel.FlyOut(card, afterActivation);
                 };
 
                 global::GameLog.Write(

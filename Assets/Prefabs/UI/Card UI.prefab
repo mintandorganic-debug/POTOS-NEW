@@ -95,7 +95,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -3.36, y: 2}
+  m_AnchoredPosition: {x: -3.3599854, y: 2}
   m_SizeDelta: {x: 2065.478, y: 1003.9322}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7355475686801635052
@@ -234,6 +234,11 @@ MonoBehaviour:
   sideScale: 1.575
   centerColor: {r: 1, g: 1, b: 1, a: 1}
   sideColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  hoverScrollDelay: 0.5
+  scrollWheelEnabled: 1
+  flyOutDuration: 0.3
+  flyOutDistance: 600
+  flyOutScaleGain: 0.15
   debugLogs: 1
 --- !u!114 &6622999448589129796
 MonoBehaviour:
@@ -251,6 +256,7 @@ MonoBehaviour:
   craftController: {fileID: 8813948333632891302}
   comboIconParent: {fileID: 6291608682381581541}
   comboIconPrefab: {fileID: 5564090457228176447, guid: 89030deb0be237c4fab3cca115712fb7, type: 3}
+  showComboIcons: 0
   combinations:
   - firstCardID: ATK
     secondCardID: ATK
@@ -261,6 +267,8 @@ MonoBehaviour:
     resultCardPrefab: {fileID: 8322325650327940216, guid: 138087b1c3f78c14c91da93632df33b2, type: 3}
     craftVFXPrefab: {fileID: 3702621902215750549, guid: dc885b256a6bcaf4aaf1c2c22e6203f2, type: 3}
   comboIconOffset: {x: 0, y: 0}
+  comboIconScale: 0.74
+  comboIconSpread: 1.4
   missingColor: {r: 1, g: 1, b: 1, a: 1}
   missingAlpha: 0.25
 --- !u!225 &4792998705365741626
@@ -371,6 +379,10 @@ PrefabInstance:
       propertyPath: shakeDuration
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3128590100007893852, guid: 5924104b7946e53489c61f91109486c0, type: 3}
+      propertyPath: transitionDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7751995739508661976, guid: 5924104b7946e53489c61f91109486c0, type: 3}
       propertyPath: m_Name
       value: PSN_DISABLE_CARD Variant
@@ -477,6 +489,10 @@ PrefabInstance:
       propertyPath: carousel
       value: 
       objectReference: {fileID: 3557696729932024254}
+    - target: {fileID: 3128590100007893852, guid: a34c728889050564a8d904584bab5a4e, type: 3}
+      propertyPath: transitionDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7751995739508661976, guid: a34c728889050564a8d904584bab5a4e, type: 3}
       propertyPath: m_Name
       value: SIN_CHOSEN_CARD Variant
@@ -590,6 +606,10 @@ PrefabInstance:
     - target: {fileID: 3128590100007893852, guid: 8e6a1a66308daf147868d78fb3894644, type: 3}
       propertyPath: shakeDuration
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3128590100007893852, guid: 8e6a1a66308daf147868d78fb3894644, type: 3}
+      propertyPath: transitionDuration
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7751995739508661976, guid: 8e6a1a66308daf147868d78fb3894644, type: 3}
       propertyPath: m_Name
@@ -705,6 +725,10 @@ PrefabInstance:
       propertyPath: shakeDuration
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3128590100007893852, guid: c561df9353c5d3449b792f2263c4ebb8, type: 3}
+      propertyPath: transitionDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7751995739508661976, guid: c561df9353c5d3449b792f2263c4ebb8, type: 3}
       propertyPath: m_Name
       value: ATK_Ashtray and Cigarette Variant
@@ -814,6 +838,10 @@ PrefabInstance:
     - target: {fileID: 3128590100007893852, guid: 41ddae2059a9f2a46adab59f1da918de, type: 3}
       propertyPath: shakeDuration
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3128590100007893852, guid: 41ddae2059a9f2a46adab59f1da918de, type: 3}
+      propertyPath: transitionDuration
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7751995739508661976, guid: 41ddae2059a9f2a46adab59f1da918de, type: 3}
       propertyPath: m_Name

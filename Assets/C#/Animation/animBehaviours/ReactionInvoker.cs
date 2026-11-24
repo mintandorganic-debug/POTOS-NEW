@@ -83,7 +83,7 @@ public class ReactionInvoker : StateMachineBehaviour
 
         switch (id)
         {
-            case "WISKEY":
+            case "WHISKEY":
                 victim.StartDamagePass(1);
                 break;
             default:

@@ -57,7 +57,7 @@ namespace CardCarouselUI
                         "LocalPlayerHandSource",
                         $"Card activated from hand card={(card != null ? card.name : "NULL")} netId={(card != null ? card.netId.ToString() : "NULL")}");
 
-                    card.Interact();
+                    return card != null && card.PlayFromHand();
                 });
         }
 

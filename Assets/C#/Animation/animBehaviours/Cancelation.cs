@@ -3,7 +3,6 @@ using UnityEngine;
 public class Cancelation : StateMachineBehaviour
 {
     [SerializeField] int itemIndex;
-    [SerializeField] int soundIndex = -1;
 
     public override void OnStateEnter(
         Animator animator,
@@ -22,11 +21,5 @@ public class Cancelation : StateMachineBehaviour
             playerAnimator.DiscardAnimationStarted();
         }
 
-        NetworkSound soundController =
-          animator.GetComponentInParent<NetworkSound>();
-        if (soundController != null && soundIndex >= 0)
-        {
-            soundController.Play(soundIndex);
-        }
     }
 }

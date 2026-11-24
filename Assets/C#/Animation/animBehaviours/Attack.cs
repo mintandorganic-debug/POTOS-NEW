@@ -18,8 +18,5 @@ public class Attack : StateMachineBehaviour
             animator.GetComponentInParent<PlayerAnimator>();
         playerAnimator.AttackStartedOrCanceled(itemIndex);
 
-        NetworkSound soundController =
-            animator.GetComponentInParent<NetworkSound>();
-        soundController.Play(soundIndex);
     }
 }

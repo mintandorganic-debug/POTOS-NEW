@@ -17,6 +17,7 @@ namespace CardCarouselUI
         private bool isSuppressed;
         private bool pointerEntered;
         private float pointerLostTime;
+        private Func<bool> isOpenProbe;
 
         public float MaxDistance => maxDistance;
 
@@ -34,12 +35,30 @@ namespace CardCarouselUI
             pointerArea = area;
         }
 
+        public void SetOpenStateProbe(Func<bool> probe)
+        {
+            isOpenProbe = probe;
+        }
+
         private void Update()
         {
             bool isAiming = IsAimingAtZone();
 
             if (!isAiming)
                 isSuppressed = false;
+
+            if (isShown && isOpenProbe != null && !isOpenProbe())
+            {
+                // The popup was closed without Hide() (a card was played from the
+                // carousel) or never opened. Previously isShown stayed true and the
+                // carousel stopped appearing when the gaze returned to the fan.
+                global::GameLog.Write(
+                    "CardGazeHandInput",
+                    "Update popup closed elsewhere, resetting shown state");
+
+                isShown = false;
+                isSuppressed = true;
+            }
 
             if (isShown)
             {

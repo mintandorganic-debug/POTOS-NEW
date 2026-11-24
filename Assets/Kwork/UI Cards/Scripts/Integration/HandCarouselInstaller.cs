@@ -59,6 +59,7 @@ namespace CardCarouselUI
 
             CardGazeHandInput gaze = canvas.gameObject.AddComponent<CardGazeHandInput>();
             gaze.SetPointerArea((RectTransform)carouselInstance.transform);
+            gaze.SetOpenStateProbe(() => popup.IsVisible);
             input = gaze;
 
             controller = new HandCarouselController(

@@ -34,6 +34,19 @@ namespace CardCarouselUI
         [SerializeField] private Color centerColor = Color.white;
         [SerializeField] private Color sideColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
+        [Header("Mouse")]
+        [Tooltip("How long the pointer must rest on a side card before the carousel scrolls to it.")]
+        [SerializeField] private float hoverScrollDelay = 0.15f;
+        [SerializeField] private bool scrollWheelEnabled = true;
+
+        [Header("Fly Out")]
+        [SerializeField] private float flyOutDuration = 0.3f;
+        [SerializeField] private float flyOutDistance = 600f;
+        [SerializeField] private float flyOutScaleGain = 0.15f;
+
+        private bool isFlyingOut;
+        private int hoverScrollIndex = -1;
+        private float hoverScrollTimer;
         [Header("Debug")]
         [SerializeField] private bool debugLogs = true;
     
@@ -100,6 +113,8 @@ namespace CardCarouselUI
         {
             StopAllCoroutines();
             isMoving = false;
+            isFlyingOut = false;
+            ResetHoverScroll();
 
             foreach (RectTransform oldCard in cards)
             {
@@ -151,17 +166,107 @@ namespace CardCarouselUI
 
         private void Update()
         {
-            if (isMoving || cards.Count < 2)
+            if (isMoving || isFlyingOut || cards.Count < 2)
                 return;
 
             if (WasPressed(leftKeyCode))
+            {
                 Step(-1);
+                return;
+            }
 
             if (WasPressed(rightKeyCode))
+            {
                 Step(1);
+                return;
+            }
 
             if (selection != Selection.Card && WasPressed(Key.Enter))
                 ActivateSelectedIcon();
+
+            if (TryScrollWithWheel())
+                return;
+
+            UpdateHoverScroll();
+        }
+
+        private bool TryScrollWithWheel()
+        {
+            if (!scrollWheelEnabled || Mouse.current == null)
+                return false;
+
+            float scroll = Mouse.current.scroll.ReadValue().y;
+
+            if (Mathf.Approximately(scroll, 0f))
+                return false;
+
+            // Wheel up = previous (left) card, wheel down = next (right) card.
+            ScrollTo(scroll > 0f ? -1 : 1);
+            return true;
+        }
+
+        private void UpdateHoverScroll()
+        {
+            int hoveredIndex = GetHoveredSideIndex();
+
+            if (hoveredIndex < 0)
+            {
+                ResetHoverScroll();
+                return;
+            }
+
+            if (hoveredIndex != hoverScrollIndex)
+            {
+                hoverScrollIndex = hoveredIndex;
+                hoverScrollTimer = 0f;
+                return;
+            }
+
+            hoverScrollTimer += Time.unscaledDeltaTime;
+
+            if (hoverScrollTimer < hoverScrollDelay)
+                return;
+
+            ScrollTo(hoveredIndex == GetNextIndex(currentIndex) ? 1 : -1);
+        }
+
+        private int GetHoveredSideIndex()
+        {
+            int rightIndex = GetNextIndex(currentIndex);
+            int leftIndex = GetPreviousIndex(currentIndex);
+
+            if (IsPointerOver(rightIndex))
+                return rightIndex;
+
+            if (IsPointerOver(leftIndex))
+                return leftIndex;
+
+            return -1;
+        }
+
+        private bool IsPointerOver(int index)
+        {
+            return index != currentIndex &&
+                   index >= 0 &&
+                   index < cardHovers.Count &&
+                   cardHovers[index].IsPointerInside;
+        }
+
+        private void ScrollTo(int direction)
+        {
+            ResetHoverScroll();
+            SetSelection(Selection.Card);
+
+            if (direction > 0)
+                MoveRight();
+            else
+                MoveLeft();
+        }
+
+        private void ResetHoverScroll()
+        {
+            hoverScrollIndex = -1;
+            hoverScrollTimer = 0f;
         }
 
         private void Step(int direction)
@@ -510,10 +615,111 @@ namespace CardCarouselUI
 
         private void UpdateCardInteraction()
         {
+            // Only the center card reacts to hover/click. Side cards are used
+            // for hover-scrolling, so they must not show hover visuals.
             for (int i = 0; i < cardHovers.Count; i++)
             {
-                cardHovers[i].SetInteractable(true);
+                cardHovers[i].SetInteractable(i == currentIndex);
             }
+        }
+
+        public void FlyOut(RectTransform card, System.Action onComplete)
+        {
+            if (cards.IndexOf(card) < 0 || isFlyingOut)
+            {
+                onComplete?.Invoke();
+                return;
+            }
+
+            if (isMoving)
+            {
+                StopAllCoroutines();
+                isMoving = false;
+                RefreshCardsInstant();
+            }
+
+            StartCoroutine(AnimateFlyOut(card, onComplete));
+        }
+
+        private IEnumerator AnimateFlyOut(RectTransform card, System.Action onComplete)
+        {
+            isFlyingOut = true;
+            ResetHoverScroll();
+
+            int index = cards.IndexOf(card);
+
+            if (index >= 0 && index < cardHovers.Count)
+                cardHovers[index].SetInteractable(false);
+
+            card.SetAsLastSibling();
+
+            if (!card.TryGetComponent(out CanvasGroup group))
+                group = card.gameObject.AddComponent<CanvasGroup>();
+
+            group.blocksRaycasts = false;
+
+            Vector2 startPosition = card.anchoredPosition;
+            Vector2 targetPosition = startPosition + Vector2.up * flyOutDistance;
+            Vector3 startScale = card.localScale;
+
+            float time = 0f;
+
+            while (time < flyOutDuration)
+            {
+                time += Time.unscaledDeltaTime;
+
+                float t = Mathf.Clamp01(time / flyOutDuration);
+                float eased = t * t;
+
+                card.anchoredPosition = Vector2.LerpUnclamped(startPosition, targetPosition, eased);
+                card.localScale = startScale * (1f + flyOutScaleGain * t);
+                group.alpha = 1f - t;
+
+                yield return null;
+            }
+
+            RemoveCard(card);
+
+            isFlyingOut = false;
+
+            onComplete?.Invoke();
+        }
+
+        private void RemoveCard(RectTransform card)
+        {
+            int index = cards.IndexOf(card);
+
+            if (index < 0)
+                return;
+
+            cards.RemoveAt(index);
+
+            // Keep the cached base scales: the remaining cards already carry
+            // carousel scaling, so re-reading localScale would compound it.
+            if (index < baseScales.Count) baseScales.RemoveAt(index);
+            if (index < hoverScales.Count) hoverScales.RemoveAt(index);
+            if (index < cardVisuals.Count) cardVisuals.RemoveAt(index);
+            if (index < cardHovers.Count) cardHovers.RemoveAt(index);
+
+            Destroy(card.gameObject);
+
+            selection = Selection.Card;
+
+            if (comboController != null)
+                comboController.Invalidate();
+
+            if (cards.Count == 0)
+            {
+                currentIndex = 0;
+                return;
+            }
+
+            if (index < currentIndex)
+                currentIndex--;
+
+            currentIndex = Mathf.Clamp(currentIndex, 0, cards.Count - 1);
+
+            RefreshCardsInstant();
         }
 
 

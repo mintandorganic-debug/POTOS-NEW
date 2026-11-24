@@ -282,7 +282,8 @@ MonoBehaviour:
   hoverScale: 1.05
   imageHoverScale: 0.3
   imageYOffset: 50
-  transitionDuration: 0.2
+  transitionDuration: 0.5
+  descriptionShowDelay: 0.2
   shakeSpeed: 30
   shakeDuration: 0.25
   shakeStrength: 5

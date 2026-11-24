@@ -1024,6 +1024,26 @@ public class Card : InteractableObject
         interaction?.Interact();
     }
 
+    // Hand carousel entry point: plays the card at once instead of zooming it first.
+    public bool PlayFromHand()
+    {
+        GameLog.Write(
+            "Card",
+            $"PlayFromHand netId={netId} data={(cardData != null ? cardData.name : "NULL")}");
+
+        if (!CanInteract())
+        {
+            GameLog.Write(
+                "Card",
+                $"PlayFromHand ignored netId={netId}: cannot interact");
+
+            return false;
+        }
+
+        return interaction != null &&
+               interaction.PlayImmediately();
+    }
+
     private bool CanInteract()
     {
         if (!IsOwnedByLocalPlayer() ||

@@ -58,7 +58,7 @@ namespace CardCarouselUI
 
         private void Update()
         {
-            if (carousel == null || carousel.IsMoving)
+            if (carousel == null || carousel.IsMoving || carousel.Cards.Count == 0)
                 return;
 
             if (lastCenterIndex == carousel.CurrentIndex)

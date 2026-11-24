@@ -17,12 +17,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 1
+  m_ExitTime: 0
   m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_HasFixedDuration: 0
+  m_InterruptionSource: 1
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!114 &-8762339786689689398
@@ -38,7 +38,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 6
-  soundIndex: 17
 --- !u!1102 &-8746765924497176286
 AnimatorState:
   serializedVersion: 6
@@ -275,7 +274,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 1
-  soundIndex: 2
 --- !u!114 &-7691344156767139553
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -973,7 +971,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 1
-  m_HasExitTime: 0
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -1226,7 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReactionInvoker
   targetFrame: 60
-  id: WISKEY
+  id: WHISKEY
 --- !u!1102 &-290217827842733206
 AnimatorState:
   serializedVersion: 6
@@ -1309,7 +1307,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 3
-  soundIndex: 8
 --- !u!1109 &-231882422146431073
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -1552,7 +1549,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: 1
+  m_ExitTime: 0
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1575,7 +1572,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.03
   m_TransitionOffset: 0
   m_ExitTime: 1
   m_HasExitTime: 0
@@ -1596,7 +1593,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 4
-  soundIndex: 11
 --- !u!1102 &1316933531438530377
 AnimatorState:
   serializedVersion: 6
@@ -1875,7 +1871,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 5
-  soundIndex: 14
 --- !u!1102 &3516719935906405878
 AnimatorState:
   serializedVersion: 6
@@ -2143,7 +2138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cancelation
   itemIndex: 2
-  soundIndex: 5
 --- !u!1109 &4876386155733120351
 AnimatorTransition:
   m_ObjectHideFlags: 1

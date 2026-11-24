@@ -3,7 +3,6 @@ using UnityEngine;
 public class Preparation : StateMachineBehaviour
 {
     [SerializeField] int itemIndex;
-    [SerializeField] int soundIndex = -1;
     private bool hasFinished;
 
     public override void OnStateEnter(
@@ -16,10 +15,6 @@ public class Preparation : StateMachineBehaviour
             $"OnStateEnter index={itemIndex} animator={(animator != null ? animator.name : "NULL")} layer={layerIndex}");
 
         hasFinished = false;
-
-        NetworkSound soundController =
-           animator.GetComponentInParent<NetworkSound>();
-        soundController.Play(soundIndex);
     }
 
     public override void OnStateUpdate(

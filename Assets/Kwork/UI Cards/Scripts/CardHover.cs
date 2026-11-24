@@ -26,6 +26,8 @@ namespace CardCarouselUI
         [SerializeField] private float imageHoverScale = 0.9f;
         [SerializeField] private float imageYOffset = 25f;
         [SerializeField] private float transitionDuration = 0.2f;
+        [Tooltip("Seconds the description stays hidden after hover starts, before it fades in over Transition Duration.")]
+        [SerializeField] private float descriptionShowDelay = 0.1f;
 
         [Header("Hover Shake")]
         [SerializeField] private float shakeSpeed = 30f;
@@ -62,6 +64,7 @@ namespace CardCarouselUI
         private Coroutine shakeCoroutine;
 
         private bool isHovered;
+        private bool isPointerInside;
         private bool isInteractable = true;
         private bool isMissingCard;
 
@@ -119,6 +122,30 @@ namespace CardCarouselUI
                 if (frameMaterial.HasProperty(sweepProperty))
                     frameMaterial.SetFloat(sweepProperty, sweepStart);
             }
+
+            ConfigureRaycastTargets();
+        }
+
+        // Hover visuals (raised image, description, status icons, shake) change the
+        // card's shape. When they were raycast targets, a pointer near an edge or in the
+        // gap between cards entered/exited every frame and every hover effect flickered.
+        // Now only one static, invisible hit area on the card root receives pointer events.
+        private void ConfigureRaycastTargets()
+        {
+            foreach (Graphic graphic in GetComponentsInChildren<Graphic>(true))
+            {
+                if (graphic.gameObject != gameObject)
+                    graphic.raycastTarget = false;
+            }
+
+            if (!TryGetComponent(out Graphic hitArea))
+            {
+                Image image = gameObject.AddComponent<Image>();
+                image.color = Color.clear;
+                hitArea = image;
+            }
+
+            hitArea.raycastTarget = true;
         }
 
         private float enabledTime;
@@ -130,6 +157,8 @@ namespace CardCarouselUI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            isPointerInside = true;
+
             if (isMissingCard) StartShake();
         
             if (!isInteractable) return;
@@ -143,6 +172,9 @@ namespace CardCarouselUI
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (!isInteractable)
+                return;
+
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 GameAudioManager.Instance?.PlayAccept();
@@ -152,6 +184,7 @@ namespace CardCarouselUI
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            isPointerInside = false;
             SetHover(false);
         }
 
@@ -162,6 +195,7 @@ namespace CardCarouselUI
         {
             imageRoot = root;
             cardImage = image;
+            image.raycastTarget = false;
             baseSprite = image.sprite;
             imageBaseScale = root.localScale;
             imageBasePosition = root.anchoredPosition;
@@ -184,11 +218,24 @@ namespace CardCarouselUI
                 label.text = text;
         }
 
+        public bool IsPointerInside => isPointerInside;
+
         public void SetInteractable(bool interactable)
         {
             isInteractable = interactable;
 
-            if (!isInteractable && !isHovered) SetHover(false);
+            if (!isInteractable && isHovered)
+            {
+                SetHover(false);
+            }
+            else if (isInteractable &&
+                     isPointerInside &&
+                     !isHovered &&
+                     gameObject.activeInHierarchy)
+            {
+                // A side card scrolled to the center under a resting pointer.
+                SetHover(true);
+            }
         }
 
         public void SetMissingCard(bool missingCard)
@@ -354,7 +401,12 @@ namespace CardCarouselUI
 
             float time = 0f;
 
-            while (time < transitionDuration)
+            // The description stays hidden for descriptionShowDelay, then fades in
+            // over transitionDuration. Hiding has no delay.
+            float descriptionDelay = hover ? Mathf.Max(0f, descriptionShowDelay) : 0f;
+            float totalDuration = transitionDuration + descriptionDelay;
+
+            while (time < totalDuration)
             {
                 bool spriteChanged = false;
                 time += Time.unscaledDeltaTime;
@@ -410,10 +462,16 @@ namespace CardCarouselUI
 
                 if (descriptionGroup != null)
                 {
+                    float descriptionElapsed = time - descriptionDelay;
+
+                    float descriptionT = transitionDuration > 0f
+                        ? Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(descriptionElapsed / transitionDuration))
+                        : (descriptionElapsed >= 0f ? 1f : 0f);
+
                     descriptionGroup.alpha = Mathf.Lerp(
                         startDescriptionAlpha,
                         targetDescriptionAlpha,
-                        t
+                        descriptionT
                     );
                 }
 
@@ -509,6 +567,7 @@ namespace CardCarouselUI
                 HoverChanged?.Invoke(false);
 
             isHovered = false;
+            isPointerInside = false;
 
             if (cardImage != null &&
                 baseSprite != null)

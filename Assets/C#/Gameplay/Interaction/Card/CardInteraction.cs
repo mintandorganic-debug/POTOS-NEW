@@ -134,6 +134,35 @@ public class CardInteraction : MonoBehaviour
             "CardInteraction",
             $"Interact card={card.netId}: zoomed, confirming (start attack sequence)");
 
+        return Confirm(true);
+    }
+
+    // Hand carousel entry point: plays the card at once, without the zoom step.
+    // The carousel already played the accept sound on click.
+    public bool PlayImmediately()
+    {
+        GameLog.Write(
+            "CardInteraction",
+            $"PlayImmediately card={(card != null ? card.netId.ToString() : "NULL")} zoomed={isZoomed}");
+
+        if (card == null)
+            return false;
+
+        if (card.IsInRoulette ||
+            !card.IsAvailable)
+        {
+            GameLog.Write(
+                "CardInteraction",
+                $"PlayImmediately rejected card={card.netId}: inRoulette={card.IsInRoulette} available={card.IsAvailable}");
+
+            return false;
+        }
+
+        return Confirm(false);
+    }
+
+    private bool Confirm(bool playAcceptSound)
+    {
         ownerAnimator?.DisableCardFocus();
 
         if (movement != null &&
@@ -141,7 +170,7 @@ public class CardInteraction : MonoBehaviour
         {
             GameLog.Write(
                 "CardInteraction",
-                $"Interact rejected card={card.netId}: card is still moving");
+                $"Confirm rejected card={card.netId}: card is still moving");
 
             return false;
         }
@@ -150,17 +179,20 @@ public class CardInteraction : MonoBehaviour
         {
             GameLog.Write(
                 "CardInteraction",
-                $"Interact rejected card={card.netId}: AttackSequence.Instance is NULL");
+                $"Confirm rejected card={card.netId}: AttackSequence.Instance is NULL");
 
             return false;
         }
 
         ResetState();
 
-        GameAudioManager.Instance?.PlayAccept();
+        if (playAcceptSound)
+            GameAudioManager.Instance?.PlayAccept();
+
         GameLog.Write(
             "CardInteraction",
-            $"Interact card={card.netId}: sending CmdStartSequence");
+            $"Confirm card={card.netId}: sending CmdStartSequence");
+
         AttackSequence.Instance.CmdStartSequence(
             card.netIdentity);
 

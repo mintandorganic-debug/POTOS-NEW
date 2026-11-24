@@ -3,28 +3,36 @@
   "WorkspaceRootPath": "G:\\Projects\\Unity\\POTOS-NEW\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\reactioninvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\reactioninvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\vfxinvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\vfxinvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\cancelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\cancelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\gameplay\\player\\playeranimator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\player\\playeranimator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\cancelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\cancelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\reactioninvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\reactioninvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\attacksequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\attack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\attack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\vfxinvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\vfxinvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animatoroverrider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,18 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\core\\vfxplayrate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\core\\vfxplayrate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\attack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\attack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,23 +50,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "ReactionInvoker.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAADwv1UAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAAAFIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-16T16:40:24.736Z"
+              "WhenOpened": "2026-11-16T16:40:24.736Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "VfxInvoker.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\VfxInvoker.cs",
               "RelativeDocumentMoniker": "Assets\\VfxInvoker.cs",
@@ -82,7 +79,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "AnimatorOverrider.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\AnimatorOverrider.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\AnimatorOverrider.cs",
@@ -94,7 +91,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "VFXPlayRate.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Core\\VFXPlayRate.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Core\\VFXPlayRate.cs",
@@ -106,67 +103,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PlayerAnimator.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
               "RelativeToolTip": "Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
-              "ViewState": "AgIAAJUAAAAAAAAAAAAAAKMAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAvwLsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-15T15:50:17.005Z"
+              "WhenOpened": "2026-11-15T15:50:17.005Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "WiskeyShaderController.cs",
-              "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs",
-              "RelativeDocumentMoniker": "Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs",
-              "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs",
-              "RelativeToolTip": "Assets\\C#\\ShaderControllers\\WiskeyShaderController.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAABAAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-14T20:05:14.47Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
               "Title": "Attack.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-10T11:31:40.682Z"
+              "WhenOpened": "2026-11-10T11:31:40.682Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 0,
               "Title": "Preparation.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABQAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-10T11:31:25.273Z"
+              "WhenOpened": "2026-11-10T11:31:25.273Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Cancelation.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-10T11:31:24.31Z"
+              "WhenOpened": "2026-11-10T11:31:24.31Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "AttackSequence.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\AttackSequence.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\AttackSequence.cs",
@@ -174,17 +163,18 @@
               "RelativeToolTip": "Assets\\C#\\Gameplay\\AttackSequence.cs",
               "ViewState": "AgIAAL4BAAAAAAAAAADgv8wBAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T14:25:35.981Z"
+              "WhenOpened": "2026-10-13T14:25:35.981Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Player.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\Player\\Player.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\Player.cs",
               "RelativeToolTip": "Assets\\C#\\Gameplay\\Player\\Player.cs",
-              "ViewState": "AgIAAJoCAAAAAAAAAAAAAB8DAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAN0CAAAAAAAAAAAvwOgCAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-13T14:22:25.955Z",
               "EditorCaption": ""

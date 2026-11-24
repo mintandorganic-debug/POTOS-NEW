@@ -3,7 +3,11 @@
   "WorkspaceRootPath": "G:\\Projects\\Unity\\POTOS-NEW\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\kwork\\ui cards\\scripts\\cardcarouselcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\kwork\\ui cards\\scripts\\cardcarouselcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\preparation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -19,7 +23,7 @@
       "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\animation\\animbehaviours\\reactioninvoker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|g:\\projects\\unity\\potos-new\\assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|G:\\Projects\\Unity\\POTOS-NEW\\assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EC0C5CC6-34BF-86AF-E271-8CE20CC6FE4A}|Assembly-CSharp.csproj|solutionrelative:assets\\c#\\gameplay\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -50,11 +54,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
+              "Title": "CardCarouselController.cs",
+              "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\Kwork\\UI Cards\\Scripts\\CardCarouselController.cs",
+              "RelativeDocumentMoniker": "Assets\\Kwork\\UI Cards\\Scripts\\CardCarouselController.cs",
+              "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\Kwork\\UI Cards\\Scripts\\CardCarouselController.cs",
+              "RelativeToolTip": "Assets\\Kwork\\UI Cards\\Scripts\\CardCarouselController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAAkAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-24T10:41:16.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ReactionInvoker.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
@@ -62,12 +79,11 @@
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\ReactionInvoker.cs",
               "ViewState": "AgIAAEkAAAAAAAAAAAAAAFIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-16T16:40:24.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-11-16T16:40:24.736Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "VfxInvoker.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\VfxInvoker.cs",
               "RelativeDocumentMoniker": "Assets\\VfxInvoker.cs",
@@ -79,7 +95,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "AnimatorOverrider.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\AnimatorOverrider.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\AnimatorOverrider.cs",
@@ -91,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "VFXPlayRate.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Core\\VFXPlayRate.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Core\\VFXPlayRate.cs",
@@ -103,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "PlayerAnimator.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
@@ -111,12 +127,11 @@
               "RelativeToolTip": "Assets\\C#\\Gameplay\\Player\\PlayerAnimator.cs",
               "ViewState": "AgIAAJQAAAAAAAAAAAAvwLsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-15T15:50:17.005Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-11-15T15:50:17.005Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Attack.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
@@ -124,25 +139,24 @@
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Attack.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-10T11:31:40.682Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-11-10T11:31:40.682Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Preparation.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "ToolTip": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Preparation.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-11-10T11:31:25.273Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Cancelation.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
@@ -150,12 +164,11 @@
               "RelativeToolTip": "Assets\\C#\\Animation\\animBehaviours\\Cancelation.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-10T11:31:24.31Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-11-10T11:31:24.31Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "AttackSequence.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\AttackSequence.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\AttackSequence.cs",
@@ -163,12 +176,11 @@
               "RelativeToolTip": "Assets\\C#\\Gameplay\\AttackSequence.cs",
               "ViewState": "AgIAAL4BAAAAAAAAAADgv8wBAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T14:25:35.981Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-13T14:25:35.981Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Player.cs",
               "DocumentMoniker": "G:\\Projects\\Unity\\POTOS-NEW\\Assets\\C#\\Gameplay\\Player\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\C#\\Gameplay\\Player\\Player.cs",
@@ -176,8 +188,7 @@
               "RelativeToolTip": "Assets\\C#\\Gameplay\\Player\\Player.cs",
               "ViewState": "AgIAAN0CAAAAAAAAAAAvwOgCAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T14:22:25.955Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-13T14:22:25.955Z"
             }
           ]
         }

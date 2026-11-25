@@ -70,6 +70,14 @@ namespace CardCarouselUI
 
         private Sprite baseSprite;
 
+        private const float DefenseSpinSpeed = 180f;
+        private global::Card defenseCard;
+        private Action onDefensePlayed;
+        private RectTransform defenseVisual;
+        private Quaternion baseVisualRotation;
+        private float spinAngle;
+        private bool isSpinning;
+
         private void Awake()
         {
             if (cardImage != null) baseSprite = cardImage.sprite;
@@ -206,6 +214,71 @@ namespace CardCarouselUI
             carousel = owner;
         }
 
+        public void BindDefense(global::Card card, Action onPlayed)
+        {
+            defenseCard = card;
+            onDefensePlayed = onPlayed;
+            card.EnteredRoulette += onDefensePlayed;
+
+            defenseVisual = visualRoot;
+            if (defenseVisual == transform)
+            {
+                // Keep the root hit area still while the card artwork rotates.
+                defenseVisual = (RectTransform)new GameObject("Defense Card Visuals", typeof(RectTransform)).transform;
+                defenseVisual.SetParent(transform, false);
+                defenseVisual.anchorMin = Vector2.zero;
+                defenseVisual.anchorMax = Vector2.one;
+                defenseVisual.offsetMin = Vector2.zero;
+                defenseVisual.offsetMax = Vector2.zero;
+
+                while (transform.GetChild(0) != defenseVisual)
+                    transform.GetChild(0).SetParent(defenseVisual, false);
+            }
+
+            if (defenseVisual != null)
+                baseVisualRotation = defenseVisual.localRotation;
+        }
+
+        private void LateUpdate()
+        {
+            bool prepared = defenseCard != null && defenseCard.IsDefensePrepared;
+            if (!prepared || defenseVisual == null)
+            {
+                if (isSpinning)
+                {
+                    StopDefenseSpin();
+                    if (isInteractable && isPointerInside)
+                        SetHover(true);
+                }
+
+                return;
+            }
+
+            if (!isSpinning)
+            {
+                isSpinning = true;
+                SetHover(false);
+
+                if (shakeCoroutine != null)
+                {
+                    StopCoroutine(shakeCoroutine);
+                    shakeCoroutine = null;
+                    visualRoot.localRotation = Quaternion.identity;
+                }
+            }
+
+            spinAngle = Mathf.Repeat(spinAngle + DefenseSpinSpeed * Time.unscaledDeltaTime, 360f);
+            defenseVisual.localRotation = baseVisualRotation * Quaternion.Euler(0f, 0f, -spinAngle);
+        }
+
+        private void StopDefenseSpin()
+        {
+            isSpinning = false;
+            spinAngle = 0f;
+            if (defenseVisual != null)
+                defenseVisual.localRotation = baseVisualRotation;
+        }
+
         public void SetDescription(string text)
         {
             if (descriptionGroup == null)
@@ -245,6 +318,9 @@ namespace CardCarouselUI
 
         public void SetHover(bool state)
         {
+            if (state && isSpinning)
+                return;
+
             if (isHovered == state)
                 return;
 
@@ -283,7 +359,7 @@ namespace CardCarouselUI
 
         private void StartShake()
         {
-            if (visualRoot == null) return;
+            if (visualRoot == null || isSpinning) return;
         
             if(shakeCoroutine != null) StopCoroutine(shakeCoroutine);
 
@@ -548,6 +624,9 @@ namespace CardCarouselUI
 
         private void OnDisable()
         {
+            if (isSpinning)
+                StopDefenseSpin();
+
             if (vfxInstance != null)
                 vfxInstance.SetActive(false);
 
@@ -637,6 +716,9 @@ namespace CardCarouselUI
 
         private void OnDestroy()
         {
+            if (defenseCard != null)
+                defenseCard.EnteredRoulette -= onDefensePlayed;
+
             if (frameMaterial != null)
                 Destroy(frameMaterial);
         }

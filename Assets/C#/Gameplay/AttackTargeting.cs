@@ -173,6 +173,11 @@ public class AttackTargeting
             return;
         }
 
+        state.DefenseOpen = true;
+
+        if (context.TryPlayPreparedDefense(victim))
+            return;
+
         if (context.HasAttackRoutine)
         {
             GameLog.Write(

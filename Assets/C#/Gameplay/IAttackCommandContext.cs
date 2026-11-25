@@ -4,7 +4,7 @@ public interface IAttackCommandContext
         Card card,
         Player attacker);
 
-    void StartDefenseSequence(
+    bool TryPlayDefense(
         Card defenseCard,
         Player defensePlayer);
 

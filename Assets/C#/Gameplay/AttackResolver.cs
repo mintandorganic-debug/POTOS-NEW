@@ -101,6 +101,8 @@ public class AttackResolver
             "AttackResolver",
             "AttackDelayRoutine defense window elapsed");
 
+        state.DefenseOpen = false;
+
         if (victimConnection != null)
         {
             GameLog.Write(

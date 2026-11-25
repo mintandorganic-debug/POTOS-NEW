@@ -7,7 +7,7 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     public static AttackSequence Instance { get; private set; }
 
     [Header("Timing")]
-    [SerializeField] private float targetSelectionTime = 10f;
+    [SerializeField] private float targetSelectionTime = 5f;
     [SerializeField] private float targetActionTime = 5f;
     [SerializeField] private float stealActionTime = 5f;
 
@@ -18,6 +18,9 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [SerializeField] public Animator Lamp;
 
     private readonly AttackState state = new();
+
+    [SyncVar] private uint preparationRound;
+    private uint attackNumber;
 
     private Coroutine attackRoutine;
     private TargetSelectionTimer targetTimer;
@@ -153,6 +156,52 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     // CLIENT -> SERVER
     // =========================================================
 
+    public bool RequestDefensePreparation(Card card)
+    {
+        if (preparationRound == 0 || GameMaster.Instance == null ||
+            GameMaster.Instance.CurrentPhase != GameMaster.GamePhase.SelectTarget ||
+            Player.LocalPlayer == null ||
+            Player.LocalPlayer.SeatIndex == GameMaster.Instance.CurrentPlayerIndex)
+        {
+            return false;
+        }
+
+        if (!card.IsDefensePrepared)
+            CmdPrepareDefense(card.netIdentity, preparationRound);
+
+        return true;
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdPrepareDefense(
+        NetworkIdentity cardIdentity,
+        uint round,
+        NetworkConnectionToClient sender = null)
+    {
+        if (round == 0 || round != preparationRound ||
+            cardIdentity == null || !cardIdentity.TryGetComponent(out Card card))
+        {
+            return;
+        }
+
+        TryPrepareDefense(card, AttackValidator.FindPlayerByConnection(sender));
+    }
+
+    [Server]
+    private bool TryPrepareDefense(Card card, Player player)
+    {
+        if (!state.IsActive || state.Attacker == null || state.Target != null ||
+            player == null || player == state.Attacker || !card.CanPrepareDefense ||
+            GameMaster.Instance == null ||
+            GameMaster.Instance.CurrentPhase != GameMaster.GamePhase.SelectTarget ||
+            !AttackValidator.IsCardOwnedByPlayer(card, player))
+        {
+            return false;
+        }
+
+        return state.PrepareDefense(player, card);
+    }
+
     [Command(requiresAuthority = false)]
     public void CmdStartSequence(
         NetworkIdentity cardIdentity,
@@ -234,6 +283,9 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             card,
             attacker);
 
+        if (state.IsActive)
+            preparationRound = ++attackNumber;
+
         RpcPlaySequenceAudio(GetCardAudioKey(card), 0, attacker != null ? attacker.netIdentity : null);
     }
     // =========================================================
@@ -257,11 +309,18 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     // =========================================================
 
     [Server]
-    private void StartDefenseSequence(
+    private bool TryPlayDefense(
         Card defenseCard,
         Player defensePlayer)
     {
-        lifecycle.StartDefenseSequence(
+        if (!state.DefenseOpen || state.Attacker == null || state.Card == null ||
+            GameMaster.Instance == null ||
+            !GameMaster.Instance.SelectDefense(defenseCard, defensePlayer))
+        {
+            return false;
+        }
+
+        return lifecycle.StartDefenseSequence(
             defenseCard,
             defensePlayer);
     }
@@ -275,6 +334,9 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     {
         targeting.SetTarget(
             target);
+
+        if (state.Target != null)
+            preparationRound = 0;
     }
 
     // =========================================================
@@ -468,6 +530,7 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     [Server]
     private void CancelSequence()
     {
+        preparationRound = 0;
         string cancelledCardKey = GetCardAudioKey(state.Card);
         Player prevAttacker = state.Attacker;
 
@@ -475,6 +538,13 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
 
         RpcPlaySequenceAudio(cancelledCardKey, 4, prevAttacker != null ? prevAttacker.netIdentity : null);
         GameMaster.Instance?.TryTriggerOtherPlayerScoff(prevAttacker, 0.5f);
+    }
+
+    [Server]
+    public void ClearDefensePreparation()
+    {
+        preparationRound = 0;
+        state.ClearPreparedDefenses();
     }
 
     [ClientRpc]
@@ -514,13 +584,19 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
     public bool ServerPlayCard(Card card, Player cardOwner)
     {
         if (card == null || cardOwner == null) return false;
-        if (!card.IsAvailable || card.IsInRoulette) return false;
 
         if (card.Data != null && card.Data.CardClass == Card.CardClass.Defence)
         {
-            if (!state.IsActive || state.Attacker == null || state.Target == null) return false;
-            StartDefenseSequence(card, cardOwner);
-            return true;
+            if (state.DefenseOpen)
+                return TryPlayDefense(card, cardOwner);
+
+            return TryPrepareDefense(card, cardOwner);
+        }
+
+        if (GameMaster.Instance == null ||
+            !GameMaster.Instance.SelectAttack(card, cardOwner))
+        {
+            return false;
         }
 
         StartSequence(card, cardOwner);
@@ -693,6 +769,11 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
                 attackRoutine);
 
             attackRoutine = null;
+
+            Player victim = state.Target != null ? state.Target.GetComponentInParent<Player>() : null;
+            NetworkConnectionToClient connection = victim != null ? victim.connectionToClient : null;
+            if (connection != null)
+                TargetHideDefenseTimer(connection);
         }
     }
 
@@ -733,11 +814,11 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             attacker);
     }
 
-    void IAttackCommandContext.StartDefenseSequence(
+    bool IAttackCommandContext.TryPlayDefense(
         Card defenseCard,
         Player defensePlayer)
     {
-        StartDefenseSequence(
+        return TryPlayDefense(
             defenseCard,
             defensePlayer);
     }
@@ -761,6 +842,14 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
 
     bool IAttackTargetingContext.HasAttackRoutine =>
         attackRoutine != null;
+
+    bool IAttackTargetingContext.TryPlayPreparedDefense(Player victim)
+    {
+        Card card = state.GetPreparedDefense(victim);
+        bool played = card != null && TryPlayDefense(card, victim);
+        state.ClearPreparedDefenses();
+        return played;
+    }
 
     void IAttackTargetingContext.StopAttackRoutine()
     {

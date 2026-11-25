@@ -46,16 +46,31 @@ namespace CardCarouselUI
                 if (info.HoverChanged != null)
                     hover.HoverChanged += info.HoverChanged;
 
+                bool playingNormally = false;
+                if (info.DefenseCard != null)
+                {
+                    hover.BindDefense(info.DefenseCard, () =>
+                    {
+                        if (!playingNormally)
+                            afterActivation?.Invoke();
+                    });
+                }
+
                 hover.Clicked += () =>
                 {
                     global::GameLog.Write(
                         "TemplateHandCardFactory",
                         $"Card clicked in carousel id={info.Id} category={info.Category}");
 
+                    if (info.DefenseCard != null && info.DefenseCard.TryPrepareDefenseFromHand())
+                        return;
+
+                    playingNormally = true;
                     bool played = info.Activated != null && info.Activated();
 
                     if (!played)
                     {
+                        playingNormally = false;
                         global::GameLog.Write(
                             "TemplateHandCardFactory",
                             $"Card play rejected id={info.Id}, card stays in carousel");

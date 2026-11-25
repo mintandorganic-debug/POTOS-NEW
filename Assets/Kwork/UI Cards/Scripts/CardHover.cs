@@ -241,8 +241,9 @@ namespace CardCarouselUI
 
         private void LateUpdate()
         {
-            bool prepared = defenseCard != null && defenseCard.IsDefensePrepared;
-            if (!prepared || defenseVisual == null)
+            bool shouldSpin = defenseCard != null && isInteractable && !carousel.IsMoving &&
+                GameMaster.Instance != null && GameMaster.Instance.CurrentPhase == GameMaster.GamePhase.SelectTarget;
+            if (!shouldSpin)
             {
                 if (isSpinning)
                 {
@@ -253,6 +254,10 @@ namespace CardCarouselUI
 
                 return;
             }
+
+            defenseCard.TryPrepareDefenseFromHand();
+            if (defenseVisual == null)
+                return;
 
             if (!isSpinning)
             {
@@ -359,7 +364,7 @@ namespace CardCarouselUI
 
         private void StartShake()
         {
-            if (visualRoot == null || isSpinning) return;
+            if (visualRoot == null || defenseCard != null || isSpinning) return;
         
             if(shakeCoroutine != null) StopCoroutine(shakeCoroutine);
 

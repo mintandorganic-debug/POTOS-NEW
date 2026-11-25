@@ -1,5 +1,6 @@
 using Mirror;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackVortexContext, IAttackLifecycleContext, IAttackCommandContext, IAttackTargetingContext
@@ -21,6 +22,8 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
 
     [SyncVar] private uint preparationRound;
     private uint attackNumber;
+    private uint lastRequestedPreparationRound;
+    private readonly HashSet<uint> requestedDefenseCards = new();
 
     private Coroutine attackRoutine;
     private TargetSelectionTimer targetTimer;
@@ -166,7 +169,13 @@ public class AttackSequence : NetworkBehaviour, IAttackResolverContext, IAttackV
             return false;
         }
 
-        if (!card.IsDefensePrepared)
+        if (lastRequestedPreparationRound != preparationRound)
+        {
+            lastRequestedPreparationRound = preparationRound;
+            requestedDefenseCards.Clear();
+        }
+
+        if (!card.IsDefensePrepared && requestedDefenseCards.Add(card.netId))
             CmdPrepareDefense(card.netIdentity, preparationRound);
 
         return true;

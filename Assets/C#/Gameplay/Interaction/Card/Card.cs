@@ -44,9 +44,6 @@ public class Card : InteractableObject
     [SerializeField] private bool isInRoulette;
 
     [SyncVar]
-    private bool isDefensePrepared;
-
-    [SyncVar]
     [SerializeField]
     private UnavailableReason unavailableReason =
         UnavailableReason.SampleReason;
@@ -74,16 +71,6 @@ public class Card : InteractableObject
     public bool IsInRoulette =>
         isInRoulette;
 
-    public bool IsDefensePrepared =>
-        isDefensePrepared;
-
-    public event System.Action EnteredRoulette;
-
-    public bool CanPrepareDefense =>
-        !isInRoulette &&
-        (isAvailable || unavailableReason == UnavailableReason.WrongTurnPhase) &&
-        cardData != null && cardData.CardClass == CardClass.Defence;
-
     public bool IsZoomed =>
         interaction != null &&
         interaction.IsZoomed;
@@ -110,9 +97,6 @@ public class Card : InteractableObject
         {
             return false;
         }
-
-        if (cardDataIndex != index)
-            SetDefensePrepared(false);
 
         cardDataIndex = index;
 
@@ -472,19 +456,11 @@ public class Card : InteractableObject
             $"SetAvailable netId={netId} {isAvailable}->{value} reason={reason} (previous reason={unavailableReason})");
 
         isAvailable = value;
-        if (!value && reason == UnavailableReason.Effect)
-            SetDefensePrepared(false);
 
         unavailableReason =
             value
                 ? UnavailableReason.SampleReason
                 : reason;
-    }
-
-    [Server]
-    public void SetDefensePrepared(bool value)
-    {
-        isDefensePrepared = value;
     }
 
     [Server]
@@ -531,7 +507,6 @@ public class Card : InteractableObject
 
             visual?.HideUnavailableOverlay();
             visual?.SetColliderEnabled(false);
-            EnteredRoulette?.Invoke();
 
             return;
         }
@@ -547,9 +522,6 @@ public class Card : InteractableObject
         GameLog.Write(
             "Card",
             $"SetOwner netId={netId} owner {this.ownerNetId}->{ownerNetId} socket {this.socketIndex}->{socketIndex}");
-
-        if (this.ownerNetId != ownerNetId)
-            SetDefensePrepared(false);
 
         this.ownerNetId = ownerNetId;
         this.socketIndex = socketIndex;
@@ -1070,14 +1042,6 @@ public class Card : InteractableObject
 
         return interaction != null &&
                interaction.PlayImmediately();
-    }
-
-    public bool TryPrepareDefenseFromHand()
-    {
-        return IsOwnedByLocalPlayer() &&
-               CanPrepareDefense &&
-               AttackSequence.Instance != null &&
-               AttackSequence.Instance.RequestDefensePreparation(this);
     }
 
     private bool CanInteract()

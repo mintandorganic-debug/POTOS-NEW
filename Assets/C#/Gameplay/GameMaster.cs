@@ -36,8 +36,6 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     public TurnStage CurrentStage =>
         currentStage;
 
-    [SyncVar] private uint selectedTargetNetId;
-
     [SyncVar(hook = nameof(OnGamePhaseChanged))]
     [SerializeField] private GamePhase currentPhase = GamePhase.Wait;
 
@@ -50,21 +48,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     public int CurrentPlayerIndex =>
         currentPlayerIn;
 
-    public Player SelectedTarget
-    {
-        get
-        {
-            if (isServer)
-                return selection?.Target;
-
-            if (currentPhase != GamePhase.Defense && currentPhase != GamePhase.Steal)
-                return null;
-
-            return NetworkClient.spawned.TryGetValue(selectedTargetNetId, out NetworkIdentity target)
-                ? target.GetComponent<Player>()
-                : null;
-        }
-    }
+    public Player SelectedTarget =>
+        selection?.Target;
 
     public Card SelectedAttack =>
         selection != null ? selection.Attack : null;
@@ -156,14 +141,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
             "GameMaster",
             $"SetGamePhase changing {currentPhase} -> {phase}");
 
-        if (phase != GamePhase.Defense && phase != GamePhase.Steal)
-            selectedTargetNetId = 0;
-
         currentPhase = phase;
-
-        // Mirror invokes the SyncVar hook on the host and clients only.
-        if (!NetworkServer.activeHost)
-            GamePhaseChanged?.Invoke(phase);
     }
 
     private void OnGamePhaseChanged(
@@ -477,11 +455,8 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     public bool SelectTarget(
         Player player)
     {
-        if (!selection.SelectTarget(player))
-            return false;
-
-        selectedTargetNetId = player.netId;
-        return true;
+        return selection.SelectTarget(
+            player);
     }
 
     [Server]
@@ -658,8 +633,7 @@ public class GameMaster : NetworkBehaviour, IAttackSelectionContext, IAccessoryT
     {
         gameStarted = false;
         currentPlayerIn = -1;
-        SetGamePhase(GamePhase.Wait);
-        AttackSequence.Instance?.ClearDefensePreparation();
+        currentPhase = GamePhase.Wait;
         if (idleAudioRoutine != null)
         {
             StopCoroutine(idleAudioRoutine);

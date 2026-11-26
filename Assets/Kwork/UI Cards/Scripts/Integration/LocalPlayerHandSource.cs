@@ -58,8 +58,7 @@ namespace CardCarouselUI
                         $"Card activated from hand card={(card != null ? card.name : "NULL")} netId={(card != null ? card.netId.ToString() : "NULL")}");
 
                     return card != null && card.PlayFromHand();
-                },
-                data.CardClass == global::Card.CardClass.Defence ? card : null);
+                });
         }
 
         private static HandCardCategory ToCategory(global::Card.CardClass cardClass)

@@ -18,6 +18,9 @@ namespace CardCarouselUI
         [Header("Positions")]
         [SerializeField] private Vector2 centerPosition = Vector2.zero;
 
+        private const float CenterDefenseOverlap = 1f / 3f;
+        private const float CenterDefenseScale = 0.875f;
+
         [SerializeField] private float cardSpacing = 350f;
         [SerializeField] private float comboSpacing = 100f;
 
@@ -488,9 +491,8 @@ namespace CardCarouselUI
 
                 if (index == newCenter)
                 {
-                    targetPositions[index] = centerPosition;
-                    targetScales[index] =
-                        baseScales[index] * centerScale;
+                    targetPositions[index] = GetCenterPosition(index);
+                    targetScales[index] = GetCenterScale(index);
                     targetColors[index] = centerColor;
                 }
                 else if (index == newLeft)
@@ -728,6 +730,26 @@ namespace CardCarouselUI
         {
         }
 
+        private Vector2 GetCenterPosition(int index)
+        {
+            if (!cardHovers[index].HasDefenseSpin)
+                return centerPosition;
+
+            Rect cardRect = cards[index].rect;
+            float sideTop = cardRect.yMax * baseScales[index].y * sideScale;
+            float overlapLine = cardRect.yMin + cardRect.height * CenterDefenseOverlap;
+            float lift = sideTop - overlapLine * GetCenterScale(index).y;
+            return centerPosition + Vector2.up * lift;
+        }
+
+        private Vector3 GetCenterScale(int index)
+        {
+            float scale = cardHovers[index].HasDefenseSpin
+                ? centerScale * CenterDefenseScale
+                : centerScale;
+            return baseScales[index] * scale;
+        }
+
         private void GetCardVisual(
             int index,
             out Vector2 position,
@@ -742,8 +764,8 @@ namespace CardCarouselUI
 
             if (index == currentIndex)
             {
-                position = centerPosition;
-                scale = baseScale * centerScale * hoverScales[index];
+                position = GetCenterPosition(index);
+                scale = GetCenterScale(index) * hoverScales[index];
                 color = centerColor;
                 return;
             }

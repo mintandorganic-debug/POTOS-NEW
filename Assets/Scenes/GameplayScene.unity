@@ -829,7 +829,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  targetSelectionTime: 5
+  targetSelectionTime: 10
   targetActionTime: 5
   stealActionTime: 5
   stealCoinsAmount: 5

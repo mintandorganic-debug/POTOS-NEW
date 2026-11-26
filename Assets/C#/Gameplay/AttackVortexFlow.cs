@@ -175,9 +175,6 @@ public class AttackVortexFlow
             "AttackVortexFlow",
             $"OnDefenseVortexCompleted card={(card != null && card.Data != null ? card.Data.name : "NULL")}");
 
-        if (state.ReflectedAttack != null)
-            RouletteCardReleaser.Destroy(state.ReflectedAttack);
-
         if (card == null)
         {
             GameLog.Write(

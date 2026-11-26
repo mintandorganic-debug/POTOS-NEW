@@ -125,7 +125,7 @@ public class AttackLifecycle
         targetTimer.Start();
     }
 
-    public bool StartDefenseSequence(
+    public void StartDefenseSequence(
         Card defenseCard,
         Player defensePlayer)
     {
@@ -140,7 +140,7 @@ public class AttackLifecycle
                 "AttackLifecycle",
                 "StartDefenseSequence rejected: defenseCard or defensePlayer is null");
 
-            return false;
+            return;
         }
 
         if (!defenseCard.IsAvailable ||
@@ -150,7 +150,7 @@ public class AttackLifecycle
                 "AttackLifecycle",
                 $"StartDefenseSequence rejected: card unavailable isAvailable={defenseCard.IsAvailable} isInRoulette={defenseCard.IsInRoulette}");
 
-            return false;
+            return;
         }
 
         if (defenseCard.Data == null ||
@@ -161,7 +161,7 @@ public class AttackLifecycle
                 "AttackLifecycle",
                 "StartDefenseSequence rejected: card is not a Defence card");
 
-            return false;
+            return;
         }
 
         if (!AttackValidator.IsCardOwnedByPlayer(
@@ -172,7 +172,7 @@ public class AttackLifecycle
                 "AttackLifecycle",
                 $"StartDefenseSequence rejected: card not owned by defensePlayer defensePlayer={defensePlayer.netId}");
 
-            return false;
+            return;
         }
 
         RouletteRotator roulette =
@@ -188,10 +188,9 @@ public class AttackLifecycle
                 "AttackSequence: RouletteRotator.Instance not found.",
                 owner);
 
-            return false;
+            return;
         }
 
-        state.DefenseOpen = false;
         targetTimer.Stop();
 
         if (context.HasAttackRoutine)
@@ -207,7 +206,6 @@ public class AttackLifecycle
         string attackCardKey = AttackSequence.GetCardAudioKey(attackCard);
         Player attacker = state.Attacker;
 
-        state.ReflectedAttack = attackCard;
         state.Card =
             defenseCard;
 
@@ -254,8 +252,6 @@ public class AttackLifecycle
         context.StartAttackPreparation(
             defensePlayer.netIdentity,
             defenseCard.Data.ActionId);
-
-        return true;
     }
 
     public void CancelSequence()
@@ -294,9 +290,6 @@ public class AttackLifecycle
 
         RouletteCardReleaser.Release(
             previousCard);
-
-        if (state.ReflectedAttack != null)
-            RouletteCardReleaser.Destroy(state.ReflectedAttack);
 
         if (previousCard != null)
         {

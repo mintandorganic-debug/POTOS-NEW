@@ -19,8 +19,7 @@ namespace CardCarouselUI
             string description,
             HandCardCategory category,
             Action<bool> hoverChanged,
-            Func<bool> activated,
-            global::Card defenseCard = null)
+            Func<bool> activated)
         {
             Id = id;
             Art = art;
@@ -28,7 +27,6 @@ namespace CardCarouselUI
             Category = category;
             HoverChanged = hoverChanged;
             Activated = activated;
-            DefenseCard = defenseCard;
         }
 
         public string Id { get; }
@@ -38,6 +36,5 @@ namespace CardCarouselUI
         public Action<bool> HoverChanged { get; }
         // Returns true when the card was actually played.
         public Func<bool> Activated { get; }
-        public global::Card DefenseCard { get; }
     }
 }

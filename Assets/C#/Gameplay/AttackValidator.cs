@@ -20,7 +20,8 @@ public static class AttackValidator
             return false;
         }
 
-        return player.netId != 0 && card.OwnerNetId == player.netId;
+        return card.IsOwnedByLocalConnection(
+            player.netIdentity.connectionToClient);
     }
 
     public static Player FindPlayerByConnection(

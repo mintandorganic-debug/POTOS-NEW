@@ -4,8 +4,6 @@ public interface IAttackTargetingContext
 
     bool HasAttackRoutine { get; }
 
-    bool TryPlayPreparedDefense(Player victim);
-
     void StopAttackRoutine();
 
     void StartAttackRoutine();

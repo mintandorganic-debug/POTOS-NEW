@@ -121,13 +121,13 @@ public class AttackCommandHandler
                 return;
             }
 
-            if (!context.TryPlayDefense(
+            if (!gameMaster.SelectDefense(
                     card,
                     targetPlayer))
             {
                 GameLog.Write(
                     "AttackCommandHandler",
-                    $"CmdStartSequence defense rejected card={card.Data.name} targetPlayer={targetPlayer.netId}");
+                    $"CmdStartSequence defense rejected: GameMaster.SelectDefense returned false card={card.Data.name} targetPlayer={targetPlayer.netId}");
 
                 return;
             }
@@ -135,6 +135,10 @@ public class AttackCommandHandler
             GameLog.Write(
                 "AttackCommandHandler",
                 $"CmdStartSequence defense accepted card={card.Data.name} targetPlayer={targetPlayer.netId}");
+
+            context.StartDefenseSequence(
+                card,
+                targetPlayer);
 
             return;
         }

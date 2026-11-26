@@ -50,7 +50,7 @@ public class TestSceneController : MonoBehaviour
     private int actIndex;
     private int targetIndex;
 
-    private float selectTime = 5f;
+    private float selectTime = 10f;
     private float defenseTime = 5f;
     private float stealTime = 5f;
 

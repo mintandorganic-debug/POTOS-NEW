@@ -71,9 +71,11 @@ namespace CardCarouselUI
         private Sprite baseSprite;
 
         private const float DefenseSpinSpeed = 180f;
-        private global::Card defenseCard;
-        private Action onDefensePlayed;
+        private static readonly Quaternion DefenseTilt = Quaternion.Euler(-28f, 0f, 0f);
+        private static Sprite defenseShadowSprite;
         private RectTransform defenseVisual;
+        private RectTransform shadowMask;
+        private RectTransform receivedShadow;
         private Quaternion baseVisualRotation;
         private float spinAngle;
         private bool isSpinning;
@@ -214,12 +216,8 @@ namespace CardCarouselUI
             carousel = owner;
         }
 
-        public void BindDefense(global::Card card, Action onPlayed)
+        public void EnableDefenseSpin()
         {
-            defenseCard = card;
-            onDefensePlayed = onPlayed;
-            card.EnteredRoulette += onDefensePlayed;
-
             defenseVisual = visualRoot;
             if (defenseVisual == transform)
             {
@@ -241,8 +239,7 @@ namespace CardCarouselUI
 
         private void LateUpdate()
         {
-            bool shouldSpin = defenseCard != null && isInteractable && !carousel.IsMoving &&
-                GameMaster.Instance != null && GameMaster.Instance.CurrentPhase == GameMaster.GamePhase.SelectTarget;
+            bool shouldSpin = defenseVisual != null && isInteractable && !carousel.IsMoving;
             if (!shouldSpin)
             {
                 if (isSpinning)
@@ -254,10 +251,6 @@ namespace CardCarouselUI
 
                 return;
             }
-
-            defenseCard.TryPrepareDefenseFromHand();
-            if (defenseVisual == null)
-                return;
 
             if (!isSpinning)
             {
@@ -273,7 +266,8 @@ namespace CardCarouselUI
             }
 
             spinAngle = Mathf.Repeat(spinAngle + DefenseSpinSpeed * Time.unscaledDeltaTime, 360f);
-            defenseVisual.localRotation = baseVisualRotation * Quaternion.Euler(0f, 0f, -spinAngle);
+            defenseVisual.localRotation = baseVisualRotation * DefenseTilt * Quaternion.Euler(0f, 0f, -spinAngle);
+            UpdateDefenseShadows(true);
         }
 
         private void StopDefenseSpin()
@@ -282,6 +276,102 @@ namespace CardCarouselUI
             spinAngle = 0f;
             if (defenseVisual != null)
                 defenseVisual.localRotation = baseVisualRotation;
+            UpdateDefenseShadows(false);
+        }
+
+        private void UpdateDefenseShadows(bool visible)
+        {
+            if (carousel == null)
+                return;
+
+            for (int i = 0; i < carousel.Cards.Count; i++)
+            {
+                RectTransform card = carousel.Cards[i];
+                if (card == null || card == transform || !card.TryGetComponent(out CardHover neighbor))
+                    continue;
+
+                if (visible && card.gameObject.activeInHierarchy)
+                    neighbor.ShowDefenseShadow(defenseVisual, spinAngle);
+                else
+                    neighbor.HideDefenseShadow();
+            }
+        }
+
+        private void ShowDefenseShadow(RectTransform source, float angle)
+        {
+            RectTransform card = (RectTransform)transform;
+            if (shadowMask == null)
+            {
+                // Only the surface of this card receives the shadow.
+                shadowMask = (RectTransform)new GameObject("Card Shadow Mask", typeof(RectTransform), typeof(RectMask2D)).transform;
+                shadowMask.SetParent(card, false);
+                shadowMask.anchorMin = Vector2.zero;
+                shadowMask.anchorMax = Vector2.one;
+                shadowMask.offsetMin = Vector2.zero;
+                shadowMask.offsetMax = Vector2.zero;
+
+                var image = new GameObject("Dove Shadow", typeof(RectTransform), typeof(Image)).GetComponent<Image>();
+                receivedShadow = image.rectTransform;
+                receivedShadow.SetParent(shadowMask, false);
+                receivedShadow.anchorMin = card.pivot;
+                receivedShadow.anchorMax = card.pivot;
+                image.sprite = GetDefenseShadowSprite();
+                image.color = new Color(0f, 0f, 0f, 0.38f);
+                image.raycastTarget = false;
+            }
+
+            Vector3 scale = source.lossyScale;
+            Vector3 receiverScale = card.lossyScale;
+            receivedShadow.sizeDelta = new Vector2(
+                source.rect.width * Mathf.Abs(scale.x / receiverScale.x),
+                source.rect.height * Mathf.Abs(scale.y / receiverScale.y));
+
+            Vector3 sourceCenter = source.TransformPoint(source.rect.center);
+            Vector2 center = card.InverseTransformPoint(sourceCenter);
+            float height = receivedShadow.sizeDelta.y;
+            receivedShadow.anchoredPosition = center + new Vector2(0.09f, -0.27f) * height;
+            receivedShadow.localRotation = Quaternion.Euler(0f, 0f, -angle);
+            shadowMask.gameObject.SetActive(true);
+        }
+
+        private void HideDefenseShadow()
+        {
+            if (shadowMask != null)
+                shadowMask.gameObject.SetActive(false);
+        }
+
+        private static Sprite GetDefenseShadowSprite()
+        {
+            if (defenseShadowSprite != null)
+                return defenseShadowSprite;
+
+            const int size = 64;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.HideAndDontSave
+            };
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = Mathf.Max(Mathf.Abs((x + 0.5f) / size - 0.5f) - 0.36f, 0f);
+                    float dy = Mathf.Max(Mathf.Abs((y + 0.5f) / size - 0.5f) - 0.36f, 0f);
+                    float distance = Mathf.Sqrt(dx * dx + dy * dy);
+                    byte alpha = (byte)Mathf.RoundToInt(255f * (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.06f, 0.14f, distance))));
+                    pixels[y * size + x] = new Color32(255, 255, 255, alpha);
+                }
+            }
+
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            defenseShadowSprite = Sprite.Create(
+                texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f),
+                100f, 0, SpriteMeshType.FullRect);
+            defenseShadowSprite.hideFlags = HideFlags.HideAndDontSave;
+            return defenseShadowSprite;
         }
 
         public void SetDescription(string text)
@@ -297,6 +387,8 @@ namespace CardCarouselUI
         }
 
         public bool IsPointerInside => isPointerInside;
+
+        internal bool HasDefenseSpin => defenseVisual != null;
 
         public void SetInteractable(bool interactable)
         {
@@ -364,7 +456,7 @@ namespace CardCarouselUI
 
         private void StartShake()
         {
-            if (visualRoot == null || defenseCard != null || isSpinning) return;
+            if (visualRoot == null || isSpinning) return;
         
             if(shakeCoroutine != null) StopCoroutine(shakeCoroutine);
 
@@ -631,6 +723,7 @@ namespace CardCarouselUI
         {
             if (isSpinning)
                 StopDefenseSpin();
+            HideDefenseShadow();
 
             if (vfxInstance != null)
                 vfxInstance.SetActive(false);
@@ -721,9 +814,6 @@ namespace CardCarouselUI
 
         private void OnDestroy()
         {
-            if (defenseCard != null)
-                defenseCard.EnteredRoulette -= onDefensePlayed;
-
             if (frameMaterial != null)
                 Destroy(frameMaterial);
         }

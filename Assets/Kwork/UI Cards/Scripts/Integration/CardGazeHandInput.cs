@@ -18,6 +18,7 @@ namespace CardCarouselUI
         private bool pointerEntered;
         private float pointerLostTime;
         private Func<bool> isOpenProbe;
+        private Func<bool> keepOpenProbe;
 
         public float MaxDistance => maxDistance;
 
@@ -26,13 +27,14 @@ namespace CardCarouselUI
         public event Action ShowRequested;
         public event Action HideRequested;
 
-        public void SetPointerArea(RectTransform area)
+        public void SetPointerArea(RectTransform area, Func<bool> keepOpen = null)
         {
             global::GameLog.Write(
                 "CardGazeHandInput",
                 $"SetPointerArea area={(area != null ? area.name : "NULL")}");
 
             pointerArea = area;
+            keepOpenProbe = keepOpen;
         }
 
         public void SetOpenStateProbe(Func<bool> probe)
@@ -62,7 +64,7 @@ namespace CardCarouselUI
 
             if (isShown)
             {
-                if (WasEscapePressed() || HasPointerLeftArea())
+                if (WasEscapePressed() || (keepOpenProbe?.Invoke() != true && HasPointerLeftArea()))
                     Hide();
 
                 return;

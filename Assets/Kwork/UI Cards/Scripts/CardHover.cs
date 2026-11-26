@@ -239,7 +239,7 @@ namespace CardCarouselUI
 
         private void LateUpdate()
         {
-            bool shouldSpin = defenseVisual != null && isInteractable && !carousel.IsMoving;
+            bool shouldSpin = defenseVisual != null && isInteractable && carousel.IsDefenseFlying((RectTransform)transform);
             if (!shouldSpin)
             {
                 if (isSpinning)
@@ -388,7 +388,6 @@ namespace CardCarouselUI
 
         public bool IsPointerInside => isPointerInside;
 
-        internal bool HasDefenseSpin => defenseVisual != null;
 
         public void SetInteractable(bool interactable)
         {
@@ -415,7 +414,7 @@ namespace CardCarouselUI
 
         public void SetHover(bool state)
         {
-            if (state && isSpinning)
+            if (state && defenseVisual != null && carousel.HasDefenseFlight)
                 return;
 
             if (isHovered == state)

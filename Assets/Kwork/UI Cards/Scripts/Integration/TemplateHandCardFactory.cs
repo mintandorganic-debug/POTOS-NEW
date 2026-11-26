@@ -55,6 +55,12 @@ namespace CardCarouselUI
                         "TemplateHandCardFactory",
                         $"Card clicked in carousel id={info.Id} category={info.Category}");
 
+                    if (info.Category == HandCardCategory.Defence && !carousel.IsDefenseFlying(card))
+                    {
+                        carousel.StartDefenseFlight(card);
+                        return;
+                    }
+
                     bool played = info.Activated != null && info.Activated();
 
                     if (!played)

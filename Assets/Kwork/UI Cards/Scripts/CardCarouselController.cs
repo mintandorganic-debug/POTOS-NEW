@@ -48,6 +48,9 @@ namespace CardCarouselUI
         [SerializeField] private float flyOutScaleGain = 0.15f;
 
         private bool isFlyingOut;
+        private RectTransform defenseFlightCard;
+        private Coroutine defenseFlightMotion;
+        private bool isDefenseReturning;
         private int hoverScrollIndex = -1;
         private float hoverScrollTimer;
         [Header("Debug")]
@@ -77,6 +80,7 @@ namespace CardCarouselUI
         private readonly List<CardHover> cardHovers = new();
     
         public bool IsMoving => isMoving;
+        internal bool HasDefenseFlight => defenseFlightCard != null;
         public int CurrentIndex => currentIndex;
         public IReadOnlyList<RectTransform> Cards => cards;
 
@@ -114,6 +118,7 @@ namespace CardCarouselUI
 
         public void SetCards(IReadOnlyList<RectTransform> newCards)
         {
+            EndDefenseFlight(true);
             StopAllCoroutines();
             isMoving = false;
             isFlyingOut = false;
@@ -169,6 +174,20 @@ namespace CardCarouselUI
 
         private void Update()
         {
+            if (HasDefenseFlight)
+            {
+                if (!isDefenseReturning && (Mouse.current?.rightButton.wasPressedThisFrame ?? false))
+                {
+                    if (defenseFlightMotion != null)
+                        StopCoroutine(defenseFlightMotion);
+
+                    isDefenseReturning = true;
+                    defenseFlightMotion = StartCoroutine(MoveDefenseCard(defenseFlightCard, false));
+                }
+
+                return;
+            }
+
             if (isMoving || isFlyingOut || cards.Count < 2)
                 return;
 
@@ -491,8 +510,8 @@ namespace CardCarouselUI
 
                 if (index == newCenter)
                 {
-                    targetPositions[index] = GetCenterPosition(index);
-                    targetScales[index] = GetCenterScale(index);
+                    targetPositions[index] = centerPosition;
+                    targetScales[index] = baseScales[index] * centerScale;
                     targetColors[index] = centerColor;
                 }
                 else if (index == newLeft)
@@ -625,6 +644,77 @@ namespace CardCarouselUI
             }
         }
 
+        internal bool IsDefenseFlying(RectTransform card)
+        {
+            return defenseFlightCard == card && !isDefenseReturning;
+        }
+
+        internal void StartDefenseFlight(RectTransform card)
+        {
+            if (isMoving || isFlyingOut || HasDefenseFlight || cards.Count == 0 ||
+                cards[currentIndex] != card)
+            {
+                return;
+            }
+
+            ResetHoverScroll();
+            defenseFlightCard = card;
+            defenseFlightMotion = StartCoroutine(MoveDefenseCard(card, true));
+        }
+
+        private IEnumerator MoveDefenseCard(RectTransform card, bool lift)
+        {
+            int index = cards.IndexOf(card);
+            Vector2 startPosition = card.anchoredPosition;
+            Vector3 startScale = card.localScale;
+            Vector2 targetPosition = lift ? GetDefenseFlightPosition(index) : centerPosition;
+            Vector3 targetScale = baseScales[index] * centerScale * hoverScales[index];
+            if (lift)
+                targetScale *= CenterDefenseScale;
+
+            float elapsed = 0f;
+            do
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float progress = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / Mathf.Max(moveDuration, 0.01f)));
+                card.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, progress);
+                card.localScale = Vector3.Lerp(startScale, targetScale, progress);
+                yield return null;
+            } while (elapsed < moveDuration);
+
+            defenseFlightMotion = null;
+            if (!lift)
+            {
+                EndDefenseFlight(false);
+                cardHovers[index].SetInteractable(true);
+            }
+        }
+
+        private void EndDefenseFlight(bool resetPose)
+        {
+            if (defenseFlightMotion != null)
+                StopCoroutine(defenseFlightMotion);
+
+            if (resetPose && defenseFlightCard != null)
+            {
+                int index = cards.IndexOf(defenseFlightCard);
+                if (index >= 0 && index < baseScales.Count)
+                {
+                    defenseFlightCard.anchoredPosition = centerPosition;
+                    defenseFlightCard.localScale = baseScales[index] * centerScale * hoverScales[index];
+                }
+            }
+
+            defenseFlightCard = null;
+            defenseFlightMotion = null;
+            isDefenseReturning = false;
+        }
+
+        private void OnDisable()
+        {
+            EndDefenseFlight(true);
+        }
+
         public void FlyOut(RectTransform card, System.Action onComplete)
         {
             if (cards.IndexOf(card) < 0 || isFlyingOut)
@@ -639,6 +729,9 @@ namespace CardCarouselUI
                 isMoving = false;
                 RefreshCardsInstant();
             }
+
+            if (card == defenseFlightCard)
+                EndDefenseFlight(false);
 
             StartCoroutine(AnimateFlyOut(card, onComplete));
         }
@@ -730,24 +823,13 @@ namespace CardCarouselUI
         {
         }
 
-        private Vector2 GetCenterPosition(int index)
+        private Vector2 GetDefenseFlightPosition(int index)
         {
-            if (!cardHovers[index].HasDefenseSpin)
-                return centerPosition;
-
             Rect cardRect = cards[index].rect;
             float sideTop = cardRect.yMax * baseScales[index].y * sideScale;
             float overlapLine = cardRect.yMin + cardRect.height * CenterDefenseOverlap;
-            float lift = sideTop - overlapLine * GetCenterScale(index).y;
+            float lift = sideTop - overlapLine * baseScales[index].y * centerScale * CenterDefenseScale;
             return centerPosition + Vector2.up * lift;
-        }
-
-        private Vector3 GetCenterScale(int index)
-        {
-            float scale = cardHovers[index].HasDefenseSpin
-                ? centerScale * CenterDefenseScale
-                : centerScale;
-            return baseScales[index] * scale;
         }
 
         private void GetCardVisual(
@@ -764,8 +846,8 @@ namespace CardCarouselUI
 
             if (index == currentIndex)
             {
-                position = GetCenterPosition(index);
-                scale = GetCenterScale(index) * hoverScales[index];
+                position = centerPosition;
+                scale = baseScale * centerScale * hoverScales[index];
                 color = centerColor;
                 return;
             }
